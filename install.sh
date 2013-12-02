@@ -15,4 +15,10 @@ if [ ! -d ${_STANDARDS_DIR} ]; then
   exit 1
 fi
 
+_INSTALL_DIR=${_STANDARDS_DIR}/Behance
+
+if [ -d ${_INSTALL_DIR} ]; then
+  rm -rf ${_INSTALL_DIR}
+fi
+
 cp -r ${_BASE_DIR}/Behance ${_STANDARDS_DIR}/.

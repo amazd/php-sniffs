@@ -3,12 +3,6 @@
 
   <description>Behance Coding Standards</description>
 
-  <rule ref="PSR2">
-    <exclude>
-      <rule ref="Squiz.Functions.FunctionDeclaration"/>
-    </exclude>
-  </rule>
-
   <rule ref="Generic.WhiteSpace.ScopeIndent">
     <properties>
       <property name="indent" value="2"/>
