@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<ruleset name="Behance">
+
+  <description>Behance Coding Standards</description>
+
+  <rule ref="PSR2">
+    <exclude>
+      <rule ref="Squiz.Functions.FunctionDeclaration"/>
+    </exclude>
+  </rule>
+
+  <rule ref="Generic.WhiteSpace.ScopeIndent">
+    <properties>
+      <property name="indent" value="2"/>
+    </properties>
+  </rule>
+
+  <!-- Custom standards -->
+  <rule ref="Behance.Classes.ClassDeclaration"/>
+  <rule ref="Behance.Comments.TrailingComment"/>
+
+</ruleset>
