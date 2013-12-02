@@ -4,6 +4,7 @@ Behance PHP_CodeSniffer Sniffs
 Something smells bad.
 
 [List of supported rules](https://github.com/behance/php-sniffs/wiki/Ruleset)
+
 [ruleset.xml defines these](https://github.com/behance/php-sniffs/blob/master/Behance/ruleset.xml)
 
 ## To Run
