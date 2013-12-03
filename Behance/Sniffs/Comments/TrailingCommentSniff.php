@@ -25,6 +25,8 @@
  */
 class Behance_Sniffs_Comments_TrailingCommentSniff implements PHP_CodeSniffer_Sniff {
 
+  public $minLinesRequiredForTrailing = 4;
+
   /**
    * Returns the token types that this sniff is interested in.
    *
@@ -56,14 +58,10 @@ class Behance_Sniffs_Comments_TrailingCommentSniff implements PHP_CodeSniffer_Sn
 
     // comment exists right after curly brace
     if ( $tokens[ $nextTokenPtr ]['type'] == 'T_COMMENT' ) {
-
       $error = 'Single space required between closing curly brace & trailing comment';
-
       $phpcsFile->addError( $error, $stackPtr, 'MissingWhitespace' );
-
       return;
-
-    } // if comment right after curly brace
+    }
 
     // newline right after closing brace - check that this is a control structure
     // and that it only has one line in it
@@ -81,11 +79,14 @@ class Behance_Sniffs_Comments_TrailingCommentSniff implements PHP_CodeSniffer_Sn
 
       } // for scopeBegin to scopeEnd
 
-      if ( $numberOfNewlines != 2 ) {
+      $numberOfLines = max( 0, $numberOfNewlines - 1 );
 
-        $error = 'Missing trailing comment for multi-line scope; found %s lines';
+      if ( $numberLines >= $this->minLinesRequiredForTrailing ) {
 
-        $phpcsFile->addError( $error, $stackPtr, 'MissingTrailingComment', [ $numberOfNewlines - 1 ] );
+        $error = 'Missing required trailing comment for scope greater than % lines; found %s lines';
+        $data  = [ $this->minLinesRequiredForTrailing, $numberLines ];
+
+        $phpcsFile->addError( $error, $stackPtr, 'MissingTrailingComment', $data );
 
       } // if # of lines > 1 in scope
 
