@@ -73,8 +73,24 @@ class Behance_Sniffs_Functions_FunctionCallArgumentSpacingSniff implements PHP_C
       return;
     }
 
+    // No need to inspect functions with no arguments
+    if ($tokens[($openBracket + 1)]['code'] === T_CLOSE_PARENTHESIS) {
+      return;
+    }
+
     $closeBracket  = $tokens[$openBracket]['parenthesis_closer'];
     $nextSeparator = $openBracket;
+
+    if ( $tokens[($closeBracket - 1)]['code'] !== T_WHITESPACE ) {
+      $error = 'Expected at least 1 space before closing parenthesis';
+      $phpcsFile->addError($error, ($closeBracket - 1), 'SpaceBeforeCloseParens');
+    } // if SpaceBeforeCloseParens
+
+    if ( $tokens[($openBracket + 1)]['code'] !== T_WHITESPACE ) {
+      $error = 'Expected at least 1 space after opening parenthesis';
+      $phpcsFile->addError($error, ($openBracket + 1), 'SpaceAfterOpenParens');
+    } // if SpaceAfterOpenParens
+
 
     while (($nextSeparator = $phpcsFile->findNext(array(T_COMMA, T_VARIABLE, T_CLOSURE), ($nextSeparator + 1), $closeBracket)) !== false) {
 
