@@ -15,10 +15,13 @@
     <exclude name="PSR2.ControlStructures.ControlStructureSpacing.SpacingAfterOpenBrace"/>
     <exclude name="PSR2.ControlStructures.ControlStructureSpacing.SpaceBeforeCloseBrace"/>
     <exclude name="PSR2.Classes.PropertyDeclaration.Multiple"/>
-    <exclude name="Squiz.ControlStructures.ControlSignature"/>
+
+	<!-- Generic standards that are inherited via PSR2 -->
+    <exclude name="Generic.ControlStructures.InlineControlStructure"/>
 
     <!-- Squiz standards that are inherited via PSR2 -->
     <exclude name="Squiz.Functions.MultiLineFunctionDeclaration.BraceOnSameLine"/>
+    <exclude name="Squiz.ControlStructures.ControlSignature"/>
     <exclude name="Squiz.ControlStructures.ForEachLoopDeclaration.SpaceAfterOpen"/>
     <exclude name="Squiz.ControlStructures.ForEachLoopDeclaration.SpaceBeforeClose"/>
     <exclude name="Squiz.Functions.FunctionDeclarationArgumentSpacing.SpacingBeforeClose"/>
