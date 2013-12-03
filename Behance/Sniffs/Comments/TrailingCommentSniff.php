@@ -81,7 +81,7 @@ class Behance_Sniffs_Comments_TrailingCommentSniff implements PHP_CodeSniffer_Sn
 
       $numberOfLines = max( 0, $numberOfNewlines - 1 );
 
-      if ( $numberLines >= $this->minLinesRequiredForTrailing ) {
+      if ( $numberOfLines >= $this->minLinesRequiredForTrailing ) {
 
         $error = 'Missing required trailing comment for scope greater than % lines; found %s lines';
         $data  = [ $this->minLinesRequiredForTrailing, $numberLines ];
