@@ -53,5 +53,6 @@
   <rule ref="Behance.Comments.TrailingComment"/>
   <rule ref="Behance.Comments.DisallowHashComments"/>
   <rule ref="Behance.ControlStructures.ControlSignature"/>
+  <rule ref="Behance.Arrays.ShortHandArrayOnly"/>
 
 </ruleset>
