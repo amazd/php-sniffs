@@ -1,6 +1,6 @@
 <?php
 /**
- * Ensures that trailing comments conform to standards
+ * Adds an error to the PHPCS file whenever array( ... ) is encountered
  *
  * @category  PHP
  * @package   behance/php-sniffs
@@ -10,8 +10,7 @@
  */
 
 /**
- * Ensures that trailing comments conform to standards
- * Applied to anything with a closing curly bracket
+ * Adds an error to the PHPCS file whenever array( ... ) is encountered
  *
  * @category  PHP
  * @package   behance/php-sniffs
