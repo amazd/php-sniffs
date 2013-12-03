@@ -5,6 +5,7 @@
 
   <rule ref="PSR1">
     <exclude name="PSR1.Classes.ClassDeclaration.MissingNamespace"/>
+    <exclude name="PSR1.Methods.CamelCapsMethodName.NotCamelCaps"/>
   </rule>
 
   <rule ref="PSR2">
@@ -12,11 +13,16 @@
     <exclude name="PSR2.Methods.FunctionCallSignature.SpaceAfterOpenBracket"/>
     <exclude name="PSR2.ControlStructures.ControlStructureSpacing.SpacingAfterOpenBrace"/>
     <exclude name="PSR2.ControlStructures.ControlStructureSpacing.SpaceBeforeCloseBrace"/>
+    <exclude name="PSR2.Classes.PropertyDeclaration.Multiple"/>
+    <exclude name="Squiz.ControlStructures.ControlSignature"/>
 
     <!-- Squiz standards that are inherited via PSR2 -->
     <exclude name="Squiz.Functions.MultiLineFunctionDeclaration.BraceOnSameLine"/>
     <exclude name="Squiz.ControlStructures.ForEachLoopDeclaration.SpaceAfterOpen"/>
     <exclude name="Squiz.ControlStructures.ForEachLoopDeclaration.SpaceBeforeClose"/>
+    <exclude name="Squiz.Functions.FunctionDeclarationArgumentSpacing.SpacingBeforeClose"/>
+    <exclude name="Squiz.Functions.FunctionDeclarationArgumentSpacing.SpacingAfterOpen"/>
+    <exclude name="Squiz.Functions.FunctionDeclarationArgumentSpacing.SpacingAfterOpenHint"/>
   </rule>
 
   <rule ref="Generic.WhiteSpace.ScopeIndent">
@@ -28,5 +34,7 @@
   <!-- Custom standards -->
   <rule ref="Behance.Classes.ClassDeclaration"/>
   <rule ref="Behance.Comments.TrailingComment"/>
+  <rule ref="Behance.Comments.DisallowHashComments"/>
+  <rule ref="Behance.ControlStructures.ControlSignature"/>
 
 </ruleset>
