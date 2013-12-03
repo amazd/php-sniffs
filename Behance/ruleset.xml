@@ -29,6 +29,12 @@
     <exclude name="Squiz.ControlStructures.ForLoopDeclaration.SpacingBeforeClose"/>
   </rule>
 
+  <rule ref="PSR2.ControlStructures.SwitchDeclaration">
+    <properties>
+      <property name="indent" value="2"/>
+    </properties>
+  </rule>
+
   <rule ref="Generic.WhiteSpace.ScopeIndent">
     <properties>
       <property name="indent" value="2"/>
