@@ -3,25 +3,21 @@
  * Ensures that trailing comments conform to standards
  *
  * @category  PHP
- * @package   PHP_CodeSniffer
- * @author    Your Name <you@domain.net>
- * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   SVN: $Id: coding-standard-tutorial.xml,v 1.9 2008-10-09 15:16:47 cweiske Exp $
- * @link      http://pear.php.net/package/PHP_CodeSniffer
+ * @package   behance/php-sniffs
+ * @author    Kevin Ran <kran@adobe.com>
+ * @license   Proprietary
+ * @link      https://github.com/behance/php-sniffs
  */
 
 /**
- * Ensures that trailing comments are valid:
- *   - Function declarations
- *   - Construct declaractions
- *   - Control structures (when they're more than 1 line)
- * 
+ * Ensures that trailing comments conform to standards
+ * Applied to anything with a closing curly bracket
+ *
  * @category  PHP
- * @package   PHP_CodeSniffer
- * @author    Your Name <you@domain.net>
- * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   Release: @package_version@
- * @link      http://pear.php.net/package/PHP_CodeSniffer
+ * @package   behance/php-sniffs
+ * @author    Kevin Ran <kran@adobe.com>
+ * @license   Proprietary
+ * @link      https://github.com/behance/php-sniffs
  */
 class Behance_Sniffs_Comments_TrailingCommentSniff implements PHP_CodeSniffer_Sniff {
 
@@ -67,28 +63,13 @@ class Behance_Sniffs_Comments_TrailingCommentSniff implements PHP_CodeSniffer_Sn
     // and that it only has one line in it
     if ( $tokens[ $nextTokenPtr ]['content'] === PHP_EOL ) {
 
-      $numberOfNewlines = 0;
-      $scopeEndPtr      = $stackPtr;
-      $scopeBeginPtr    = $tokens[ $scopeEndPtr ]['scope_opener'];
-
-      for ( $ptr = $scopeBeginPtr; $ptr != $scopeEndPtr; ++$ptr ) {
-
-        if ( $tokens[ $ptr ]['content'] === PHP_EOL ) {
-          ++$numberOfNewlines;
-        }
-
-      } // for scopeBegin to scopeEnd
-
-      $numberOfLines = max( 0, $numberOfNewlines - 1 );
+      $numberOfLines = $this->_numberOfLinesInScope( $tokens, $stackPtr );
 
       if ( $numberOfLines >= $this->minLinesRequiredForTrailing ) {
-
-        $error = 'Missing required trailing comment for scope greater than % lines; found %s lines';
+        $error = 'Missing required trailing comment for scope >= %s lines; found %s lines';
         $data  = [ $this->minLinesRequiredForTrailing, $numberOfLines ];
-
         $phpcsFile->addError( $error, $stackPtr, 'MissingTrailingComment', $data );
-
-      } // if # of lines > 1 in scope
+      }
 
       return;
 
@@ -111,11 +92,9 @@ class Behance_Sniffs_Comments_TrailingCommentSniff implements PHP_CodeSniffer_Sn
       } // while isset && is whitespace
 
       if ( $amountOfSpace > 1 ) {
-
         $phpcsFile->addError( 'Too much whitespace detected after curly brace', $stackPtr );
         return;
-
-      } // if strlen whitespace > 1
+      }
 
     } // if there is whitespace right after curly brace
 
@@ -142,5 +121,30 @@ class Behance_Sniffs_Comments_TrailingCommentSniff implements PHP_CodeSniffer_Sn
     } // if empty comment or missing whitespace
 
   } // process
+
+  /**
+   * Starts from the *end* of the scope (ie: where '}' is)
+   *
+   * @param   array $tokens
+   * @param   int   $stackPtr
+   * @return  int
+   */
+  protected function _numberOfLinesInScope( $tokens, $stackPtr ) {
+
+    $numberOfNewlines = 0;
+    $scopeEndPtr      = $stackPtr;
+    $scopeBeginPtr    = $tokens[ $scopeEndPtr ]['scope_opener'];
+
+    for ( $ptr = $scopeBeginPtr; $ptr != $scopeEndPtr; ++$ptr ) {
+
+      if ( $tokens[ $ptr ]['content'] === PHP_EOL ) {
+        ++$numberOfNewlines;
+      }
+
+    } // for scopeBegin to scopeEnd
+
+    return max( 0, $numberOfNewlines - 1 );
+
+  } // _numberOfLinesInScope
 
 } // Behance_Sniffs_Comments_TrailingCommentSniff
