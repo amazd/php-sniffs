@@ -24,6 +24,9 @@
     <exclude name="Squiz.Functions.FunctionDeclarationArgumentSpacing.SpacingBeforeClose"/>
     <exclude name="Squiz.Functions.FunctionDeclarationArgumentSpacing.SpacingAfterOpen"/>
     <exclude name="Squiz.Functions.FunctionDeclarationArgumentSpacing.SpacingAfterOpenHint"/>
+    <exclude name="Squiz.Classes.ValidClassName.NotCamelCaps"/>
+    <exclude name="Squiz.ControlStructures.ForLoopDeclaration.SpacingAfterOpen"/>
+    <exclude name="Squiz.ControlStructures.ForLoopDeclaration.SpacingBeforeClose"/>
   </rule>
 
   <rule ref="Generic.WhiteSpace.ScopeIndent">

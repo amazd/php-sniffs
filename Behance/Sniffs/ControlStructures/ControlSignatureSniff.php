@@ -29,38 +29,35 @@ if (class_exists('PHP_CodeSniffer_Standards_AbstractPatternSniff', true) === fal
  */
 class Behance_Sniffs_ControlStructures_ControlSignatureSniff extends PHP_CodeSniffer_Standards_AbstractPatternSniff {
 
-    /**
-     * A list of tokenizers this sniff supports.
-     *
-     * @var array
-     */
-    public $supportedTokenizers = [
-        'PHP',
-        'JS',
-    ];
+  /**
+   * A list of tokenizers this sniff supports.
+   *
+   * @var array
+   */
+  public $supportedTokenizers = [
+      'PHP',
+      'JS',
+  ];
 
+  /**
+   * Returns the patterns that this test wishes to verify.
+   *
+   * @return array(string)
+   */
+  protected function getPatterns() {
 
-    /**
-     * Returns the patterns that this test wishes to verify.
-     *
-     * @return array(string)
-     */
-    protected function getPatterns()
-    {
         return array(
-                'try {EOL...}EOLcatch ( ... ) {EOL',
-                'do {EOL...} while ( ... );EOL',
-                'while ( ... ) {EOL',
-                'for ( ... ) {EOL',
-                'if ( ... ) {EOL',
-                'foreach ( ... ) {EOL',
-                '}EOLEOLelse if ( ... ) {EOL',
-                '}EOLEOLelseif ( ... ) {EOL',
-                '}EOLEOLelse {EOL',
-               );
+            'try {EOL...}EOLcatch ( ... ) {EOL',
+            'do {EOL...} while ( ... );EOL',
+            'while ( ... ) {EOL',
+            'for ( ... ) {EOL',
+            'if ( ... ) {EOL',
+            'foreach ( ... ) {EOL',
+            '}EOLEOLelse if ( ... ) {EOL',
+            '}EOLEOLelseif ( ... ) {EOL',
+            '}EOLEOL...else {EOL',
+        );
 
-    }//end getPatterns()
+  } // getPatterns
 
-
-}//end class
-
+} // Behance_Sniffs_ControlStructures_ControlSignatureSniff
