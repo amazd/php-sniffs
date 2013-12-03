@@ -20,6 +20,7 @@
 
 	<!-- Generic standards that are inherited via PSR2 -->
     <exclude name="Generic.ControlStructures.InlineControlStructure"/>
+    <exclude name="Generic.Functions.FunctionCallArgumentSpacing"/>
 
     <!-- Squiz standards that are inherited via PSR2 -->
     <exclude name="Squiz.ControlStructures.ControlSignature"/>
@@ -53,5 +54,6 @@
   <rule ref="Behance.Comments.TrailingComment"/>
   <rule ref="Behance.Comments.DisallowHashComments"/>
   <rule ref="Behance.ControlStructures.ControlSignature"/>
+  <rule ref="Behance.Functions.FunctionCallArgumentSpacing"/>
 
 </ruleset>
