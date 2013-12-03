@@ -11,6 +11,7 @@
   <rule ref="PSR2">
     <exclude name="PSR2.Classes.ClassDeclaration.OpenBraceNewLine"/>
     <exclude name="PSR2.Classes.ClassDeclaration.CloseBraceAfterBody"/>
+    <exclude name="PSR2.Classes.ClassDeclaration.CloseBraceSameLine"/>
     <exclude name="PSR2.Methods.FunctionCallSignature.SpaceAfterOpenBracket"/>
     <exclude name="PSR2.Methods.FunctionCallSignature.SpaceBeforeCloseBracket"/>
     <exclude name="PSR2.ControlStructures.ControlStructureSpacing.SpacingAfterOpenBrace"/>
@@ -21,14 +22,15 @@
     <exclude name="Generic.ControlStructures.InlineControlStructure"/>
 
     <!-- Squiz standards that are inherited via PSR2 -->
-    <exclude name="Squiz.Functions.MultiLineFunctionDeclaration.BraceOnSameLine"/>
     <exclude name="Squiz.ControlStructures.ControlSignature"/>
     <exclude name="Squiz.ControlStructures.ForEachLoopDeclaration.SpaceAfterOpen"/>
     <exclude name="Squiz.ControlStructures.ForEachLoopDeclaration.SpaceBeforeClose"/>
     <exclude name="Squiz.Functions.FunctionDeclarationArgumentSpacing.SpacingBeforeClose"/>
     <exclude name="Squiz.Functions.FunctionDeclarationArgumentSpacing.SpacingAfterOpen"/>
     <exclude name="Squiz.Functions.FunctionDeclarationArgumentSpacing.SpacingAfterOpenHint"/>
+    <exclude name="Squiz.Functions.MultiLineFunctionDeclaration.BraceOnSameLine"/>
     <exclude name="Squiz.Classes.ValidClassName.NotCamelCaps"/>
+    <exclude name="Squiz.Classes.ClassDeclaration.CloseBraceSameLine"/>
     <exclude name="Squiz.ControlStructures.ForLoopDeclaration.SpacingAfterOpen"/>
     <exclude name="Squiz.ControlStructures.ForLoopDeclaration.SpacingBeforeClose"/>
   </rule>
