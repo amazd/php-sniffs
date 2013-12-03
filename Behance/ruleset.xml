@@ -33,6 +33,7 @@
     <exclude name="Squiz.Classes.ClassDeclaration.CloseBraceSameLine"/>
     <exclude name="Squiz.ControlStructures.ForLoopDeclaration.SpacingAfterOpen"/>
     <exclude name="Squiz.ControlStructures.ForLoopDeclaration.SpacingBeforeClose"/>
+    <exclude name="Squiz.WhiteSpace.ScopeClosingBrace.ContentBefore"/>
   </rule>
 
   <rule ref="PSR2.ControlStructures.SwitchDeclaration">
