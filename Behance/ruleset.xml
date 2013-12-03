@@ -54,6 +54,7 @@
   <rule ref="Behance.Comments.TrailingComment"/>
   <rule ref="Behance.Comments.DisallowHashComments"/>
   <rule ref="Behance.ControlStructures.ControlSignature"/>
+  <rule ref="Behance.ControlStructures.ControlStructureSpacing"/>
   <rule ref="Behance.Functions.FunctionCallArgumentSpacing"/>
 
 </ruleset>
