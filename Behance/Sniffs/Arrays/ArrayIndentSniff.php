@@ -51,10 +51,16 @@ class Behance_Sniffs_Arrays_ArrayIndentSniff implements PHP_CodeSniffer_Sniff {
     $tokens      = $phpcsFile->getTokens();
 
     // skip indentation checking for the array opener itself
-    $ptr         = $stackPtr + 1;
     $closingPtr  = ( $tokens[ $stackPtr ]['type'] === 'T_ARRAY' )
                    ? $tokens[ $stackPtr ]['parenthesis_closer']
                    : $tokens[ $stackPtr ]['bracket_closer'];
+
+    if ( $tokens[ $stackPtr ]['line'] === $tokens[ $closingPtr ]['line'] ) {
+      return;
+    }
+
+    // skip indentation checking for the array opener itself
+    $ptr         = $stackPtr + 1;
 
     // same with the closing brace
     $closingPtr -= 1;
