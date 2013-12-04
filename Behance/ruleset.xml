@@ -18,7 +18,7 @@
     <exclude name="PSR2.ControlStructures.ControlStructureSpacing.SpaceBeforeCloseBrace"/>
     <exclude name="PSR2.Classes.PropertyDeclaration.Multiple"/>
 
-	<!-- Generic standards that are inherited via PSR2 -->
+    <!-- Generic standards that are inherited via PSR2 -->
     <exclude name="Generic.ControlStructures.InlineControlStructure"/>
     <exclude name="Generic.Functions.FunctionCallArgumentSpacing"/>
 
@@ -61,6 +61,8 @@
   <rule ref="Behance.Comments.DisallowHashComments"/>
   <rule ref="Behance.ControlStructures.ControlSignature"/>
   <rule ref="Behance.ControlStructures.ControlStructureSpacing"/>
+  <!-- InlineControlStructure is a copy of the Generic, but also checks elseif statements -->
+  <rule ref="Generic.ControlStructures.InlineControlStructure"/>
   <rule ref="Behance.Functions.FunctionCallArgumentSpacing"/>
 
 </ruleset>
