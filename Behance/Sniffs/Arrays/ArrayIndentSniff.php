@@ -84,6 +84,11 @@ class Behance_Sniffs_Arrays_ArrayIndentSniff implements PHP_CodeSniffer_Sniff {
 
       } // if spaces not expectedSpaces
 
+      // fast-forward to next line
+      while ( $tokens[ $ptr ]['content'] !== PHP_EOL ) {
+        ++$ptr;
+      }
+
     } // for ptr < closingPtr
 
   } // process
