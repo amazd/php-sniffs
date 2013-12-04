@@ -50,6 +50,12 @@
   </rule>
 
   <!-- Custom standards -->
+  <rule ref="Behance.Arrays.ArrayIndent">
+    <properties>
+      <property name="indent" value="2"/>
+      <property name="elementIndentLevel" value="2"/>
+    </properties>
+  </rule>
   <rule ref="Behance.Classes.ClassDeclaration"/>
   <rule ref="Behance.Comments.TrailingComment"/>
   <rule ref="Behance.Comments.DisallowHashComments"/>
