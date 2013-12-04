@@ -54,5 +54,12 @@
   <rule ref="Behance.Comments.DisallowHashComments"/>
   <rule ref="Behance.ControlStructures.ControlSignature"/>
   <rule ref="Behance.ControlStructures.ControlStructureSpacing"/>
+  <rule ref="Behance.Arrays.ArrayIndent">
+    <properties>
+      <property name="indent" value="2"/>
+      <property name="elementIndentLevel" value="2"/>
+    </properties>
+  </rule>
+
 
 </ruleset>
