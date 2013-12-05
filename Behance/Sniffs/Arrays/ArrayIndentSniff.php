@@ -246,8 +246,11 @@ class Behance_Sniffs_Arrays_ArrayIndentSniff implements PHP_CodeSniffer_Sniff
                 if (isset($tokens[$stackPtr]['nested_parenthesis']) === true) {
                     $stackPtrCount = count($tokens[$stackPtr]['nested_parenthesis']);
                 }
+                if (!$isShortArray) {
+                  $stackPtrCount++;
+                }
 
-                if (count($tokens[$nextToken]['nested_parenthesis']) > ($stackPtrCount + 1)) {
+                if (count($tokens[$nextToken]['nested_parenthesis']) > $stackPtrCount) {
                     // This comma is inside more parenthesis than the ARRAY keyword,
                     // then there it is actually a comma used to separate arguments
                     // in a function call.
