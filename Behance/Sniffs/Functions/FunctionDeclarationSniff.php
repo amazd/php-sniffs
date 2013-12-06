@@ -264,6 +264,12 @@ class Behance_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniff
         }
 
         if ( strpos( $fxName, $prefix ) === 0 ) {
+
+          // handles public functions with two underscores
+          if ( strpos( $fxName, '__' ) === 0 ) {
+            continue;
+          }
+
           $error = 'Expected no prefix for %s function "%s"; found %s prefix "%s"';
           $data  = [ $functionScope['content'], $fxName, $scope, $prefix ];
           $phpcsFile->addError( $error, $stackPtr, static::INCORRECT_PREFIX, $data );
