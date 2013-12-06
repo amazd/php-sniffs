@@ -66,5 +66,6 @@
   <!-- InlineControlStructure is a copy of the Generic, but also checks elseif statements -->
   <rule ref="Behance.ControlStructures.InlineControlStructure"/>
   <rule ref="Behance.Functions.FunctionCallArgumentSpacing"/>
+  <rule ref="Behance.Functions.FunctionDeclaration"/>
 
 </ruleset>
