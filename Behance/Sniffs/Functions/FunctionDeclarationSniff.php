@@ -178,6 +178,10 @@ class Behance_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniff
     $tokens       = $phpcsFile->getTokens();
     $openingBrace = $phpcsFile->findNext( T_OPEN_CURLY_BRACKET, $stackPtr );
 
+    if ( $tokens[ $openingBrace + 1 ]['code'] === T_CLOSE_CURLY_BRACKET ) {
+      return;
+    }
+
     if ( $tokens[ $openingBrace + 1 ]['content'] !== PHP_EOL ) {
       $error = 'Newline not found immediately after opening curly bracket';
       $phpcsFile->addError( $error, $stackPtr, static::INCORRECT_NEWLINES );
@@ -244,44 +248,18 @@ class Behance_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniff
   protected function _processFunctionName( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
 
     $tokens         = $phpcsFile->getTokens();
-    $functionScope  = $tokens[ $stackPtr - 2 ];
-
-    if ( $functionScope['code'] === T_ABSTRACT ) {
-      $functionScope = $tokens[ $stackPtr - 4 ];
-    }
-
-    $fxName         = $tokens[ $stackPtr + 2 ]['content'];
+    $functionScope  = $phpcsFile->findPrevious( PHP_CodeSniffer_Tokens::$scopeModifiers, $stackPtr );
+    $functionScope  = $tokens[ $functionScope ];
     $expectedPrefix = $this->functionScopePrefixes[ $functionScope['code'] ];
 
-    // expected prefix is empty - loop through non-empty prefixes & make sure
-    // that the function name does not have any of them at the beginning
+    // expected prefix is empty - just return, anything can happen
     if ( empty( $expectedPrefix ) ) {
-
-      foreach ( $this->functionScopePrefixes as $scope => $prefix ) {
-
-        if ( empty( $prefix ) ) {
-          continue;
-        }
-
-        if ( strpos( $fxName, $prefix ) === 0 ) {
-
-          // handles public functions with two underscores
-          if ( strpos( $fxName, '__' ) === 0 ) {
-            continue;
-          }
-
-          $error = 'Expected no prefix for %s function "%s"; found %s prefix "%s"';
-          $data  = [ $functionScope['content'], $fxName, $scope, $prefix ];
-          $phpcsFile->addError( $error, $stackPtr, static::INCORRECT_PREFIX, $data );
-        }
-
-      } // foreach functionScopePrefixes
-
       return;
+    }
 
-    } // if empty
+    $fxName = $phpcsFile->findNext( T_STRING, $stackPtr );
+    $fxName = $tokens[ $fxName ]['content'];
 
-    // expected a prefix - simply check
     if ( strpos( $fxName, $expectedPrefix ) !== 0 ) {
 
       $error = 'Expected prefix "%s" for %s function "%s" not found';
@@ -289,12 +267,7 @@ class Behance_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniff
 
       $phpcsFile->addError( $error, $stackPtr, static::INCORRECT_PREFIX, $data );
 
-      return;
-
     } // if expected prefix not at beginning
-
-    // @todo: make sure that the prefix is not repeated
-    //        ie: '_' NOT '____'
 
   } // _processFunctionName
 
