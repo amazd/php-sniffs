@@ -1,34 +1,4 @@
 <?php
-/**
- * This sniff prohibits the use of Perl style hash comments.
- *
- * PHP version 5
- *
- * @category  PHP
- * @package   PHP_CodeSniffer
- * @author    Your Name <you@domain.net>
- * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   SVN: $Id: coding-standard-tutorial.xml,v 1.9 2008-10-09 15:16:47 cweiske Exp $
- * @link      http://pear.php.net/package/PHP_CodeSniffer
- */
-
-/**
- * This sniff prohibits the use of Perl style hash comments.
- *
- * An example of a hash comment is:
- *
- * <code>
- *  # This is a hash comment, which is prohibited.
- *  $hello = 'hello';
- * </code>
- * 
- * @category  PHP
- * @package   PHP_CodeSniffer
- * @author    Your Name <you@domain.net>
- * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version   Release: @package_version@
- * @link      http://pear.php.net/package/PHP_CodeSniffer
- */
 class Behance_Sniffs_Comments_DisallowHashCommentsSniff implements PHP_CodeSniffer_Sniff {
 
   /**
@@ -60,7 +30,7 @@ class Behance_Sniffs_Comments_DisallowHashCommentsSniff implements PHP_CodeSniff
       $error = 'Hash comments are prohibited; found %s';
       $data  = array( trim( $tokens[$stackPtr]['content'] ) );
 
-      $phpcsFile->addError($error, $stackPtr, 'Found', $data);
+      $phpcsFile->addError( $error, $stackPtr, 'Found', $data );
 
     } // if first char
 

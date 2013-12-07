@@ -1,26 +1,4 @@
 <?php
-/**
- * Checks that class declarations are:
- *  - @todo
- *
- * PHP version 5
- *
- * @category PHP
- * @package  PHP_CodeSniffer
- * @author   Your Name <you@domain.net>
- * @license  http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version  SVN: $Id: coding-standard-tutorial.xml,v 1.9 2008-10-09 15:16:47 cweiske Exp $
- * @link     http://pear.php.net/package/PHP_CodeSniffer
- */
-
-/**
- * @category PHP
- * @package  PHP_CodeSniffer
- * @author   Your Name <you@domain.net>
- * @license  http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
- * @version  Release: @package_version@
- * @link     http://pear.php.net/package/PHP_CodeSniffer
- */
 class Behance_Sniffs_Classes_ClassDeclarationSniff implements PHP_CodeSniffer_Sniff {
 
   /**
@@ -43,7 +21,7 @@ class Behance_Sniffs_Classes_ClassDeclarationSniff implements PHP_CodeSniffer_Sn
         T_INTERFACE
     ];
 
-  } // end register()
+  } // register
 
 
   /**
@@ -64,22 +42,22 @@ class Behance_Sniffs_Classes_ClassDeclarationSniff implements PHP_CodeSniffer_Sn
 
         $error = 'Possible parse error: %s missing opening or closing brace';
 
-        $phpcsFile->addWarning($error, $stackPtr, 'MissingBrace', $errorData);
+        $phpcsFile->addWarning( $error, $stackPtr, 'MissingBrace', $errorData );
 
         return;
 
     } // if scope_opener not present
 
     $curlyBrace  = $tokens[ $stackPtr ]['scope_opener'];
-    $lastContent = $phpcsFile->findPrevious(T_WHITESPACE, ($curlyBrace - 1), $stackPtr, true);
+    $lastContent = $phpcsFile->findPrevious( T_WHITESPACE, ($curlyBrace - 1), $stackPtr, true );
     $classLine   = $tokens[ $lastContent ]['line'];
     $braceLine   = $tokens[ $curlyBrace ]['line'];
 
-    if ($braceLine !== $classLine) {
+    if ( $braceLine !== $classLine ) {
 
       $error = 'Opening brace of a %s must be on the same line as the definition';
 
-      $phpcsFile->addError($error, $curlyBrace, 'OpenBraceNewLine', $errorData);
+      $phpcsFile->addError( $error, $curlyBrace, 'OpenBraceNewLine', $errorData );
 
       return;
 
@@ -110,7 +88,7 @@ class Behance_Sniffs_Classes_ClassDeclarationSniff implements PHP_CodeSniffer_Sn
             $spaces,
         ];
 
-        $phpcsFile->addError($error, $curlyBrace, 'SpaceBeforeBrace', $data);
+        $phpcsFile->addError( $error, $curlyBrace, 'SpaceBeforeBrace', $data );
 
       } // if number of spaces not expected
 
