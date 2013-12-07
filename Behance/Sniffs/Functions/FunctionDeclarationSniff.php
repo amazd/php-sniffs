@@ -33,11 +33,12 @@
  */
 class Behance_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniffer_Sniff {
 
-  const INCORRECT_PREFIX   = 'IncorrectFunctionPrefix';
-  const INCORRECT_NEWLINES = 'InvalidFunctionNewlineFormatting';
-  const INVALID_TRAILING   = 'InvalidFunctionTrailingComment';
-  const INVALID_ARG_FORMAT = 'InvalidArgumentListFormat';
-  const MULTILINE_FUNC     = 'MultilineFunctionsNotAllowed';
+  const INCORRECT_PREFIX     = 'IncorrectFunctionPrefix';
+  const INCORRECT_NEWLINES   = 'InvalidFunctionNewlineFormatting';
+  const INVALID_TRAILING     = 'InvalidFunctionTrailingComment';
+  const INVALID_ARG_FORMAT   = 'InvalidArgumentListFormat';
+  const MULTILINE_FUNC       = 'MultilineFunctionsNotAllowed';
+  const NON_EMPTY_SINGLELINE = 'SingleLineFunctionDefinitionNotEmpty';
 
   public $prefixLimit = 1;
 
@@ -134,8 +135,21 @@ class Behance_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniff
   protected function _processTrailingFunctionComment( $phpcsFile, $stackPtr ) {
 
     $tokens     = $phpcsFile->getTokens();
-    $fxName     = $tokens[ $stackPtr + 2 ]['content'];
+    $openingPtr = $tokens[ $stackPtr ]['scope_opener'];
     $closingPtr = $tokens[ $stackPtr ]['scope_closer'];
+
+    if ( $tokens[ $openingPtr ]['line'] === $tokens[ $closingPtr ]['line'] ) {
+
+      $commentPtr = $phpcsFile->findNext( T_COMMENT, $stackPtr );
+
+      if ( $tokens[ $commentPtr ]['line'] === $tokens[ $stackPtr ]['line'] ) {
+        $error = 'No trailing comment allowed for single line function';
+        $phpcsFile->addError( $error, $stackPtr, static::INVALID_TRAILING );
+      }
+
+      return;
+
+    } // if opening curly bracket on same line as closing
 
     $next = $phpcsFile->findNext( T_WHITESPACE, $closingPtr + 1, null, true );
 
@@ -151,6 +165,7 @@ class Behance_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniff
       return;
     }
 
+    $fxName          = $tokens[ $stackPtr + 2 ]['content'];
     $expectedComment = "// {$fxName}";
     $actualComment   = trim( $tokens[ $next ]['content'] );
 
@@ -176,11 +191,20 @@ class Behance_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniff
   protected function _processCurlyBraceNewlines( $phpcsFile, $stackPtr ) {
 
     $tokens       = $phpcsFile->getTokens();
-    $openingBrace = $phpcsFile->findNext( T_OPEN_CURLY_BRACKET, $stackPtr );
+    $openingBrace = $tokens[ $stackPtr ]['scope_opener'];
+    $closingBrace = $tokens[ $stackPtr ]['scope_closer'];
 
-    if ( $tokens[ $openingBrace + 1 ]['code'] === T_CLOSE_CURLY_BRACKET ) {
+    if ( $tokens[ $openingPtr ]['line'] === $tokens[ $closingPtr ]['line'] ) {
+
+      if ( $openingPtr + 1 !== $closingPtr ) {
+        $error = 'Single line function not empty';
+        $phpcsFile->addError( $error, $stackPtr, static::NON_EMPTY_SINGLELINE );
+      }
+
       return;
-    }
+
+    } // if opening curly bracket on same line as closing
+
 
     if ( $tokens[ $openingBrace + 1 ]['content'] !== PHP_EOL ) {
       $error = 'Newline not found immediately after opening curly bracket';
