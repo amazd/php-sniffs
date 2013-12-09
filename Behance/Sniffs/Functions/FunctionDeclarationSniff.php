@@ -1,51 +1,49 @@
 <?php
-/**
- * Makes sure that function / method definitions have:
- *
- * - curly brace on the same line as the definition
- * - an empty line right after the definition
- * - an empty line right before the closing brace
- * - the trailing comment is the name of the function
- *   - Formatting of the function name is sniffed via Comment.TrailingComment
- *
- *
- * @category  PHP
- * @package   behance/php-sniffs
- * @author    Kevin Ran <kran@adobe.com>
- * @license   Proprietary
- * @link      https://github.com/behance/php-sniffs
- */
-
-/**
- * Makes sure that function / method definitions have:
- *
- * - curly brace on the same line as the definition
- * - an empty line right after the definition
- * - an empty line right before the closing brace
- * - the trailing comment is the name of the function
- *   - Formatting of the function name is sniffed via Comment.TrailingComment
- *
- * @category  PHP
- * @package   behance/php-sniffs
- * @author    Kevin Ran <kran@adobe.com>
- * @license   Proprietary
- * @link      https://github.com/behance/php-sniffs
- */
 class Behance_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniffer_Sniff {
 
-  const INCORRECT_PREFIX     = 'IncorrectFunctionPrefix';
-  const INCORRECT_NEWLINES   = 'InvalidFunctionNewlineFormatting';
-  const INVALID_TRAILING     = 'InvalidFunctionTrailingComment';
-  const INVALID_ARG_FORMAT   = 'InvalidArgumentListFormat';
-  const MULTILINE_FUNC       = 'MultilineFunctionsNotAllowed';
-  const NON_EMPTY_SINGLELINE = 'SingleLineFunctionDefinitionNotEmpty';
-
-  public $prefixLimit = 1;
+  const INCORRECT_PREFIX            = 'IncorrectFunctionPrefix';
+  const INCORRECT_DOUBLE_UNDERSCORE = 'IncorrectDoubleUnderscoreFunctionPrefix';
+  const INCORRECT_NEWLINES          = 'InvalidFunctionNewlineFormatting';
+  const INVALID_TRAILING            = 'InvalidFunctionTrailingComment';
+  const INVALID_ARG_FORMAT          = 'InvalidArgumentListFormat';
+  const MULTILINE_FUNC              = 'MultilineFunctionsNotAllowed';
 
   public $functionScopePrefixes = [
-      T_PRIVATE    => '_',
-      T_PROTECTED  => '_',
-      T_PUBLIC     => ''
+      'private'    => '_',
+      'protected'  => '_',
+      'public'     => ''
+  ];
+
+  /**
+   * A list of methods where a double underscore is allowed as a prefix
+   *
+   * @var array
+   */
+  public $doubleUnderscoreAllowedMethods = [
+      'init'
+  ];
+
+  /**
+   * A list of all PHP magic methods
+   *
+   * @var array
+   */
+  protected $magicMethods = [
+      'construct',
+      'destruct',
+      'call',
+      'callstatic',
+      'get',
+      'set',
+      'isset',
+      'unset',
+      'sleep',
+      'wakeup',
+      'tostring',
+      'set_state',
+      'clone',
+      'invoke',
+      'call',
   ];
 
   /**
@@ -96,7 +94,7 @@ class Behance_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniff
       return;
     }
 
-    // valid - function blah()
+    // valid - function blah() {}
     if ( $parenOpen + 1 === $parenClose ) {
       return;
     }
@@ -194,9 +192,9 @@ class Behance_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniff
     $openingBrace = $tokens[ $stackPtr ]['scope_opener'];
     $closingBrace = $tokens[ $stackPtr ]['scope_closer'];
 
-    if ( $tokens[ $openingPtr ]['line'] === $tokens[ $closingPtr ]['line'] ) {
+    if ( $tokens[ $openingBrace ]['line'] === $tokens[ $closingBrace ]['line'] ) {
 
-      if ( $openingPtr + 1 !== $closingPtr ) {
+      if ( $openingBrace + 1 !== $closingBrace ) {
         $error = 'Single line function not empty';
         $phpcsFile->addError( $error, $stackPtr, static::NON_EMPTY_SINGLELINE );
       }
@@ -272,14 +270,46 @@ class Behance_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniff
   protected function _processFunctionName( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
 
     $tokens         = $phpcsFile->getTokens();
-    $functionScope  = $phpcsFile->findPrevious( PHP_CodeSniffer_Tokens::$scopeModifiers, $stackPtr );
-    $functionScope  = $tokens[ $functionScope ];
-    $expectedPrefix = $this->functionScopePrefixes[ $functionScope['code'] ];
+    $methodProps    = $phpcsFile->getMethodProperties( $stackPtr );
+    $scope          = $methodProps['scope'];
+    $fxName         = $phpcsFile->getDeclarationName( $stackPtr );
+    $expectedPrefix = $this->functionScopePrefixes[ $scope ];
+
+    $doubleUnderAllowed = array_merge( $this->magicMethods, $this->doubleUnderscoreAllowedMethods );
+
+    if ( strpos( $fxName, '__' ) === 0 ) {
+
+      if ( in_array( substr( $fxName, 2 ), $doubleUnderAllowed ) ) {
+        return;
+      }
+
+      else {
+          $error = '__ is a reserved prefix for magic functions';
+          $phpcsFile->addError( $error, $stackPtr, static::INCORRECT_DOUBLE_UNDERSCORE );
+      }
+
+    } // if fxName __ == 0
 
     // expected prefix is empty - just return, anything can happen
     if ( empty( $expectedPrefix ) ) {
+
+      foreach ( $this->functionScopePrefixes as $scope => $prefix ) {
+
+        if ( empty( $prefix ) ) {
+          continue;
+        }
+
+        if ( strpos( $fxName, $prefix ) === 0 ) {
+          $error = 'Expected no prefix for %s function "%s"; found "%s"';
+          $data  = [ $scope, $fxName, $prefix ];
+          $phpcsFile->addError( $error, $stackPtr, static::INCORRECT_PREFIX, $data );
+        }
+
+      } // foreach functionScopePrefixes
+
       return;
-    }
+
+    } // if empty expectedPrefix
 
     $fxName = $phpcsFile->findNext( T_STRING, $stackPtr );
     $fxName = $tokens[ $fxName ]['content'];
@@ -287,7 +317,7 @@ class Behance_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniff
     if ( strpos( $fxName, $expectedPrefix ) !== 0 ) {
 
       $error = 'Expected prefix "%s" for %s function "%s" not found';
-      $data  = [ $expectedPrefix, $functionScope['content'], $fxName ];
+      $data  = [ $expectedPrefix, $scope, $fxName ];
 
       $phpcsFile->addError( $error, $stackPtr, static::INCORRECT_PREFIX, $data );
 

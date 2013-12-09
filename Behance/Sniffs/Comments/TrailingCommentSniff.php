@@ -1,24 +1,4 @@
 <?php
-/**
- * Ensures that trailing comments conform to standards
- *
- * @category  PHP
- * @package   behance/php-sniffs
- * @author    Kevin Ran <kran@adobe.com>
- * @license   Proprietary
- * @link      https://github.com/behance/php-sniffs
- */
-
-/**
- * Ensures that trailing comments conform to standards
- * Applied to anything with a closing curly bracket
- *
- * @category  PHP
- * @package   behance/php-sniffs
- * @author    Kevin Ran <kran@adobe.com>
- * @license   Proprietary
- * @link      https://github.com/behance/php-sniffs
- */
 class Behance_Sniffs_Comments_TrailingCommentSniff implements PHP_CodeSniffer_Sniff {
 
   public $minLinesRequiredForTrailing = 4;
