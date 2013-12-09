@@ -32,9 +32,7 @@ class Behance_Sniffs_Arrays_ArrayBracketSpacingSniff implements PHP_CodeSniffer_
         T_TRUE,
         T_FALSE,
         T_LNUMBER,
-        T_DNUMBER,
-        T_OPEN_SQUARE_BRACKET,
-        T_CLOSE_SQUARE_BRACKET
+        T_DNUMBER
     ] );
 
     $tokens = $phpcsFile->getTokens();
@@ -57,6 +55,11 @@ class Behance_Sniffs_Arrays_ArrayBracketSpacingSniff implements PHP_CodeSniffer_
 
     // don't deal with multiline array dereferencing
     if ( $tokens[ $nonSpace ]['line'] !==  $tokens[ $stackPtr ]['line'] ) {
+      return;
+    }
+
+    // don't deal with array push syntax []
+    if ( $stackPtr + ( 1 * $direction ) === $nonSpace ) {
       return;
     }
 
