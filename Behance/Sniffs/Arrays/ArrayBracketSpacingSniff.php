@@ -59,7 +59,7 @@ class Behance_Sniffs_Arrays_ArrayBracketSpacingSniff implements PHP_CodeSniffer_
     }
 
     // don't deal with array push syntax []
-    if ( $stackPtr + ( 1 * $direction ) === $nonSpace ) {
+    if ( $tokens[ $stackPtr + ( 1 * $direction ) ]['code'] === $otherToken ) {
       return;
     }
 
