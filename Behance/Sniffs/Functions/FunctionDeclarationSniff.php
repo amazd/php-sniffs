@@ -311,9 +311,6 @@ class Behance_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniff
 
     } // if empty expectedPrefix
 
-    $fxName = $phpcsFile->findNext( T_STRING, $stackPtr );
-    $fxName = $tokens[ $fxName ]['content'];
-
     if ( strpos( $fxName, $expectedPrefix ) !== 0 ) {
 
       $error = 'Expected prefix "%s" for %s function "%s" not found';
