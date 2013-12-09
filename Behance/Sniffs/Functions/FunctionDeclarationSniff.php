@@ -94,7 +94,7 @@ class Behance_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniff
       return;
     }
 
-    // valid - function blah()
+    // valid - function blah() {}
     if ( $parenOpen + 1 === $parenClose ) {
       return;
     }
@@ -133,8 +133,21 @@ class Behance_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniff
   protected function _processTrailingFunctionComment( $phpcsFile, $stackPtr ) {
 
     $tokens     = $phpcsFile->getTokens();
-    $fxName     = $tokens[ $stackPtr + 2 ]['content'];
+    $openingPtr = $tokens[ $stackPtr ]['scope_opener'];
     $closingPtr = $tokens[ $stackPtr ]['scope_closer'];
+
+    if ( $tokens[ $openingPtr ]['line'] === $tokens[ $closingPtr ]['line'] ) {
+
+      $commentPtr = $phpcsFile->findNext( T_COMMENT, $stackPtr );
+
+      if ( $tokens[ $commentPtr ]['line'] === $tokens[ $stackPtr ]['line'] ) {
+        $error = 'No trailing comment allowed for single line function';
+        $phpcsFile->addError( $error, $stackPtr, static::INVALID_TRAILING );
+      }
+
+      return;
+
+    } // if opening curly bracket on same line as closing
 
     $next = $phpcsFile->findNext( T_WHITESPACE, $closingPtr + 1, null, true );
 
@@ -150,6 +163,7 @@ class Behance_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniff
       return;
     }
 
+    $fxName          = $phpcsFile->getDeclarationName( $stackPtr );
     $expectedComment = "// {$fxName}";
     $actualComment   = trim( $tokens[ $next ]['content'] );
 
@@ -175,7 +189,20 @@ class Behance_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniff
   protected function _processCurlyBraceNewlines( $phpcsFile, $stackPtr ) {
 
     $tokens       = $phpcsFile->getTokens();
-    $openingBrace = $phpcsFile->findNext( T_OPEN_CURLY_BRACKET, $stackPtr );
+    $openingBrace = $tokens[ $stackPtr ]['scope_opener'];
+    $closingBrace = $tokens[ $stackPtr ]['scope_closer'];
+
+    if ( $tokens[ $openingBrace ]['line'] === $tokens[ $closingBrace ]['line'] ) {
+
+      if ( $openingBrace + 1 !== $closingBrace ) {
+        $error = 'Single line function not empty';
+        $phpcsFile->addError( $error, $stackPtr, static::NON_EMPTY_SINGLELINE );
+      }
+
+      return;
+
+    } // if opening curly bracket on same line as closing
+
 
     if ( $tokens[ $openingBrace + 1 ]['content'] !== PHP_EOL ) {
       $error = 'Newline not found immediately after opening curly bracket';
@@ -243,26 +270,27 @@ class Behance_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniff
   protected function _processFunctionName( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
 
     $tokens         = $phpcsFile->getTokens();
-
     $methodProps    = $phpcsFile->getMethodProperties( $stackPtr );
     $scope          = $methodProps['scope'];
-
     $fxName         = $phpcsFile->getDeclarationName( $stackPtr );
     $expectedPrefix = $this->functionScopePrefixes[ $scope ];
 
     $doubleUnderAllowed = array_merge( $this->magicMethods, $this->doubleUnderscoreAllowedMethods );
+
     if ( strpos( $fxName, '__' ) === 0 ) {
+
       if ( in_array( substr( $fxName, 2 ), $doubleUnderAllowed ) ) {
         return;
       }
+
       else {
           $error = '__ is a reserved prefix for magic functions';
           $phpcsFile->addError( $error, $stackPtr, static::INCORRECT_DOUBLE_UNDERSCORE );
       }
+
     } // if fxName __ == 0
 
-    // expected prefix is empty - loop through non-empty prefixes & make sure
-    // that the function name does not have any of them at the beginning
+    // expected prefix is empty - just return, anything can happen
     if ( empty( $expectedPrefix ) ) {
 
       foreach ( $this->functionScopePrefixes as $scope => $prefix ) {
@@ -281,17 +309,14 @@ class Behance_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniff
 
       return;
 
-    } // if empty
+    } // if empty expectedPrefix
 
-    // expected a prefix - simply check
     if ( strpos( $fxName, $expectedPrefix ) !== 0 ) {
 
       $error = 'Expected prefix "%s" for %s function "%s" not found';
       $data  = [ $expectedPrefix, $scope, $fxName ];
 
       $phpcsFile->addError( $error, $stackPtr, static::INCORRECT_PREFIX, $data );
-
-      return;
 
     } // if expected prefix not at beginning
 
