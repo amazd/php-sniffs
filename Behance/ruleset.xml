@@ -52,6 +52,7 @@
   </rule>
 
   <!-- Custom standards -->
+  <rule ref="Behance.Arrays.ArrayBracketSpacing"/>
   <rule ref="Behance.Arrays.ArrayIndent">
     <properties>
       <property name="indent" value="2"/>
