@@ -163,7 +163,7 @@ class Behance_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniff
       return;
     }
 
-    $fxName          = $tokens[ $stackPtr + 2 ]['content'];
+    $fxName          = $phpcsFile->getDeclarationName( $stackPtr );
     $expectedComment = "// {$fxName}";
     $actualComment   = trim( $tokens[ $next ]['content'] );
 
