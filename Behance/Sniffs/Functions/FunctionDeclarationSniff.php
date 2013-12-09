@@ -1,36 +1,4 @@
 <?php
-/**
- * Makes sure that function / method definitions have:
- *
- * - curly brace on the same line as the definition
- * - an empty line right after the definition
- * - an empty line right before the closing brace
- * - the trailing comment is the name of the function
- *   - Formatting of the function name is sniffed via Comment.TrailingComment
- *
- *
- * @category  PHP
- * @package   behance/php-sniffs
- * @author    Kevin Ran <kran@adobe.com>
- * @license   Proprietary
- * @link      https://github.com/behance/php-sniffs
- */
-
-/**
- * Makes sure that function / method definitions have:
- *
- * - curly brace on the same line as the definition
- * - an empty line right after the definition
- * - an empty line right before the closing brace
- * - the trailing comment is the name of the function
- *   - Formatting of the function name is sniffed via Comment.TrailingComment
- *
- * @category  PHP
- * @package   behance/php-sniffs
- * @author    Kevin Ran <kran@adobe.com>
- * @license   Proprietary
- * @link      https://github.com/behance/php-sniffs
- */
 class Behance_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniffer_Sniff {
 
   const INCORRECT_PREFIX   = 'IncorrectFunctionPrefix';
