@@ -1,18 +1,49 @@
 <?php
 class Behance_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniffer_Sniff {
 
-  const INCORRECT_PREFIX   = 'IncorrectFunctionPrefix';
-  const INCORRECT_NEWLINES = 'InvalidFunctionNewlineFormatting';
-  const INVALID_TRAILING   = 'InvalidFunctionTrailingComment';
-  const INVALID_ARG_FORMAT = 'InvalidArgumentListFormat';
-  const MULTILINE_FUNC     = 'MultilineFunctionsNotAllowed';
-
-  public $prefixLimit = 1;
+  const INCORRECT_PREFIX            = 'IncorrectFunctionPrefix';
+  const INCORRECT_DOUBLE_UNDERSCORE = 'IncorrectDoubleUnderscoreFunctionPrefix';
+  const INCORRECT_NEWLINES          = 'InvalidFunctionNewlineFormatting';
+  const INVALID_TRAILING            = 'InvalidFunctionTrailingComment';
+  const INVALID_ARG_FORMAT          = 'InvalidArgumentListFormat';
+  const MULTILINE_FUNC              = 'MultilineFunctionsNotAllowed';
 
   public $functionScopePrefixes = [
-      T_PRIVATE    => '_',
-      T_PROTECTED  => '_',
-      T_PUBLIC     => ''
+      'private'    => '_',
+      'protected'  => '_',
+      'public'     => ''
+  ];
+
+  /**
+   * A list of methods where a double underscore is allowed as a prefix
+   *
+   * @var array
+   */
+  public $doubleUnderscoreAllowedMethods = [
+      'init'
+  ];
+
+  /**
+   * A list of all PHP magic methods
+   *
+   * @var array
+   */
+  protected $magicMethods = [
+      'construct',
+      'destruct',
+      'call',
+      'callstatic',
+      'get',
+      'set',
+      'isset',
+      'unset',
+      'sleep',
+      'wakeup',
+      'tostring',
+      'set_state',
+      'clone',
+      'invoke',
+      'call',
   ];
 
   /**
@@ -212,14 +243,23 @@ class Behance_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniff
   protected function _processFunctionName( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
 
     $tokens         = $phpcsFile->getTokens();
-    $functionScope  = $tokens[ $stackPtr - 2 ];
 
-    if ( $functionScope['code'] === T_ABSTRACT ) {
-      $functionScope = $tokens[ $stackPtr - 4 ];
-    }
+    $methodProps    = $phpcsFile->getMethodProperties( $stackPtr );
+    $scope          = $methodProps['scope'];
 
-    $fxName         = $tokens[ $stackPtr + 2 ]['content'];
-    $expectedPrefix = $this->functionScopePrefixes[ $functionScope['code'] ];
+    $fxName         = $phpcsFile->getDeclarationName( $stackPtr );
+    $expectedPrefix = $this->functionScopePrefixes[ $scope ];
+
+    $doubleUnderAllowed = array_merge( $this->magicMethods, $this->doubleUnderscoreAllowedMethods );
+    if ( strpos( $fxName, '__' ) === 0 ) {
+      if ( in_array( substr( $fxName, 2 ), $doubleUnderAllowed ) ) {
+        return;
+      }
+      else {
+          $error = '__ is a reserved prefix for magic functions';
+          $phpcsFile->addError( $error, $stackPtr, static::INCORRECT_DOUBLE_UNDERSCORE );
+      }
+    } // if fxName __ == 0
 
     // expected prefix is empty - loop through non-empty prefixes & make sure
     // that the function name does not have any of them at the beginning
@@ -232,14 +272,8 @@ class Behance_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniff
         }
 
         if ( strpos( $fxName, $prefix ) === 0 ) {
-
-          // handles public functions with two underscores
-          if ( strpos( $fxName, '__' ) === 0 ) {
-            continue;
-          }
-
-          $error = 'Expected no prefix for %s function "%s"; found %s prefix "%s"';
-          $data  = [ $functionScope['content'], $fxName, $scope, $prefix ];
+          $error = 'Expected no prefix for %s function "%s"; found "%s"';
+          $data  = [ $scope, $fxName, $prefix ];
           $phpcsFile->addError( $error, $stackPtr, static::INCORRECT_PREFIX, $data );
         }
 
@@ -253,16 +287,13 @@ class Behance_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniff
     if ( strpos( $fxName, $expectedPrefix ) !== 0 ) {
 
       $error = 'Expected prefix "%s" for %s function "%s" not found';
-      $data  = [ $expectedPrefix, $functionScope['content'], $fxName ];
+      $data  = [ $expectedPrefix, $scope, $fxName ];
 
       $phpcsFile->addError( $error, $stackPtr, static::INCORRECT_PREFIX, $data );
 
       return;
 
     } // if expected prefix not at beginning
-
-    // @todo: make sure that the prefix is not repeated
-    //        ie: '_' NOT '____'
 
   } // _processFunctionName
 
