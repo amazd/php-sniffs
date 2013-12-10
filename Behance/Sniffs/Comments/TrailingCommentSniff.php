@@ -39,7 +39,7 @@ class Behance_Sniffs_Comments_TrailingCommentSniff implements PHP_CodeSniffer_Sn
     }
 
     // comment exists right after curly brace
-    if ( $tokens[ $nextTokenPtr ]['type'] == 'T_COMMENT' ) {
+    if ( $tokens[ $nextTokenPtr ]['code'] == T_COMMENT ) {
       $error = 'Single space required between closing curly brace & trailing comment';
       $phpcsFile->addError( $error, $stackPtr, 'MissingWhitespace' );
       return;
@@ -63,12 +63,12 @@ class Behance_Sniffs_Comments_TrailingCommentSniff implements PHP_CodeSniffer_Sn
 
     // handle generic whitespace
     // at this point we're looking at a multiline scope
-    if ( $tokens[ $nextTokenPtr ]['type'] == 'T_WHITESPACE' ) {
+    if ( $tokens[ $nextTokenPtr ]['code'] == T_WHITESPACE ) {
 
       $whitespacePtr = $nextTokenPtr;
       $amountOfSpace = 0;
 
-      while ( isset( $tokens[ $whitespacePtr ] ) && $tokens[ $whitespacePtr ]['type'] === 'T_WHITESPACE' ) {
+      while ( isset( $tokens[ $whitespacePtr ] ) && $tokens[ $whitespacePtr ]['code'] === T_WHITESPACE ) {
 
         $content        = str_replace( PHP_EOL, '', $tokens[ $whitespacePtr ]['content'] );
         $amountOfSpace += strlen( $content );
@@ -97,7 +97,7 @@ class Behance_Sniffs_Comments_TrailingCommentSniff implements PHP_CodeSniffer_Sn
       $commentPtr++;
     } // if _isCloseOfAnAssignedAnonymousFunction
 
-    if ( !isset( $tokens[ $commentPtr ] ) || $tokens[ $commentPtr ]['type'] !== 'T_COMMENT' ) {
+    if ( !isset( $tokens[ $commentPtr ] ) || $tokens[ $commentPtr ]['code'] !== T_COMMENT ) {
 
       $phpcsFile->addError( 'trailing comment not found after closing curly', $stackPtr );
 

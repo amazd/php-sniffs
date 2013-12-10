@@ -47,7 +47,7 @@ class Behance_Sniffs_Arrays_ArrayIndentSniff implements PHP_CodeSniffer_Sniff {
 
     $tokens = $phpcsFile->getTokens();
 
-    $isShortArray = $tokens[$stackPtr]['type'] !== 'T_ARRAY';
+    $isShortArray = $tokens[$stackPtr]['code'] !== T_ARRAY;
 
     // Array keyword should be lower case.
     if ( !$isShortArray && strtolower( $tokens[$stackPtr]['content'] ) !== $tokens[$stackPtr]['content'] ) {
