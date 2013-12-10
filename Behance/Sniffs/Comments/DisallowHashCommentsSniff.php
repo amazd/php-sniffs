@@ -25,10 +25,10 @@ class Behance_Sniffs_Comments_DisallowHashCommentsSniff implements PHP_CodeSniff
 
     $tokens = $phpcsFile->getTokens();
 
-    if ( $tokens[$stackPtr]['content'][0] === '#' ) {
+    if ( $tokens[ $stackPtr ]['content'][0] === '#' ) {
 
       $error = 'Hash comments are prohibited; found %s';
-      $data  = array( trim( $tokens[$stackPtr]['content'] ) );
+      $data  = array( trim( $tokens[ $stackPtr ]['content'] ) );
 
       $phpcsFile->addError( $error, $stackPtr, 'Found', $data );
 
@@ -36,4 +36,4 @@ class Behance_Sniffs_Comments_DisallowHashCommentsSniff implements PHP_CodeSniff
 
   } // process
 
-} // end class
+} // Behance_Sniffs_Comments_DisallowHashCommentsSniff

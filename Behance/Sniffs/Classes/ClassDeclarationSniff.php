@@ -100,4 +100,4 @@ class Behance_Sniffs_Classes_ClassDeclarationSniff implements PHP_CodeSniffer_Sn
 
   } // process
 
-} // end class
+} // Behance_Sniffs_Classes_ClassDeclarationSniff

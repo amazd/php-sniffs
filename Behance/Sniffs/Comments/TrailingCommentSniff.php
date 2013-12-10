@@ -88,6 +88,7 @@ class Behance_Sniffs_Comments_TrailingCommentSniff implements PHP_CodeSniffer_Sn
 
     // make sure assignment closures have a semicolon
     if ( $this->_isCloseOfAnAssignedAnonymousFunction( $stackPtr, $phpcsFile ) ) {
+
       if ( !isset( $tokens[ $stackPtr + 1 ] ) || $tokens[ $stackPtr + 1 ]['code'] !== T_SEMICOLON ) {
         $phpcsFile->addError( 'semicolon not found after anonymous function assignment', $stackPtr + 1 );
 
@@ -95,6 +96,7 @@ class Behance_Sniffs_Comments_TrailingCommentSniff implements PHP_CodeSniffer_Sn
       } // if !semicolon
 
       $commentPtr++;
+
     } // if _isCloseOfAnAssignedAnonymousFunction
 
     if ( !isset( $tokens[ $commentPtr ] ) || $tokens[ $commentPtr ]['code'] !== T_COMMENT ) {
