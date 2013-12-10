@@ -6,6 +6,7 @@ class Behance_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniff
   const INCORRECT_NEWLINES          = 'InvalidFunctionNewlineFormatting';
   const INVALID_ARG_FORMAT          = 'InvalidArgumentListFormat';
   const MULTILINE_FUNC              = 'MultilineFunctionsNotAllowed';
+  const NON_EMPTY_SINGLELINE        = 'NonEmptySingleLine';
 
   public $functionScopePrefixes = [
       'private'    => '_',
@@ -135,6 +136,12 @@ class Behance_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniff
   protected function _processCurlyBraceNewlines( $phpcsFile, $stackPtr ) {
 
     $tokens       = $phpcsFile->getTokens();
+
+    // interface functions have no curly braces!
+    if ( !isset( $tokens[ $stackPtr ]['scope_opener'] ) ) {
+      return;
+    }
+
     $openingBrace = $tokens[ $stackPtr ]['scope_opener'];
     $closingBrace = $tokens[ $stackPtr ]['scope_closer'];
 
