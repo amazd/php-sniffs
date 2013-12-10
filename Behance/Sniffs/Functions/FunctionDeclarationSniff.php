@@ -293,7 +293,7 @@ class Behance_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniff
     // expected prefix is empty - just return, anything can happen
     if ( empty( $expectedPrefix ) ) {
 
-      foreach ( $this->functionScopePrefixes as $scope => $prefix ) {
+      foreach ( $this->functionScopePrefixes as $prefix ) {
 
         if ( empty( $prefix ) ) {
           continue;
@@ -303,22 +303,21 @@ class Behance_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniff
           $error = 'Expected no prefix for %s function "%s"; found "%s"';
           $data  = [ $scope, $fxName, $prefix ];
           $phpcsFile->addError( $error, $stackPtr, static::INCORRECT_PREFIX, $data );
-        }
+          return;
+        } // if strpos fxName prefix === 0
 
       } // foreach functionScopePrefixes
 
-      return;
-
     } // if empty expectedPrefix
 
-    if ( strpos( $fxName, $expectedPrefix ) !== 0 ) {
+    elseif ( strpos( $fxName, $expectedPrefix ) !== 0 ) {
 
       $error = 'Expected prefix "%s" for %s function "%s" not found';
       $data  = [ $expectedPrefix, $scope, $fxName ];
 
       $phpcsFile->addError( $error, $stackPtr, static::INCORRECT_PREFIX, $data );
 
-    } // if expected prefix not at beginning
+    } // if !empty expectedPrefix && expected prefix not at beginning
 
   } // _processFunctionName
 
