@@ -4,7 +4,6 @@ class Behance_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniff
   const INCORRECT_PREFIX            = 'IncorrectFunctionPrefix';
   const INCORRECT_DOUBLE_UNDERSCORE = 'IncorrectDoubleUnderscoreFunctionPrefix';
   const INCORRECT_NEWLINES          = 'InvalidFunctionNewlineFormatting';
-  const INVALID_TRAILING            = 'InvalidFunctionTrailingComment';
   const INVALID_ARG_FORMAT          = 'InvalidArgumentListFormat';
   const MULTILINE_FUNC              = 'MultilineFunctionsNotAllowed';
 
@@ -71,7 +70,6 @@ class Behance_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniff
     $this->_processFunctionName( $phpcsFile, $stackPtr );
     $this->_processDefinitionWhitespace( $phpcsFile, $stackPtr );
     $this->_processCurlyBraceNewlines( $phpcsFile, $stackPtr );
-    $this->_processTrailingFunctionComment( $phpcsFile, $stackPtr );
 
   } // process
 
@@ -122,58 +120,6 @@ class Behance_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniff
     }
 
   } // _processDefinitionWhitespace
-
-  /**
-   * Trailing comment for functions MUST be the function name
-   *
-   * @param PHP_CodeSniffer_File $phpcsFile The file where the token was found.
-   * @param int                  $stackPtr  The position in the stack where
-   *                                        the token was found.
-   */
-  protected function _processTrailingFunctionComment( $phpcsFile, $stackPtr ) {
-
-    $tokens     = $phpcsFile->getTokens();
-    $openingPtr = $tokens[ $stackPtr ]['scope_opener'];
-    $closingPtr = $tokens[ $stackPtr ]['scope_closer'];
-
-    if ( $tokens[ $openingPtr ]['line'] === $tokens[ $closingPtr ]['line'] ) {
-
-      $commentPtr = $phpcsFile->findNext( T_COMMENT, $stackPtr );
-
-      if ( $tokens[ $commentPtr ]['line'] === $tokens[ $stackPtr ]['line'] ) {
-        $error = 'No trailing comment allowed for single line function';
-        $phpcsFile->addError( $error, $stackPtr, static::INVALID_TRAILING );
-      }
-
-      return;
-
-    } // if opening curly bracket on same line as closing
-
-    $next = $phpcsFile->findNext( T_WHITESPACE, $closingPtr + 1, null, true );
-
-    if ( $tokens[ $next ]['line'] !== $tokens[ $closingPtr ]['line'] ) {
-      $error = 'Missing function trailing comment';
-      $phpcsFile->addError( $error, $closingPtr, static::INVALID_TRAILING );
-      return;
-    }
-
-    if ( $tokens[ $next ]['code'] !== T_COMMENT ) {
-      $error = 'Unexpected token found after closing curly brace';
-      $phpcsFile->addError( $error, $closingPtr, static::INVALID_TRAILING );
-      return;
-    }
-
-    $fxName          = $phpcsFile->getDeclarationName( $stackPtr );
-    $expectedComment = "// {$fxName}";
-    $actualComment   = trim( $tokens[ $next ]['content'] );
-
-    if ( $expectedComment !== $actualComment ) {
-      $error = 'Trailing comment for function "%s" incorrect; expected "%s", found "%s"';
-      $data  = [ $fxName, $expectedComment, $actualComment ];
-      $phpcsFile->addError( $error, $closingPtr, static::INVALID_TRAILING, $data );
-    }
-
-  } // _processTrailingFunctionComment
 
   /**
    * Makes sure that there is an empty line below the fxs opening curly brace
