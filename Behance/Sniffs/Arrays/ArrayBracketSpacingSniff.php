@@ -78,4 +78,4 @@ class Behance_Sniffs_Arrays_ArrayBracketSpacingSniff implements PHP_CodeSniffer_
 
   } // process
 
-} // class
+} // Behance_Sniffs_Arrays_ArrayBracketSpacingSniff
