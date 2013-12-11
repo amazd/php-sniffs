@@ -3,11 +3,9 @@ Behance PHP_CodeSniffer Sniffs
 
 Something smells bad.
 
-[List of supported rules](https://github.com/behance/php-sniffs/wiki/Ruleset)
+[ruleset.xml](https://github.com/behance/php-sniffs/blob/master/Behance/ruleset.xml)
 
-[ruleset.xml defines these](https://github.com/behance/php-sniffs/blob/master/Behance/ruleset.xml)
-
-## To Run
+## To Run (assuming you have `phpcs` v1.5 installed via PEAR)
 - make sure that you run the `install.sh` script first
   - this places the entire `Behance` directory into `$PEAR_SRC_PATH/PHP/CodeSniffer/Standards/`
   - to ensure that it was installed correctly: `phpcs -i`
