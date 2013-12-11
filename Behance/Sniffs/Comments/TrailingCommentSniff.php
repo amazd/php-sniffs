@@ -100,12 +100,9 @@ class Behance_Sniffs_Comments_TrailingCommentSniff implements PHP_CodeSniffer_Sn
     } // if _isCloseOfAnAssignedAnonymousFunction
 
     if ( !isset( $tokens[ $commentPtr ] ) || $tokens[ $commentPtr ]['code'] !== T_COMMENT ) {
-
       $phpcsFile->addError( 'trailing comment not found after closing curly', $stackPtr );
-
       return;
-
-    } // no comment at all...?
+    }
 
     // make sure that there is exactly 1 space between the slashes and the comment
     $comment = ltrim( $tokens[ $commentPtr ]['content'], '/' );
@@ -128,12 +125,29 @@ class Behance_Sniffs_Comments_TrailingCommentSniff implements PHP_CodeSniffer_Sn
 
     $commentPtr = $stackPtr + 2;
 
-    // ensure declaration names match expected comments
-    $scopeTypeMap = [
+    $nameTrailing = [
         T_FUNCTION  => 'function',
         T_CLASS     => 'class',
-        T_INTERFACE => 'interface',
+        T_INTERFACE => 'interface'
     ];
+
+    $longTrailing = [
+        T_WHILE     => 'while',
+        T_FOR       => 'for',
+        T_FOREACH   => 'foreach',
+        T_IF        => 'if',
+        T_ELSE      => 'else',
+        T_ELSEIF    => 'elseif',
+        T_DO        => 'do',
+        T_TRY       => 'try',
+        T_CATCH     => 'catch',
+        T_SWITCH    => 'switch'
+    ];
+
+    // ensure declaration names match expected comments
+    $codeValues   = array_merge( array_keys( $nameTrailing ), array_keys( $longTrailing ) );
+    $nameValues   = array_merge( $nameTrailing, $longTrailing );
+    $scopeTypeMap = array_combine( $codeValues, $nameValues );
 
     if ( !isset( $scopeTypeMap[ $tokens[ $scopeOpenerPtr ]['code'] ] ) ) {
       return;
@@ -141,15 +155,40 @@ class Behance_Sniffs_Comments_TrailingCommentSniff implements PHP_CodeSniffer_Sn
 
     $scopeType = $scopeTypeMap[ $tokens[ $scopeOpenerPtr ]['code'] ];
 
-    $declarationName = $phpcsFile->getDeclarationName( $scopeOpenerPtr );
+    $declarationName = ( in_array( $scopeType, $nameTrailing ) )
+                       ? $phpcsFile->getDeclarationName( $scopeOpenerPtr )
+                       : $scopeType;
     $expectedComment = "// {$declarationName}";
     $actualComment   = trim( $tokens[ $commentPtr ]['content'] );
 
-    if ( $expectedComment !== $actualComment ) {
+    if ( in_array( $scopeType, $nameTrailing ) && $expectedComment !== $actualComment ) {
+
       $error = 'Trailing comment for %s "%s" incorrect; expected "%s", found "%s"';
       $data  = [ $scopeType, $declarationName, $expectedComment, $actualComment ];
+
       $phpcsFile->addError( $error, $stackPtr, 'InvalidFunctionTrailingComment', $data );
-    }
+
+      return;
+
+    } // if nameTrailing and not matching
+
+    elseif ( in_array( $scopeType, $longTrailing ) ) {
+
+      $hasExpected = ( strpos( $actualComment, $expectedComment ) === 0 );
+      $error       = 'Control structure trailing comment not structure properly; expected "%s", found "%s"';
+      $data        = [ $expectedComment . ' <description>', $actualComment ];
+
+      if ( !$hasExpected ) {
+        $phpcsFile->addError( $error, $stackPtr, 'InvalidTrailingComment', $data );
+        return;
+      }
+
+      if ( strlen( $actualComment ) <= strlen( $expectedComment ) ) {
+        $phpcsFile->addError( $error, $stackPtr, 'InvalidTrailingComment', $data );
+        return;
+      }
+
+    } // elseif is longtrailing scope
 
   } // _processDeclarationName
 
