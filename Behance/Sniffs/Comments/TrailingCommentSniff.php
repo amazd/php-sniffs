@@ -169,7 +169,8 @@ class Behance_Sniffs_Comments_TrailingCommentSniff implements PHP_CodeSniffer_Sn
       return;
     }
 
-    $scopeType = $scopeTypeMap[ $tokens[ $scopeOpenerPtr ]['code'] ];
+    $scopeCode = $tokens[ $scopeOpenerPtr ]['code'];
+    $scopeType = $scopeTypeMap[ $scopeCode ];
 
     $declarationName = ( in_array( $scopeType, $nameTrailing ) )
                        ? $phpcsFile->getDeclarationName( $scopeOpenerPtr )
@@ -199,7 +200,7 @@ class Behance_Sniffs_Comments_TrailingCommentSniff implements PHP_CodeSniffer_Sn
         return;
       }
 
-      if ( strlen( $actualComment ) <= strlen( $expectedComment ) ) {
+      if ( strlen( $actualComment ) <= strlen( $expectedComment ) && $scopeCode !== T_TRY ) {
         $phpcsFile->addError( $error, $closeCurlyPtr, 'InvalidTrailingComment', $data );
         return;
       }
