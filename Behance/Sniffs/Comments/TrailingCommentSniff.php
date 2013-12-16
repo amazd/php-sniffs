@@ -10,7 +10,7 @@ class Behance_Sniffs_Comments_TrailingCommentSniff implements PHP_CodeSniffer_Sn
    */
   public function register() {
 
-    return [ T_CLOSE_CURLY_BRACKET ];
+    return PHP_CodeSniffer_Tokens::$scopeOpeners;
 
   } // register
 
@@ -26,22 +26,40 @@ class Behance_Sniffs_Comments_TrailingCommentSniff implements PHP_CodeSniffer_Sn
   public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
 
     $tokens         = $phpcsFile->getTokens();
-    $nextTokenPtr   = $stackPtr + 1;
-    $scopeOpenerPtr = $this->_getScopeOpener( $stackPtr, $phpcsFile );
+    $scopeOpenerPtr = $stackPtr;
+
+    // ignore inline scopes
+    if ( !isset( $tokens[ $scopeOpenerPtr ]['scope_opener'] ) ) {
+      return;
+    }
+
+    $openCurlyPtr  = $tokens[ $scopeOpenerPtr ]['scope_opener'];
+    $closeCurlyPtr = $tokens[ $openCurlyPtr ]['scope_closer'];
+    $nextTokenPtr  = $closeCurlyPtr + 1;
+
+    // ignore non-curly scopes such as the 'case' and 'default' keywords
+    if ( $tokens[ $openCurlyPtr ]['content'] !== '{' ) {
+      return;
+    }
 
     if ( !isset( $tokens[ $nextTokenPtr ] ) ) {
       return;
     }
 
     // ignore single line scopes
-    if ( $tokens[ $stackPtr ]['line'] === $tokens[ $scopeOpenerPtr ]['line'] ) {
+    if ( $tokens[ $closeCurlyPtr ]['line'] === $tokens[ $scopeOpenerPtr ]['line'] ) {
+      return;
+    }
+
+    // ignore unassigned closures
+    if ( $tokens[ $scopeOpenerPtr ]['code'] === T_CLOSURE && !$this->_isAssignedClosure( $scopeOpenerPtr, $phpcsFile ) ) {
       return;
     }
 
     // comment exists right after curly brace
     if ( $tokens[ $nextTokenPtr ]['code'] == T_COMMENT ) {
       $error = 'Single space required between closing curly brace & trailing comment';
-      $phpcsFile->addError( $error, $stackPtr, 'MissingWhitespace' );
+      $phpcsFile->addError( $error, $closeCurlyPtr, 'MissingWhitespace' );
       return;
     }
 
@@ -49,12 +67,12 @@ class Behance_Sniffs_Comments_TrailingCommentSniff implements PHP_CodeSniffer_Sn
     // and that it only has one line in it
     if ( $tokens[ $nextTokenPtr ]['content'] === PHP_EOL ) {
 
-      $numberOfLines = $this->_numberOfLinesInScope( $tokens, $stackPtr );
+      $numberOfLines = $this->_numberOfLinesInScope( $openCurlyPtr, $closeCurlyPtr );
 
       if ( $numberOfLines >= $this->minLinesRequiredForTrailing ) {
         $error = 'Missing required trailing comment for scope >= %s lines; found %s lines';
         $data  = [ $this->minLinesRequiredForTrailing, $numberOfLines ];
-        $phpcsFile->addError( $error, $stackPtr, 'MissingTrailingComment', $data );
+        $phpcsFile->addError( $error, $closeCurlyPtr, 'MissingTrailingComment', $data );
       }
 
       return;
@@ -78,29 +96,27 @@ class Behance_Sniffs_Comments_TrailingCommentSniff implements PHP_CodeSniffer_Sn
       } // while isset && is whitespace
 
       if ( $amountOfSpace > 1 ) {
-        $phpcsFile->addError( 'Too much whitespace detected after curly brace', $stackPtr );
+        $phpcsFile->addError( 'Too much whitespace detected after curly brace', $closeCurlyPtr );
         return;
       }
 
     } // if there is whitespace right after curly brace
 
-    $commentPtr = $stackPtr + 2;
+    $commentPtr = $closeCurlyPtr + 2;
 
     // make sure assignment closures have a semicolon
-    if ( $this->_isCloseOfAnAssignedAnonymousFunction( $stackPtr, $phpcsFile ) ) {
-
-      if ( !isset( $tokens[ $stackPtr + 1 ] ) || $tokens[ $stackPtr + 1 ]['code'] !== T_SEMICOLON ) {
-        $phpcsFile->addError( 'semicolon not found after anonymous function assignment', $stackPtr + 1 );
+    if ( $this->_isAssignedClosure( $scopeOpenerPtr, $phpcsFile ) ) {
+      if ( !isset( $tokens[ $closeCurlyPtr + 1 ] ) || $tokens[ $closeCurlyPtr + 1 ]['code'] !== T_SEMICOLON ) {
+        $phpcsFile->addError( 'semicolon not found after anonymous function assignment', $closeCurlyPtr + 1 );
 
         return;
       } // if !semicolon
 
       $commentPtr++;
-
-    } // if _isCloseOfAnAssignedAnonymousFunction
+    } // if _isAssignedClosure
 
     if ( !isset( $tokens[ $commentPtr ] ) || $tokens[ $commentPtr ]['code'] !== T_COMMENT ) {
-      $phpcsFile->addError( 'trailing comment not found after closing curly', $stackPtr );
+      $phpcsFile->addError( 'trailing comment not found after closing curly', $closeCurlyPtr );
       return;
     }
 
@@ -109,21 +125,21 @@ class Behance_Sniffs_Comments_TrailingCommentSniff implements PHP_CodeSniffer_Sn
 
     if ( strlen( $comment ) < 2 || $comment[0] !== ' ' || $comment[1] === ' '  ) {
 
-      $phpcsFile->addError( 'Trailing comment formatted incorrectly; // <comment>', $stackPtr );
+      $phpcsFile->addError( 'Trailing comment formatted incorrectly; // <comment>', $closeCurlyPtr );
 
       return;
 
     } // if empty comment or missing whitespace
 
-    $this->_processDeclarationName( $stackPtr, $scopeOpenerPtr, $phpcsFile );
+    $this->_processDeclarationName( $closeCurlyPtr, $scopeOpenerPtr, $phpcsFile );
 
   } // process
 
-  protected function _processDeclarationName( $stackPtr, $scopeOpenerPtr, PHP_CodeSniffer_File $phpcsFile ) {
+  protected function _processDeclarationName( $closeCurlyPtr, $scopeOpenerPtr, PHP_CodeSniffer_File $phpcsFile ) {
 
     $tokens = $phpcsFile->getTokens();
 
-    $commentPtr = $stackPtr + 2;
+    $commentPtr = $closeCurlyPtr + 2;
 
     $nameTrailing = [
         T_FUNCTION  => 'function',
@@ -153,7 +169,8 @@ class Behance_Sniffs_Comments_TrailingCommentSniff implements PHP_CodeSniffer_Sn
       return;
     }
 
-    $scopeType = $scopeTypeMap[ $tokens[ $scopeOpenerPtr ]['code'] ];
+    $scopeCode = $tokens[ $scopeOpenerPtr ]['code'];
+    $scopeType = $scopeTypeMap[ $scopeCode ];
 
     $declarationName = ( in_array( $scopeType, $nameTrailing ) )
                        ? $phpcsFile->getDeclarationName( $scopeOpenerPtr )
@@ -166,7 +183,7 @@ class Behance_Sniffs_Comments_TrailingCommentSniff implements PHP_CodeSniffer_Sn
       $error = 'Trailing comment for %s "%s" incorrect; expected "%s", found "%s"';
       $data  = [ $scopeType, $declarationName, $expectedComment, $actualComment ];
 
-      $phpcsFile->addError( $error, $stackPtr, 'InvalidFunctionTrailingComment', $data );
+      $phpcsFile->addError( $error, $closeCurlyPtr, 'InvalidFunctionTrailingComment', $data );
 
       return;
 
@@ -179,12 +196,12 @@ class Behance_Sniffs_Comments_TrailingCommentSniff implements PHP_CodeSniffer_Sn
       $data        = [ $expectedComment . ' <description>', $actualComment ];
 
       if ( !$hasExpected ) {
-        $phpcsFile->addError( $error, $stackPtr, 'InvalidTrailingComment', $data );
+        $phpcsFile->addError( $error, $closeCurlyPtr, 'InvalidTrailingComment', $data );
         return;
       }
 
-      if ( strlen( $actualComment ) <= strlen( $expectedComment ) ) {
-        $phpcsFile->addError( $error, $stackPtr, 'InvalidTrailingComment', $data );
+      if ( strlen( $actualComment ) <= strlen( $expectedComment ) && $scopeCode !== T_TRY ) {
+        $phpcsFile->addError( $error, $closeCurlyPtr, 'InvalidTrailingComment', $data );
         return;
       }
 
@@ -194,26 +211,13 @@ class Behance_Sniffs_Comments_TrailingCommentSniff implements PHP_CodeSniffer_Sn
 
   /**
    * closures need a semicolon before the trailing comment, but only when it's an assignment
-   * so look for this situation:
-   * 1. find the opening curly, 2. see if it's an anonymous function, 3. see if it's being assigned!
    *
    * @param   array $tokens
-   * @param   int   $stackPtr
+   * @param   int   $curlyOpenerPtr
    * @param   PHP_CodeSniffer_File $phpcsFile
    * @return  boolean
    */
-  protected function _isCloseOfAnAssignedAnonymousFunction( $stackPtr, PHP_CodeSniffer_File $phpcsFile ) {
-
-    $curlyOpenerPtr = $this->_getScopeOpener( $stackPtr, $phpcsFile );
-    if ( $curlyOpenerPtr === false ) {
-      return false;
-    }
-
-    return $this->_isAssignedAnonymousFunction( $curlyOpenerPtr, $phpcsFile );
-
-  } // _isCloseOfAnAssignedAnonymousFunction
-
-  protected function _isAssignedAnonymousFunction( $curlyOpenerPtr, PHP_CodeSniffer_File $phpcsFile ) {
+  protected function _isAssignedClosure( $curlyOpenerPtr, PHP_CodeSniffer_File $phpcsFile ) {
 
     $tokens = $phpcsFile->getTokens();
 
@@ -228,26 +232,17 @@ class Behance_Sniffs_Comments_TrailingCommentSniff implements PHP_CodeSniffer_Sn
 
     return in_array( $tokens[ $assignmentPtr ]['code'], PHP_CodeSniffer_Tokens::$assignmentTokens );
 
-  } // _isAssignedAnonymousFunction
-
-  protected function _getScopeOpener( $stackPtr, PHP_CodeSniffer_File $phpcsFile ) {
-
-    $tokens = $phpcsFile->getTokens();
-    $prevToken = $tokens[ $stackPtr ]['scope_opener'];
-    return $phpcsFile->findPrevious( PHP_CodeSniffer_Tokens::$scopeOpeners, $prevToken - 1 );
-
-  } // _getScopeOpener
+  } // _isAssignedClosure
 
   /**
-   * Starts from the *end* of the scope (ie: where '}' is)
+   * Starts from the *beginning* of the scope (ie: where '{' is)
    *
-   * @param   array $tokens
-   * @param   int   $stackPtr
+   * @param   int $scopeOpenPtr
+   * @param   int $scopeEndPtr
    * @return  int
    */
-  protected function _numberOfLinesInScope( $tokens, $scopeEndPtr ) {
+  protected function _numberOfLinesInScope( $scopeOpenPtr, $scopeEndPtr ) {
 
-    $scopeBeginPtr    = $tokens[ $scopeEndPtr ]['scope_opener'];
     return max( 0, $tokens[ $scopeEndPtr ]['line'] - $tokens[ $scopeBeginPtr ]['line'] - 1 );
 
   } // _numberOfLinesInScope
