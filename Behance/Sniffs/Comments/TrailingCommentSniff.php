@@ -237,11 +237,11 @@ class Behance_Sniffs_Comments_TrailingCommentSniff implements PHP_CodeSniffer_Sn
   /**
    * Starts from the *beginning* of the scope (ie: where '{' is)
    *
-   * @param   int $scopeOpenPtr
+   * @param   int $scopeBeginPtr
    * @param   int $scopeEndPtr
    * @return  int
    */
-  protected function _numberOfLinesInScope( $scopeOpenPtr, $scopeEndPtr ) {
+  protected function _numberOfLinesInScope( $scopeBeginPtr, $scopeEndPtr ) {
 
     return max( 0, $tokens[ $scopeEndPtr ]['line'] - $tokens[ $scopeBeginPtr ]['line'] - 1 );
 
