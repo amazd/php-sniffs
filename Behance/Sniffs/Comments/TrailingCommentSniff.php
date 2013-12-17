@@ -67,7 +67,7 @@ class Behance_Sniffs_Comments_TrailingCommentSniff implements PHP_CodeSniffer_Sn
     // and that it only has one line in it
     if ( $tokens[ $nextTokenPtr ]['content'] === PHP_EOL ) {
 
-      $numberOfLines = $this->_numberOfLinesInScope( $openCurlyPtr, $closeCurlyPtr );
+      $numberOfLines = $this->_numberOfLinesInScope( $tokens, $openCurlyPtr, $closeCurlyPtr );
 
       if ( $numberOfLines >= $this->minLinesRequiredForTrailing ) {
         $error = 'Missing required trailing comment for scope >= %s lines; found %s lines';
@@ -241,7 +241,7 @@ class Behance_Sniffs_Comments_TrailingCommentSniff implements PHP_CodeSniffer_Sn
    * @param   int $scopeEndPtr
    * @return  int
    */
-  protected function _numberOfLinesInScope( $scopeBeginPtr, $scopeEndPtr ) {
+  protected function _numberOfLinesInScope( $tokens, $scopeBeginPtr, $scopeEndPtr ) {
 
     return max( 0, $tokens[ $scopeEndPtr ]['line'] - $tokens[ $scopeBeginPtr ]['line'] - 1 );
 
