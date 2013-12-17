@@ -67,7 +67,7 @@ class Behance_Sniffs_Comments_TrailingCommentSniff implements PHP_CodeSniffer_Sn
     // and that it only has one line in it
     if ( $tokens[ $nextTokenPtr ]['content'] === PHP_EOL ) {
 
-      $numberOfLines = $this->_numberOfLinesInScope( $tokens, $openCurlyPtr, $closeCurlyPtr );
+      $numberOfLines = $this->_numberOfLinesInScope( $openCurlyPtr, $closeCurlyPtr, $phpcsFile );
 
       if ( $numberOfLines >= $this->minLinesRequiredForTrailing ) {
         $error = 'Missing required trailing comment for scope >= %s lines; found %s lines';
@@ -212,7 +212,6 @@ class Behance_Sniffs_Comments_TrailingCommentSniff implements PHP_CodeSniffer_Sn
   /**
    * closures need a semicolon before the trailing comment, but only when it's an assignment
    *
-   * @param   array $tokens
    * @param   int   $curlyOpenerPtr
    * @param   PHP_CodeSniffer_File $phpcsFile
    * @return  boolean
@@ -237,11 +236,15 @@ class Behance_Sniffs_Comments_TrailingCommentSniff implements PHP_CodeSniffer_Sn
   /**
    * Starts from the *beginning* of the scope (ie: where '{' is)
    *
-   * @param   int $scopeBeginPtr
-   * @param   int $scopeEndPtr
+   * @param   array $tokens
+   * @param   int   $scopeBeginPtr
+   * @param   int   $scopeEndPtr
+   * @param   PHP_CodeSniffer_File $phpcsFile
    * @return  int
    */
-  protected function _numberOfLinesInScope( $tokens, $scopeBeginPtr, $scopeEndPtr ) {
+  protected function _numberOfLinesInScope( $scopeBeginPtr, $scopeEndPtr, PHP_CodeSniffer_File $phpcsFile ) {
+
+    $tokens = $phpcsFile->getTokens();
 
     return max( 0, $tokens[ $scopeEndPtr ]['line'] - $tokens[ $scopeBeginPtr ]['line'] - 1 );
 
