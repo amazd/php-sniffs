@@ -205,7 +205,7 @@ class Behance_Sniffs_Comments_TrailingCommentSniff implements PHP_CodeSniffer_Sn
         return;
       }
 
-      if ( strlen( $actualComment ) <= strlen( $expectedComment ) && in_array( $scopeCode, $descriptionNotRequired ) ) {
+      if ( strlen( $actualComment ) <= strlen( $expectedComment ) && !in_array( $scopeCode, $this->descriptionNotRequired ) ) {
         $phpcsFile->addError( $error, $closeCurlyPtr, 'InvalidTrailingComment', $data );
         return;
       }
