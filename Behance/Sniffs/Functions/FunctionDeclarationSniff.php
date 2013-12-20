@@ -4,6 +4,7 @@ class Behance_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniff
   const INCORRECT_PREFIX            = 'IncorrectFunctionPrefix';
   const INCORRECT_DOUBLE_UNDERSCORE = 'IncorrectDoubleUnderscoreFunctionPrefix';
   const INCORRECT_NEWLINES          = 'InvalidFunctionNewlineFormatting';
+  const INCORRECT_CURLY             = 'InvalidFunctionCurlySpacing';
   const INVALID_ARG_FORMAT          = 'InvalidArgumentListFormat';
   const MULTILINE_FUNC              = 'MultilineFunctionsNotAllowed';
   const NON_EMPTY_SINGLELINE        = 'NonEmptySingleLine';
@@ -86,10 +87,23 @@ class Behance_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniff
     $tokens     = $phpcsFile->getTokens();
     $parenOpen  = $tokens[ $stackPtr ]['parenthesis_opener'];
     $parenClose = $tokens[ $stackPtr ]['parenthesis_closer'];
+    $curlyOpen  = $tokens[ $stackPtr ]['scope_opener'];
 
     if ( $tokens[ $parenOpen ]['line'] !== $tokens[ $parenClose ]['line'] ) {
       $error = 'Multiline function definitions not allowed';
       $phpcsFile->addError( $error, $stackPtr, static::MULTILINE_FUNC );
+      return;
+    }
+
+    if ( $tokens[ $parenClose ]['line'] !== $tokens[ $curlyOpen ]['line'] ) {
+      $error = 'Opening curly must be be on the same line as the closing parenthis';
+      $phpcsFile->addError( $error, $curlyOpen, static::INCORRECT_CURLY );
+      return;
+    }
+
+    if ( $tokens[ $parenClose ]['column'] !== $tokens[ $curlyOpen ]['column'] - 2 ) {
+      $error = 'Expected 1 space between closing parenthesis and open curly';
+      $phpcsFile->addError( $error, $curlyOpen, static::INCORRECT_CURLY );
       return;
     }
 
@@ -270,7 +284,7 @@ class Behance_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniff
 
       $phpcsFile->addError( $error, $stackPtr, static::INCORRECT_PREFIX, $data );
 
-    } // if !empty expectedPrefix && expected prefix not at beginning
+    } // elseif !empty expectedPrefix && expected prefix not at beginning
 
   } // _processFunctionName
 
