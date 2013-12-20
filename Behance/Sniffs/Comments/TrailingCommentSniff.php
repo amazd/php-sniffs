@@ -3,6 +3,11 @@ class Behance_Sniffs_Comments_TrailingCommentSniff implements PHP_CodeSniffer_Sn
 
   public $minLinesRequiredForTrailing = 4;
 
+  protected $descriptionNotRequired = [
+      T_TRY,
+      T_ELSE
+  ];
+
   /**
    * Returns the token types that this sniff is interested in.
    *
@@ -200,7 +205,7 @@ class Behance_Sniffs_Comments_TrailingCommentSniff implements PHP_CodeSniffer_Sn
         return;
       }
 
-      if ( strlen( $actualComment ) <= strlen( $expectedComment ) && $scopeCode !== T_TRY ) {
+      if ( strlen( $actualComment ) <= strlen( $expectedComment ) && in_array( $scopeCode, $descriptionNotRequired ) ) {
         $phpcsFile->addError( $error, $closeCurlyPtr, 'InvalidTrailingComment', $data );
         return;
       }
