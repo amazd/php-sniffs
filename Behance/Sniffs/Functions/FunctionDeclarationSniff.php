@@ -85,6 +85,19 @@ class Behance_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniff
   protected function _processDefinitionWhitespace( $phpcsFile, $stackPtr ) {
 
     $tokens     = $phpcsFile->getTokens();
+
+    $indices    = [
+        'parenthesis_opener',
+        'parenthesis_closer',
+        'scope_opener'
+    ];
+
+    $missingIndices = array_diff( $indices, array_keys( $tokens[ $stackPtr ] ) );
+
+    if ( !empty( $missingIndices ) ) {
+      return;
+    }
+
     $parenOpen  = $tokens[ $stackPtr ]['parenthesis_opener'];
     $parenClose = $tokens[ $stackPtr ]['parenthesis_closer'];
     $curlyOpen  = $tokens[ $stackPtr ]['scope_opener'];
