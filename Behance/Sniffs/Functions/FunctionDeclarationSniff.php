@@ -25,6 +25,18 @@ class Behance_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniff
   ];
 
   /**
+   * A list of methods where a single underscore is allowed as a prefix
+   *
+   * @var array
+   */
+  public $prefixExemptions = [
+      'protected' => [
+          'setUp',    // phpunit
+          'tearDown'  // phpunit
+      ]
+  ];
+
+  /**
    * A list of all PHP magic methods
    *
    * @var array
@@ -262,10 +274,9 @@ class Behance_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniff
       if ( in_array( substr( $fxName, 2 ), $doubleUnderAllowed ) ) {
         return;
       }
-
       else {
-          $error = '__ is a reserved prefix for magic functions';
-          $phpcsFile->addError( $error, $stackPtr, static::INCORRECT_DOUBLE_UNDERSCORE );
+        $error = '__ is a reserved prefix for magic functions';
+        $phpcsFile->addError( $error, $stackPtr, static::INCORRECT_DOUBLE_UNDERSCORE );
       }
 
     } // if fxName __ == 0
@@ -279,12 +290,11 @@ class Behance_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniff
           continue;
         }
 
-        if ( strpos( $fxName, $prefix ) === 0 ) {
+        if ( strpos( $fxName, $prefix ) === 0 && !in_array( $fxName, $this->prefixExemptions[ $scope ] ) ) {
           $error = 'Expected no prefix for %s function "%s"; found "%s"';
-          $data  = [ $scope, $fxName, $prefix ];
-          $phpcsFile->addError( $error, $stackPtr, static::INCORRECT_PREFIX, $data );
+          $phpcsFile->addError( $error, $stackPtr, static::INCORRECT_PREFIX, [ $scope, $fxName, $prefix ] );
           return;
-        } // if strpos fxName prefix === 0
+        }
 
       } // foreach functionScopePrefixes
 
