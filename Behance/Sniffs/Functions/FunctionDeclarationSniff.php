@@ -290,7 +290,7 @@ class Behance_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniff
           continue;
         }
 
-        if ( strpos( $fxName, $prefix ) === 0 && !in_array( $fxName, $this->prefixExemptions[ $scope ] ) ) {
+        if ( strpos( $fxName, $prefix ) === 0 ) {
           $error = 'Expected no prefix for %s function "%s"; found "%s"';
           $phpcsFile->addError( $error, $stackPtr, static::INCORRECT_PREFIX, [ $scope, $fxName, $prefix ] );
           return;
@@ -301,6 +301,10 @@ class Behance_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniff
     } // if empty expectedPrefix
 
     elseif ( strpos( $fxName, $expectedPrefix ) !== 0 ) {
+
+      if ( isset( $this->prefixExemptions[ $scope ] ) && in_array( $fxName, $this->prefixExemptions[ $scope ] ) ) {
+        return;
+      }
 
       $error = 'Expected prefix "%s" for %s function "%s" not found';
       $data  = [ $expectedPrefix, $scope, $fxName ];
