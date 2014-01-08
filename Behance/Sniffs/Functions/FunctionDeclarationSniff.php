@@ -217,7 +217,14 @@ class Behance_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniff
         $phpcsFile->addError( $error, $tracePtr, static::INCORRECT_NEWLINES );
       }
 
-      $token = $tokens[ --$tracePtr ];
+      --$tracePtr;
+
+      if ( $tracePtr < 0 ) {
+        $phpcsFile->addError( 'Could not find /n at all', $closingBrace - 1, static::INCORRECT_NEWLINES );
+        return;
+      }
+
+      $token = $tokens[ $tracePtr ];
 
     } // while content !== Behance_Constants::UNIX_EOL
 
