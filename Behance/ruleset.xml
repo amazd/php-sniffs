@@ -60,6 +60,7 @@
       <property name="elementIndentLevel" value="2"/>
     </properties>
   </rule>
+  <rule ref="Behance.Arrays.ShortHandArrayOnly"/>
   <rule ref="Behance.Classes.ClassDeclaration"/>
   <rule ref="Behance.Comments.TrailingComment"/>
   <rule ref="Behance.Comments.DisallowHashComments"/>
