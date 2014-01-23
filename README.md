@@ -3,10 +3,18 @@ Behance PHP_CodeSniffer Sniffs
 
 Something smells bad.
 
-[ruleset.xml](https://github.com/behance/php-sniffs/blob/master/Behance/ruleset.xml)
+## To Run
+```
+phpcs --standard=/path/to/this/repo/Behance/ruleset.xml path/to/files
+```
 
-## To Run (assuming you have `phpcs` v1.5 installed via PEAR)
-- make sure that you run the `install.sh` script first
-  - this places the entire `Behance` directory into `$PEAR_SRC_PATH/PHP/CodeSniffer/Standards/`
-  - to ensure that it was installed correctly: `phpcs -i`
-- `phpcs --standard=Behance path/to/file(s)`
+Or if it's installed in your installation of phpcs, just run
+```
+phpcs --standard=Behance path/to/files
+```
+
+## To Test
+```
+cd /path/to/this/repo
+composer install && cd tests && phpunit
+```
