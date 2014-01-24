@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "5ccaef8239890f96512c1d4740ea64f6",
+    "hash": "5798e313009322b1de12d836f8b9480c",
     "packages": [
         {
             "name": "phpunit/php-code-coverage",
@@ -251,16 +251,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "3.7.27",
+            "version": "3.7.28",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "4b024e753e3421837afbcca962c8724c58b39376"
+                "reference": "3b97c8492bcafbabe6b6fbd2ab35f2f04d932a8d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/4b024e753e3421837afbcca962c8724c58b39376",
-                "reference": "4b024e753e3421837afbcca962c8724c58b39376",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/3b97c8492bcafbabe6b6fbd2ab35f2f04d932a8d",
+                "reference": "3b97c8492bcafbabe6b6fbd2ab35f2f04d932a8d",
                 "shasum": ""
             },
             "require": {
@@ -321,7 +321,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2013-09-16 03:09:52"
+            "time": "2013-10-17 07:27:40"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
@@ -448,12 +448,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/chr0n1x/php_codesniffer_tests.git",
-                "reference": "dbb908cac947f68c285912eafc519f944e28baa8"
+                "reference": "b71b8580ebe813e974de86d4551776cf33c25c08"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/chr0n1x/php_codesniffer_tests/zipball/dbb908cac947f68c285912eafc519f944e28baa8",
-                "reference": "dbb908cac947f68c285912eafc519f944e28baa8",
+                "url": "https://api.github.com/repos/chr0n1x/php_codesniffer_tests/zipball/b71b8580ebe813e974de86d4551776cf33c25c08",
+                "reference": "b71b8580ebe813e974de86d4551776cf33c25c08",
                 "shasum": ""
             },
             "require": {
@@ -488,7 +488,7 @@
                 "standards",
                 "tests"
             ],
-            "time": "2014-01-21 20:22:55"
+            "time": "2014-01-24 23:01:40"
         },
         {
             "name": "symfony/yaml",
