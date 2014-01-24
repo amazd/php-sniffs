@@ -197,7 +197,7 @@ class Behance_Sniffs_Comments_TrailingCommentSniff implements PHP_CodeSniffer_Sn
     elseif ( in_array( $scopeType, $longTrailing ) ) {
 
       $hasExpected = ( strpos( $actualComment, $expectedComment ) === 0 );
-      $error       = 'Control structure trailing comment not structure properly; expected "%s", found "%s"';
+      $error       = 'Control structure trailing comment not structured properly; expected "%s", found "%s"';
       $data        = [ $expectedComment . ' <description>', $actualComment ];
 
       if ( !$hasExpected ) {
