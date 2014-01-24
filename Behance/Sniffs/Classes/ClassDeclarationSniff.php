@@ -13,8 +13,7 @@ class Behance_Sniffs_Classes_ClassDeclarationSniff implements PHP_CodeSniffer_Sn
    *
    * @return array
    */
-  public function register()
-  {
+  public function register() {
 
     return [
         T_CLASS,

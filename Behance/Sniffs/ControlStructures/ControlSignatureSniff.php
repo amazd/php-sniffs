@@ -20,9 +20,13 @@ class Behance_Sniffs_ControlStructures_ControlSignatureSniff extends PHP_CodeSni
    *
    * @return array(string)
    */
+  // @codingStandardsIgnoreStart
+  // ignored because this is a PHPCS specific function
+  // and '_' cannot be prefixed
   protected function getPatterns() {
+  // @codingStandardsIgnoreEnd
 
-        return array(
+        return [
             'try {EOL...}EOLcatch ( ... ) {EOL',
             'do {EOL...} while ( ... );EOL',
             'while ( ... ) {EOL',
@@ -32,7 +36,7 @@ class Behance_Sniffs_ControlStructures_ControlSignatureSniff extends PHP_CodeSni
             '}EOLEOLelse if ( ... ) {EOL',
             '}EOLEOLelseif ( ... ) {EOL',
             '}EOLEOL...else {EOL',
-        );
+        ];
 
   } // getPatterns
 

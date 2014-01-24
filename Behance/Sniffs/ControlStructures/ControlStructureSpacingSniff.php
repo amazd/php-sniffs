@@ -43,14 +43,14 @@ class Behance_Sniffs_ControlStructures_ControlStructureSpacingSniff implements P
       if ( $tokens[ ($parenOpener + 1) ]['code'] !== T_WHITESPACE ) {
         $gap   = strlen( $tokens[ ($parenOpener + 1) ]['content'] );
         $error = 'Expected at least 1 space after opening bracket';
-        $data  = array($gap);
+        $data  = [ $gap ];
         $phpcsFile->addError( $error, ($parenOpener + 1), 'SpacingAfterOpenBrace', $data );
       } // if SpacingAfterOpenBrace
 
       if ( $tokens[ ($parenOpener - 1) ]['code'] !== T_WHITESPACE ) {
         $gap   = strlen( $tokens[ ($parenOpener + 1) ]['content'] );
         $error = 'Expected at least 1 space before opening bracket';
-        $data  = array($gap);
+        $data  = [ $gap ];
         $phpcsFile->addError( $error, ($parenOpener + 1), 'SpacingBeforeOpenBrace', $data );
       } // if SpacingBeforeOpenBrace
 
@@ -59,20 +59,20 @@ class Behance_Sniffs_ControlStructures_ControlStructureSpacingSniff implements P
         if ( $tokens[ ($parenCloser - 1) ]['code'] !== T_WHITESPACE ) {
           $gap   = strlen( $tokens[ ($parenCloser - 1) ]['content'] );
           $error = 'Expected at least 1 space before closing bracket';
-          $data  = array($gap);
+          $data  = [ $gap ];
           $phpcsFile->addError( $error, ($parenCloser - 1), 'SpaceBeforeCloseBrace', $data );
         } // if SpaceBeforeCloseBrace
 
         if ( $tokens[ ($parenCloser + 1) ]['code'] !== T_WHITESPACE ) {
           $gap   = strlen( $tokens[ ($parenCloser + 1) ]['content'] );
           $error = 'Expected at least 1 space before closing bracket';
-          $data  = array($gap);
+          $data  = [ $gap ];
           $phpcsFile->addError( $error, ($parenCloser - 1), 'SpaceAfterCloseBrace', $data );
         } // if SpaceAfterCloseBrace
 
       } // if parens ends on same line as open
 
-    } // end if
+    } // if parenthesis_opener
 
   } // process
 

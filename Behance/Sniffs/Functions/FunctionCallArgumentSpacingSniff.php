@@ -100,7 +100,7 @@ class Behance_Sniffs_Functions_FunctionCallArgumentSpacingSniff implements PHP_C
 
             if ( $space < 1 ) {
               $error = 'Expected @ least 1 space after comma in function call';
-              $data  = array($space);
+              $data  = [ $space ];
               $phpcsFile->addError( $error, $stackPtr, 'NoSpaceAfterComma', $data );
             }
 
@@ -134,7 +134,7 @@ class Behance_Sniffs_Functions_FunctionCallArgumentSpacingSniff implements PHP_C
 
       } // else
 
-    } // while
+    } // while comma, var or closure
 
   } // process
 
