@@ -18,8 +18,7 @@ class Behance_Sniffs_Comments_TrailingCommentSniffTest extends AbstractSniffUnit
 
   public function getWarningList() {
 
-    return [
-    ];
+    return [];
 
   } // getWarningList
 
