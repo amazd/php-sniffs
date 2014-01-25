@@ -22,4 +22,4 @@ class Behance_Sniffs_ControlStructures_ControlStructureSpacingSniffTest extends 
 
   } // getWarningList
 
-} // Behance_Sniffs_Classes_ClassDeclarationSniffTest
+} // Behance_Sniffs_ControlStructures_ControlStructureSpacingSniffTest
