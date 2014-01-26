@@ -46,4 +46,4 @@ class Behance_Sniffs_Arrays_ShortHandArrayOnlySniff implements PHP_CodeSniffer_S
 
   } // process
 
-} // Behance_Sniffs_Comments_TrailingCommentSniff
+} // Behance_Sniffs_Arrays_ShortHandArrayOnlySniff

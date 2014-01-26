@@ -36,43 +36,54 @@ class Behance_Sniffs_ControlStructures_ControlStructureSpacingSniff implements P
 
     $tokens = $phpcsFile->getTokens();
 
-    if ( isset($tokens[ $stackPtr ]['parenthesis_opener']) === true ) {
-      $parenOpener = $tokens[ $stackPtr ]['parenthesis_opener'];
-      $parenCloser = $tokens[ $stackPtr ]['parenthesis_closer'];
+    if ( !isset($tokens[ $stackPtr ]['parenthesis_opener']) ) {
 
-      if ( $tokens[ ($parenOpener + 1) ]['code'] !== T_WHITESPACE ) {
-        $gap   = strlen( $tokens[ ($parenOpener + 1) ]['content'] );
-        $error = 'Expected at least 1 space after opening bracket';
-        $data  = array($gap);
-        $phpcsFile->addError( $error, ($parenOpener + 1), 'SpacingAfterOpenBrace', $data );
-      } // if SpacingAfterOpenBrace
+      $whitespacePtr = $stackPtr + 1;
 
-      if ( $tokens[ ($parenOpener - 1) ]['code'] !== T_WHITESPACE ) {
-        $gap   = strlen( $tokens[ ($parenOpener + 1) ]['content'] );
-        $error = 'Expected at least 1 space before opening bracket';
-        $data  = array($gap);
-        $phpcsFile->addError( $error, ($parenOpener + 1), 'SpacingBeforeOpenBrace', $data );
-      } // if SpacingBeforeOpenBrace
+      if ( $tokens[ $whitespacePtr ]['code'] !== T_WHITESPACE ) {
+        $type  = ( $tokens[ $stackPtr ]['code'] === T_DO ) ? 'do' : 'else';
+        $error = "Expected at least 1 space after '{$type}'";
+        $phpcsFile->addError( $error, $whitespacePtr, 'SpacingAfterControlStructure' );
+      }
 
-      if ( $tokens[ $parenOpener ]['line'] === $tokens[ $parenCloser ]['line'] ) {
+      return;
 
-        if ( $tokens[ ($parenCloser - 1) ]['code'] !== T_WHITESPACE ) {
-          $gap   = strlen( $tokens[ ($parenCloser - 1) ]['content'] );
-          $error = 'Expected at least 1 space before closing bracket';
-          $data  = array($gap);
-          $phpcsFile->addError( $error, ($parenCloser - 1), 'SpaceBeforeCloseBrace', $data );
-        } // if SpaceBeforeCloseBrace
+    } // if T_ELSE or T_DO
 
-        if ( $tokens[ ($parenCloser + 1) ]['code'] !== T_WHITESPACE ) {
-          $gap   = strlen( $tokens[ ($parenCloser + 1) ]['content'] );
-          $error = 'Expected at least 1 space before closing bracket';
-          $data  = array($gap);
-          $phpcsFile->addError( $error, ($parenCloser - 1), 'SpaceAfterCloseBrace', $data );
-        } // if SpaceAfterCloseBrace
+    $parenOpener = $tokens[ $stackPtr ]['parenthesis_opener'];
+    $parenCloser = $tokens[ $stackPtr ]['parenthesis_closer'];
 
-      } // if parens ends on same line as open
+    if ( $tokens[ ($parenOpener + 1) ]['code'] !== T_WHITESPACE ) {
+      $gap   = strlen( $tokens[ ($parenOpener + 1) ]['content'] );
+      $error = 'Expected at least 1 space after opening bracket';
+      $data  = [ $gap ];
+      $phpcsFile->addError( $error, ($parenOpener + 1), 'SpacingAfterOpenBrace', $data );
+    } // if SpacingAfterOpenBrace
 
-    } // end if
+    if ( $tokens[ ($parenOpener - 1) ]['code'] !== T_WHITESPACE ) {
+      $gap   = strlen( $tokens[ ($parenOpener + 1) ]['content'] );
+      $error = 'Expected at least 1 space before opening bracket';
+      $data  = [ $gap ];
+      $phpcsFile->addError( $error, ($parenOpener + 1), 'SpacingBeforeOpenBrace', $data );
+    } // if SpacingBeforeOpenBrace
+
+    if ( $tokens[ $parenOpener ]['line'] === $tokens[ $parenCloser ]['line'] ) {
+
+      if ( $tokens[ ($parenCloser - 1) ]['code'] !== T_WHITESPACE ) {
+        $gap   = strlen( $tokens[ ($parenCloser - 1) ]['content'] );
+        $error = 'Expected at least 1 space before closing bracket';
+        $data  = [ $gap ];
+        $phpcsFile->addError( $error, ($parenCloser - 1), 'SpaceBeforeCloseBrace', $data );
+      } // if SpaceBeforeCloseBrace
+
+      if ( $tokens[ ($parenCloser + 1) ]['code'] !== T_WHITESPACE ) {
+        $gap   = strlen( $tokens[ ($parenCloser + 1) ]['content'] );
+        $error = 'Expected at least 1 space before closing bracket';
+        $data  = [ $gap ];
+        $phpcsFile->addError( $error, ($parenCloser - 1), 'SpaceAfterCloseBrace', $data );
+      } // if SpaceAfterCloseBrace
+
+    } // if parens ends on same line as open
 
   } // process
 
