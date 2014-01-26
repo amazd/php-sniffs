@@ -36,43 +36,54 @@ class Behance_Sniffs_ControlStructures_ControlStructureSpacingSniff implements P
 
     $tokens = $phpcsFile->getTokens();
 
-    if ( isset($tokens[ $stackPtr ]['parenthesis_opener']) === true ) {
-      $parenOpener = $tokens[ $stackPtr ]['parenthesis_opener'];
-      $parenCloser = $tokens[ $stackPtr ]['parenthesis_closer'];
+    if ( !isset($tokens[ $stackPtr ]['parenthesis_opener']) ) {
 
-      if ( $tokens[ ($parenOpener + 1) ]['code'] !== T_WHITESPACE ) {
-        $gap   = strlen( $tokens[ ($parenOpener + 1) ]['content'] );
-        $error = 'Expected at least 1 space after opening bracket';
+      $whitespacePtr = $stackPtr + 1;
+
+      if ( $tokens[ $whitespacePtr ]['code'] !== T_WHITESPACE ) {
+        $type  = ( $tokens[ $stackPtr ]['code'] === T_DO ) ? 'do' : 'else';
+        $error = "Expected at least 1 space after '{$type}'";
+        $phpcsFile->addError( $error, $whitespacePtr, 'SpacingAfterControlStructure' );
+      }
+
+      return;
+
+    } // if T_ELSE or T_DO
+
+    $parenOpener = $tokens[ $stackPtr ]['parenthesis_opener'];
+    $parenCloser = $tokens[ $stackPtr ]['parenthesis_closer'];
+
+    if ( $tokens[ ($parenOpener + 1) ]['code'] !== T_WHITESPACE ) {
+      $gap   = strlen( $tokens[ ($parenOpener + 1) ]['content'] );
+      $error = 'Expected at least 1 space after opening bracket';
+      $data  = [ $gap ];
+      $phpcsFile->addError( $error, ($parenOpener + 1), 'SpacingAfterOpenBrace', $data );
+    } // if SpacingAfterOpenBrace
+
+    if ( $tokens[ ($parenOpener - 1) ]['code'] !== T_WHITESPACE ) {
+      $gap   = strlen( $tokens[ ($parenOpener + 1) ]['content'] );
+      $error = 'Expected at least 1 space before opening bracket';
+      $data  = [ $gap ];
+      $phpcsFile->addError( $error, ($parenOpener + 1), 'SpacingBeforeOpenBrace', $data );
+    } // if SpacingBeforeOpenBrace
+
+    if ( $tokens[ $parenOpener ]['line'] === $tokens[ $parenCloser ]['line'] ) {
+
+      if ( $tokens[ ($parenCloser - 1) ]['code'] !== T_WHITESPACE ) {
+        $gap   = strlen( $tokens[ ($parenCloser - 1) ]['content'] );
+        $error = 'Expected at least 1 space before closing bracket';
         $data  = [ $gap ];
-        $phpcsFile->addError( $error, ($parenOpener + 1), 'SpacingAfterOpenBrace', $data );
-      } // if SpacingAfterOpenBrace
+        $phpcsFile->addError( $error, ($parenCloser - 1), 'SpaceBeforeCloseBrace', $data );
+      } // if SpaceBeforeCloseBrace
 
-      if ( $tokens[ ($parenOpener - 1) ]['code'] !== T_WHITESPACE ) {
-        $gap   = strlen( $tokens[ ($parenOpener + 1) ]['content'] );
-        $error = 'Expected at least 1 space before opening bracket';
+      if ( $tokens[ ($parenCloser + 1) ]['code'] !== T_WHITESPACE ) {
+        $gap   = strlen( $tokens[ ($parenCloser + 1) ]['content'] );
+        $error = 'Expected at least 1 space before closing bracket';
         $data  = [ $gap ];
-        $phpcsFile->addError( $error, ($parenOpener + 1), 'SpacingBeforeOpenBrace', $data );
-      } // if SpacingBeforeOpenBrace
+        $phpcsFile->addError( $error, ($parenCloser - 1), 'SpaceAfterCloseBrace', $data );
+      } // if SpaceAfterCloseBrace
 
-      if ( $tokens[ $parenOpener ]['line'] === $tokens[ $parenCloser ]['line'] ) {
-
-        if ( $tokens[ ($parenCloser - 1) ]['code'] !== T_WHITESPACE ) {
-          $gap   = strlen( $tokens[ ($parenCloser - 1) ]['content'] );
-          $error = 'Expected at least 1 space before closing bracket';
-          $data  = [ $gap ];
-          $phpcsFile->addError( $error, ($parenCloser - 1), 'SpaceBeforeCloseBrace', $data );
-        } // if SpaceBeforeCloseBrace
-
-        if ( $tokens[ ($parenCloser + 1) ]['code'] !== T_WHITESPACE ) {
-          $gap   = strlen( $tokens[ ($parenCloser + 1) ]['content'] );
-          $error = 'Expected at least 1 space before closing bracket';
-          $data  = [ $gap ];
-          $phpcsFile->addError( $error, ($parenCloser - 1), 'SpaceAfterCloseBrace', $data );
-        } // if SpaceAfterCloseBrace
-
-      } // if parens ends on same line as open
-
-    } // if parenthesis_opener
+    } // if parens ends on same line as open
 
   } // process
 
