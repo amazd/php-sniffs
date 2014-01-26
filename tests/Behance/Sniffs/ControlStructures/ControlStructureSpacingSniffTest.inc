@@ -15,7 +15,7 @@ while ( true ){
   // whitespace between ) & {
 }
 
-foreach(true){
+foreach([] as $empty){
   // all errors for foreach
 }
 
