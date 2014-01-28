@@ -33,7 +33,12 @@ class Behance_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniff
       'protected' => [
           'setUp',    // phpunit
           'tearDown'  // phpunit
-      ]
+      ],
+      'public' => [
+          '_start_work', // gearman workers
+          '_end_work',   // gearman workers
+      ],
+      'private' => []
   ];
 
   /**
@@ -297,7 +302,7 @@ class Behance_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniff
           continue;
         }
 
-        if ( strpos( $fxName, $prefix ) === 0 ) {
+        if ( strpos( $fxName, $prefix ) === 0 && ( !in_array( $fxName, $this->prefixExemptions[ $scope ] )) ) {
           $error = 'Expected no prefix for %s function "%s"; found "%s"';
           $phpcsFile->addError( $error, $stackPtr, static::INCORRECT_PREFIX, [ $scope, $fxName, $prefix ] );
           return;
