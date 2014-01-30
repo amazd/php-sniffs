@@ -17,7 +17,8 @@ class Behance_Sniffs_Classes_ClassDeclarationSniff implements PHP_CodeSniffer_Sn
 
     return [
         T_CLASS,
-        T_INTERFACE
+        T_INTERFACE,
+        T_TRAIT
     ];
 
   } // register
