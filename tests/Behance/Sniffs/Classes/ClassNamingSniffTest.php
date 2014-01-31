@@ -4,7 +4,10 @@ class Behance_Sniffs_Classes_ClassNamingSniffTest extends AbstractSniffUnitTest 
 
   public function getErrorList() {
 
-    return [ 3 => 1 ];
+    return [
+        3 => 1,
+        6 => 1
+    ];
 
   } // getErrorList
 

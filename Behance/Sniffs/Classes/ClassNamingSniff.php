@@ -39,15 +39,20 @@ class Behance_Sniffs_Classes_ClassNamingSniff implements PHP_CodeSniffer_Sniff {
     $constructPath = $phpcsFile->getFilename();
     $expectedFile  = str_replace( '_', DIRECTORY_SEPARATOR, $constructName );
 
-    // "fuzzy search"
+    // "fuzzy search" for psr-0
     $namePieces  = explode( DIRECTORY_SEPARATOR, $constructPath );
     $pieces      = preg_grep( '/[A-Z]/', $namePieces );
     $guess       = array_pop( $pieces );
     $res         = array_slice( $namePieces, array_search( $guess, $namePieces ) );
     $guessName   = basename( implode( '_', $res ), '.php' );
 
-    if ( strpos( $constructPath, $expectedFile ) === false ) {;
-      $warning = "Classname '{$constructName}' does not seem to follow conventions - expected the file path to resemble '{$expectedFile}' or the name to resemble '{$guessName}'";
+    // special (as in horribly sadface) case for controllers
+    $ctrlName = ucfirst( basename( $constructPath, '.php' ) );
+
+    if ( strpos( $constructPath, $expectedFile ) === false &&
+         strpos( $constructName, $guessName ) === false &&
+         $constructName !== $ctrlName ) {
+      $warning = "Classname '{$constructName}' does not seem to follow conventions - expected the file path to resemble '{$expectedFile}' or the name to resemble either '{$guessName}' or '{$ctrlName}'";
       $phpcsFile->addError( $warning, $stackPtr, 'UnexpectedConstructName' );
     }
 
