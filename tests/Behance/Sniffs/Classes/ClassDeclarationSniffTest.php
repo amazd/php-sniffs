@@ -6,8 +6,16 @@ class Behance_Sniffs_Classes_ClassDeclarationSniffTest extends AbstractSniffUnit
 
     return [
         3  => 1,
-        6  => 1,
-        9  => 1
+        5  => 1,
+        7  => 1,
+
+        12 => 1,
+        14 => 1,
+        16 => 1,
+
+        21 => 1,
+        23 => 1,
+        25 => 1,
     ];
 
   } // getErrorList
@@ -15,7 +23,9 @@ class Behance_Sniffs_Classes_ClassDeclarationSniffTest extends AbstractSniffUnit
   public function getWarningList() {
 
     return [
-        13 => 1
+        9  => 1,
+        18 => 1,
+        27 => 1
     ];
 
   } // getWarningList
