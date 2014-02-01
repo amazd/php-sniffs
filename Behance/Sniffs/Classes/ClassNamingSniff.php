@@ -53,7 +53,7 @@ class Behance_Sniffs_Classes_ClassNamingSniff implements PHP_CodeSniffer_Sniff {
          strpos( $constructName, $guessName ) === false &&
          $constructName !== $ctrlName ) {
       $warning = "Classname '{$constructName}' does not seem to follow conventions - expected the file path to resemble '{$expectedFile}' or the name to resemble either '{$guessName}' or '{$ctrlName}'";
-      $phpcsFile->addError( $warning, $stackPtr, 'UnexpectedConstructName' );
+      $phpcsFile->addWarning( $warning, $stackPtr, 'UnexpectedConstructName' );
     }
 
   } // process
