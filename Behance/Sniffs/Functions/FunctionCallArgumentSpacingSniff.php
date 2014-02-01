@@ -55,7 +55,7 @@ class Behance_Sniffs_Functions_FunctionCallArgumentSpacingSniff implements PHP_C
 
     if ( $tokens[ ($closeBracket - 1) ]['code'] !== T_WHITESPACE ) {
       $error = 'Expected at least 1 space before closing parenthesis';
-      $phpcsFile->addError( $error, ($closeBracket - 1), 'SpaceBeforeCloseParens' );
+      $phpcsFile->addError( $error, ($closeBracket), 'SpaceBeforeCloseParens' );
     } // if SpaceBeforeCloseParens
 
     if ( $tokens[ ($openBracket + 1) ]['code'] !== T_WHITESPACE ) {
@@ -82,12 +82,12 @@ class Behance_Sniffs_Functions_FunctionCallArgumentSpacingSniff implements PHP_C
       if ( $tokens[ $nextSeparator ]['code'] === T_COMMA ) {
         if ( $tokens[ ($nextSeparator - 1) ]['code'] === T_WHITESPACE ) {
           $error = 'Space found before comma in function call';
-          $phpcsFile->addError( $error, $stackPtr, 'SpaceBeforeComma' );
+          $phpcsFile->addError( $error, $nextSeparator - 1, 'SpaceBeforeComma' );
         }
 
         if ( $tokens[ ($nextSeparator + 1) ]['code'] !== T_WHITESPACE ) {
           $error = 'No space found after comma in function call';
-          $phpcsFile->addError( $error, $stackPtr, 'NoSpaceAfterComma' );
+          $phpcsFile->addError( $error, $nextSeparator + 1, 'NoSpaceAfterComma' );
         }
 
         else {

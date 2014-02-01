@@ -54,34 +54,26 @@ class Behance_Sniffs_ControlStructures_ControlStructureSpacingSniff implements P
     $parenCloser = $tokens[ $stackPtr ]['parenthesis_closer'];
 
     if ( $tokens[ ($parenOpener + 1) ]['code'] !== T_WHITESPACE ) {
-      $gap   = strlen( $tokens[ ($parenOpener + 1) ]['content'] );
       $error = 'Expected at least 1 space after opening bracket';
-      $data  = [ $gap ];
-      $phpcsFile->addError( $error, ($parenOpener + 1), 'SpacingAfterOpenBrace', $data );
+      $phpcsFile->addError( $error, $parenOpener, 'SpacingAfterOpenBrace' );
     } // if SpacingAfterOpenBrace
 
     if ( $tokens[ ($parenOpener - 1) ]['code'] !== T_WHITESPACE ) {
-      $gap   = strlen( $tokens[ ($parenOpener + 1) ]['content'] );
       $error = 'Expected at least 1 space before opening bracket';
-      $data  = [ $gap ];
-      $phpcsFile->addError( $error, ($parenOpener + 1), 'SpacingBeforeOpenBrace', $data );
+      $phpcsFile->addError( $error, $parenOpener, 'SpacingBeforeOpenBrace' );
     } // if SpacingBeforeOpenBrace
 
     if ( $tokens[ $parenOpener ]['line'] === $tokens[ $parenCloser ]['line'] ) {
 
-      if ( $tokens[ ($parenCloser - 1) ]['code'] !== T_WHITESPACE ) {
-        $gap   = strlen( $tokens[ ($parenCloser - 1) ]['content'] );
-        $error = 'Expected at least 1 space before closing bracket';
-        $data  = [ $gap ];
-        $phpcsFile->addError( $error, ($parenCloser - 1), 'SpaceBeforeCloseBrace', $data );
-      } // if SpaceBeforeCloseBrace
-
       if ( $tokens[ ($parenCloser + 1) ]['code'] !== T_WHITESPACE ) {
-        $gap   = strlen( $tokens[ ($parenCloser + 1) ]['content'] );
-        $error = 'Expected at least 1 space before closing bracket';
-        $data  = [ $gap ];
-        $phpcsFile->addError( $error, ($parenCloser - 1), 'SpaceAfterCloseBrace', $data );
+        $error = 'Expected at least 1 space after closing bracket';
+        $phpcsFile->addError( $error, ($parenCloser + 1), 'SpaceAfterCloseBrace' );
       } // if SpaceAfterCloseBrace
+
+      if ( $tokens[ ($parenCloser - 1) ]['code'] !== T_WHITESPACE ) {
+        $error = 'Expected at least 1 space before closing bracket';
+        $phpcsFile->addError( $error, $parenCloser, 'SpaceBeforeCloseBrace' );
+      } // if SpaceBeforeCloseBrace
 
     } // if parens ends on same line as open
 
