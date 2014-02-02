@@ -60,7 +60,7 @@ class Behance_Sniffs_Functions_FunctionCallArgumentSpacingSniff implements PHP_C
 
     if ( $tokens[ ($openBracket + 1) ]['code'] !== T_WHITESPACE ) {
       $error = 'Expected at least 1 space after opening parenthesis';
-      $phpcsFile->addError( $error, ($openBracket + 1), 'SpaceAfterOpenParens' );
+      $phpcsFile->addError( $error, ($openBracket), 'SpaceAfterOpenParens' );
     } // if SpaceAfterOpenParens
 
 
