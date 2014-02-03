@@ -23,7 +23,7 @@ class Behance_Sniffs_Arrays_ArrayIndentSniff implements PHP_CodeSniffer_Sniff {
    */
   public function register() {
 
-    return array(T_ARRAY, T_OPEN_SHORT_ARRAY);
+    return [T_ARRAY, T_OPEN_SHORT_ARRAY];
 
   } // register
 
@@ -94,7 +94,7 @@ class Behance_Sniffs_Arrays_ArrayIndentSniff implements PHP_CodeSniffer_Sniff {
       // Check if there are multiple values. If so, then it has to be multiple lines
       // unless it is contained inside a function call or condition.
       $valueCount = 0;
-      $commas   = array();
+      $commas   = [];
       for ( $i = ($arrayStart + 1); $i < $arrayEnd; $i++ ) {
         // Skip bracketed statements, like function calls.
         if ( $tokens[ $i ]['code'] === T_OPEN_PARENTHESIS ) {
@@ -125,17 +125,17 @@ class Behance_Sniffs_Arrays_ArrayIndentSniff implements PHP_CodeSniffer_Sniff {
       //   if ($tokens[ ($nextArrow - 1) ]['code'] !== T_WHITESPACE) {
       //     $content = $tokens[ ($nextArrow - 1) ]['content'];
       //     $error   = 'Expected 1 space between "%s" and double arrow; 0 found';
-      //     $data  = array($content);
+      //     $data  = [$content];
       //     $phpcsFile->addError($error, $nextArrow, 'NoSpaceBeforeDoubleArrow', $data);
       //   } else {
       //     $spaceLength = strlen($tokens[ ($nextArrow - 1) ]['content']);
       //     if ($spaceLength !== 1) {
       //       $content = $tokens[ ($nextArrow - 2) ]['content'];
       //       $error   = 'Expected 1 space between "%s" and double arrow; %s found';
-      //       $data  = array(
+      //       $data  = [
       //             $content,
       //             $spaceLength,
-      //            );
+      //            ];
       //       $phpcsFile->addError($error, $nextArrow, 'SpaceBeforeDoubleArrow', $data);
       //     }
       //   }
@@ -143,17 +143,17 @@ class Behance_Sniffs_Arrays_ArrayIndentSniff implements PHP_CodeSniffer_Sniff {
       //   if ($tokens[ ($nextArrow + 1) ]['code'] !== T_WHITESPACE) {
       //     $content = $tokens[ ($nextArrow + 1) ]['content'];
       //     $error   = 'Expected 1 space between double arrow and "%s"; 0 found';
-      //     $data  = array($content);
+      //     $data  = [$content];
       //     $phpcsFile->addError($error, $nextArrow, 'NoSpaceAfterDoubleArrow', $data);
       //   } else {
       //     $spaceLength = strlen($tokens[ ($nextArrow + 1) ]['content']);
       //     if ($spaceLength !== 1) {
       //       $content = $tokens[ ($nextArrow + 2) ]['content'];
       //       $error   = 'Expected 1 space between double arrow and "%s"; %s found';
-      //       $data  = array(
+      //       $data  = [
       //             $content,
       //             $spaceLength,
-      //            );
+      //            ];
       //       $phpcsFile->addError($error, $nextArrow, 'SpaceAfterDoubleArrow', $data);
       //     }
       //   }
@@ -176,17 +176,17 @@ class Behance_Sniffs_Arrays_ArrayIndentSniff implements PHP_CodeSniffer_Sniff {
           // if ($tokens[ ($comma + 1) ]['code'] !== T_WHITESPACE) {
           //   $content = $tokens[ ($comma + 1) ]['content'];
           //   $error   = 'Expected 1 space between comma and "%s"; 0 found';
-          //   $data  = array($content);
+          //   $data  = [$content];
           //   $phpcsFile->addError($error, $comma, 'NoSpaceAfterComma', $data);
           // } else {
           //   $spaceLength = strlen($tokens[ ($comma + 1) ]['content']);
           //   if ($spaceLength !== 1) {
           //     $content = $tokens[ ($comma + 2) ]['content'];
           //     $error   = 'Expected 1 space between comma and "%s"; %s found';
-          //     $data  = array(
+          //     $data  = [
           //           $content,
           //           $spaceLength,
-          //          );
+          //          ];
           //     $phpcsFile->addError($error, $comma, 'SpaceAfterComma', $data);
           //   }
           // }
@@ -209,12 +209,12 @@ class Behance_Sniffs_Arrays_ArrayIndentSniff implements PHP_CodeSniffer_Sniff {
 
     // Check the closing bracket is on a new line.
     $lastContent = $phpcsFile->findPrevious( T_WHITESPACE, ($arrayEnd - 1), $arrayStart, true );
-    if ( $tokens[ $lastContent ]['line'] !== ($tokens[ $arrayEnd ]['line'] - 1) ) {
+    if ( $tokens[ $lastContent ]['line'] == ($tokens[ $arrayEnd ]['line']) ) {
       $error = 'Closer of array declaration must be on a new line';
       $phpcsFile->addError( $error, $arrayEnd, 'CloseBraceNewLine' );
     }
     elseif ( $tokens[ $arrayEnd ]['column'] !== $indentStart ) {
-      // Check the closing bracket is lined up under the a in array.
+      // Check the closing bracket is lined up under the [ of the array opener.
       $expected = $indentStart;
       $found  = $tokens[ $arrayEnd ]['column'];
       $error  = 'Closer of array not aligned correctly; expected %s space(s) but found %s';
@@ -230,16 +230,16 @@ class Behance_Sniffs_Arrays_ArrayIndentSniff implements PHP_CodeSniffer_Sniff {
     $keyUsed  = false;
     $singleUsed = false;
     $lastToken  = '';
-    $indices  = array();
+    $indices  = [];
     $maxLength  = 0;
 
     // Find all the double arrows that reside in this scope.
     while ( ($nextToken = $phpcsFile->findNext( [T_DOUBLE_ARROW, T_COMMA, T_ARRAY, T_OPEN_SHORT_ARRAY ], ($nextToken + 1), $arrayEnd )) !== false ) {
-      $currentEntry = array();
+      $currentEntry = [];
 
       if ( $this->_isArrayOpener( $tokens[ $nextToken ] ) ) {
         // Let subsequent calls of this test handle nested arrays.
-        $indices[] = array('value' => $nextToken);
+        $indices[] = ['value' => $nextToken];
         $nextTokenString = $tokens[ $nextToken ]['code'] === T_ARRAY ? 'parenthesis' : 'bracket';
         $nextToken = $tokens[ $tokens[ $nextToken ][ $nextTokenString . '_opener' ] ][ $nextTokenString . '_closer' ];
         continue;
@@ -281,7 +281,7 @@ class Behance_Sniffs_Arrays_ArrayIndentSniff implements PHP_CodeSniffer_Sniff {
                 $spaceLength,
             ];
             $phpcsFile->addError( $error, $nextToken, 'SpaceBeforeComma', $data );
-          } // nextToken === T_WHITESPACE
+          } // if nextToken === T_WHITESPACE
 
           // Find the value, which will be the first token on the line,
           // excluding the leading whitespace.
@@ -297,7 +297,7 @@ class Behance_Sniffs_Arrays_ArrayIndentSniff implements PHP_CodeSniffer_Sniff {
           } // while valueContent === nextToken
 
           $valueContent = $phpcsFile->findNext( T_WHITESPACE, ($valueContent + 1), $nextToken, true );
-          $indices[]  = array('value' => $valueContent);
+          $indices[]  = ['value' => $valueContent];
           $singleUsed   = true;
         } // if !keyUsed
 
@@ -339,7 +339,7 @@ class Behance_Sniffs_Arrays_ArrayIndentSniff implements PHP_CodeSniffer_Sniff {
         $currentEntry['value'] = $nextContent;
         $indices[]       = $currentEntry;
         $lastToken       = T_DOUBLE_ARROW;
-      } // code = T_DOUBLE_ARROW
+      } // if code = T_DOUBLE_ARROW
     } // while nextToken
 
     // Check for mutli-line arrays that should be single-line.
@@ -348,7 +348,7 @@ class Behance_Sniffs_Arrays_ArrayIndentSniff implements PHP_CodeSniffer_Sniff {
     if ( empty($indices) ) {
       $singleValue = true;
     }
-    else if ( count( $indices ) === 1 && $lastToken === T_COMMA ) {
+    elseif ( count( $indices ) === 1 && $lastToken === T_COMMA ) {
       // There may be another array value without a comma.
       $exclude   = PHP_CodeSniffer_Tokens::$emptyTokens;
       $exclude[]   = T_COMMA;
@@ -435,10 +435,10 @@ class Behance_Sniffs_Arrays_ArrayIndentSniff implements PHP_CodeSniffer_Sniff {
       //   $found  = ($tokens[ $index['arrow']]['column'] - (strlen($index['index_content']) + $tokens[ $index['index']]['column']));
 
       //   $error = 'Array double arrow not aligned correctly; expected %s space(s) but found %s';
-      //   $data  = array(
+      //   $data  = [
       //         $expected,
       //         $found,
-      //        );
+      //        ];
       //   $phpcsFile->addError($error, $index['arrow'], 'DoubleArrowNotAligned', $data);
       //   continue;
       // }
@@ -448,10 +448,10 @@ class Behance_Sniffs_Arrays_ArrayIndentSniff implements PHP_CodeSniffer_Sniff {
       //   $found  = ($tokens[ $index['value']]['column'] - (strlen($tokens[ $index['arrow']]['content']) + $tokens[ $index['arrow']]['column']));
 
       //   $error = 'Array value not aligned correctly; expected %s space(s) but found %s';
-      //   $data  = array(
+      //   $data  = [
       //         $expected,
       //         $found,
-      //        );
+      //        ];
       //   $phpcsFile->addError($error, $index['arrow'], 'ValueNotAligned', $data);
       // }
 
@@ -489,7 +489,7 @@ class Behance_Sniffs_Arrays_ArrayIndentSniff implements PHP_CodeSniffer_Sniff {
               $spaceLength,
           ];
           $phpcsFile->addError( $error, $nextComma, 'SpaceBeforeComma', $data );
-        } // nextComma !false
+        } // if nextComma !false
       } // if !isArrayOpener
     } // foreach indices
 

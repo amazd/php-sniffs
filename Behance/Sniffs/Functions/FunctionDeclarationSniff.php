@@ -121,7 +121,7 @@ class Behance_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniff
 
     if ( $tokens[ $parenOpen ]['line'] !== $tokens[ $parenClose ]['line'] ) {
       $error = 'Multiline function definitions not allowed';
-      $phpcsFile->addError( $error, $stackPtr, static::MULTILINE_FUNC );
+      $phpcsFile->addError( $error, $parenOpen, static::MULTILINE_FUNC );
       return;
     }
 
@@ -145,23 +145,23 @@ class Behance_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniff
     // check whitespace after first parenth
     if ( $tokens[ $parenOpen + 1 ]['code'] !== T_WHITESPACE ) {
       $error = 'No whitespace found between opening parenthesis & first argument';
-      $phpcsFile->addError( $error, $stackPtr, static::INVALID_ARG_FORMAT );
+      $phpcsFile->addError( $error, $parenOpen + 1, static::INVALID_ARG_FORMAT );
     }
     elseif ( strlen( $tokens[ $parenOpen + 1 ]['content'] ) > 1 ) {
       $error = 'Expected 1 space between opening parenthesis & first argument; found %s';
       $data  = [ strlen( $tokens[ $parenOpen + 1 ]['content'] ) ];
-      $phpcsFile->addError( $error, $stackPtr, static::INVALID_ARG_FORMAT, $data );
+      $phpcsFile->addError( $error, $parenOpen + 1, static::INVALID_ARG_FORMAT, $data );
     }
 
     // whitespace after closing parenth
     if ( $tokens[ $parenClose - 1 ]['code'] !== T_WHITESPACE ) {
       $error = 'No whitespace found between last argument & closing parenthesis';
-      $phpcsFile->addError( $error, $stackPtr, static::INVALID_ARG_FORMAT );
+      $phpcsFile->addError( $error, $parenClose, static::INVALID_ARG_FORMAT );
     }
     elseif ( strlen( $tokens[ $parenClose - 1 ]['content'] ) > 1 ) {
       $error = 'Expected 1 space between last argument & closing parenthesis; found %s';
       $data  = [ strlen( $tokens[ $parenClose - 1 ]['content'] ) ];
-      $phpcsFile->addError( $error, $stackPtr, static::INVALID_ARG_FORMAT, $data );
+      $phpcsFile->addError( $error, $parenClose - 1, static::INVALID_ARG_FORMAT, $data );
     }
 
   } // _processDefinitionWhitespace
@@ -203,12 +203,12 @@ class Behance_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniff
 
     if ( $tokens[ $openingBrace + 1 ]['content'] !== Behance_Constants::UNIX_EOL ) {
       $error = 'Newline not found immediately after opening curly bracket';
-      $phpcsFile->addError( $error, $stackPtr, static::INCORRECT_NEWLINES );
+      $phpcsFile->addError( $error, $openingBrace, static::INCORRECT_NEWLINES );
     }
 
     if ( $tokens[ $openingBrace + 2 ]['content'] !== Behance_Constants::UNIX_EOL ) {
       $error = 'Empty line not found immediately function definition; there was trailing whitespace or non-whitespace';
-      $phpcsFile->addError( $error, $stackPtr, static::INCORRECT_NEWLINES );
+      $phpcsFile->addError( $error, $openingBrace, static::INCORRECT_NEWLINES );
     }
 
     $closingBrace = $tokens[ $openingBrace ]['bracket_closer'];
