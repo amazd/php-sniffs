@@ -215,9 +215,13 @@ class Behance_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniff
     $tracePtr     = $closingBrace - 1;
     $token        = $tokens[ $tracePtr ];
 
+    // this can happen for multiple characters / tokens
+    $whitespaceErrorAdded = false;
+
     while ( $token['content'] !== Behance_Constants::UNIX_EOL && $token['code'] !== T_COMMENT ) {
 
-      if ( $token['code'] !== T_WHITESPACE ) {
+      if ( $token['code'] !== T_WHITESPACE && !$whitespaceErrorAdded ) {
+        $whitespaceErrorAdded = true;
         $error = 'Non-whitespace found before closing curly brace';
         $phpcsFile->addError( $error, $tracePtr, static::INCORRECT_NEWLINES );
       }
@@ -320,6 +324,10 @@ class Behance_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniff
 
       $error = 'Expected prefix "%s" for %s function "%s" not found';
       $data  = [ $expectedPrefix, $scope, $fxName ];
+
+      if ( strtolower( $scope ) === 'protected' ) {
+        return $phpcsFile->addWarning( $error, $stackPtr, static::INCORRECT_PREFIX, $data );
+      }
 
       $phpcsFile->addError( $error, $stackPtr, static::INCORRECT_PREFIX, $data );
 
