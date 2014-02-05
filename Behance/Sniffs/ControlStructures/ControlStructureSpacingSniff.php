@@ -1,6 +1,11 @@
 <?php
 class Behance_Sniffs_ControlStructures_ControlStructureSpacingSniff implements PHP_CodeSniffer_Sniff {
 
+  protected $_noParens = [
+      T_DO    => 'do',
+      T_ELSE  => 'else',
+      T_TRY   => 'try'
+  ];
 
   /**
    * Returns an array of tokens this test wants to listen for.
@@ -18,6 +23,8 @@ class Behance_Sniffs_ControlStructures_ControlStructureSpacingSniff implements P
           T_DO,
           T_ELSE,
           T_ELSEIF,
+          T_TRY,
+          T_CATCH
       ];
 
   } // register
@@ -41,7 +48,7 @@ class Behance_Sniffs_ControlStructures_ControlStructureSpacingSniff implements P
       $whitespacePtr = $stackPtr + 1;
 
       if ( $tokens[ $whitespacePtr ]['code'] !== T_WHITESPACE ) {
-        $type  = ( $tokens[ $stackPtr ]['code'] === T_DO ) ? 'do' : 'else';
+        $type  = $this->_noParens[ $tokens[ $stackPtr ]['code'] ];
         $error = "Expected at least 1 space after '{$type}'";
         $phpcsFile->addError( $error, $whitespacePtr, 'SpacingAfterControlStructure' );
       }
