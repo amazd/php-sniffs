@@ -210,6 +210,11 @@ class Behance_Sniffs_Comments_TrailingCommentSniff implements PHP_CodeSniffer_Sn
         return;
       }
 
+      if ( preg_match( '/\$/', $actualComment ) === 1 ) {
+        $phpcsFile->addError( 'No PHP variable-like names in trailing comments', $closeCurlyPtr, 'InvalidTrailingComment' );
+        return;
+      }
+
     } // elseif is longtrailing scope
 
   } // _processDeclarationName
