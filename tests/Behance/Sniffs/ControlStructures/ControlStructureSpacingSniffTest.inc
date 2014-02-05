@@ -22,3 +22,8 @@ foreach([] as $empty){
 do{
   // same here for do ... while
 }while(true);
+
+try{
+}
+catch( Exception $e ){
+}
