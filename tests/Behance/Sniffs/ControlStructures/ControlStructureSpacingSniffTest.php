@@ -13,7 +13,7 @@ class Behance_Sniffs_ControlStructures_ControlStructureSpacingSniffTest extends 
         22 => 1,
         24 => 4,
         26 => 1,
-        28 => 2,
+        28 => 1,
     ];
 
   } // getErrorList
