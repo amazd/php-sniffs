@@ -6,11 +6,11 @@ class Behance_Sniffs_Operators_OperatorSpacingSniffTest extends AbstractSniffUni
 
     return [
         5  => 4,
-        9  => 2,
-        13 => 2,
-        17 => 2,
-        21 => 2,
-        25 => 2,
+        12 => 2,
+        19 => 2,
+        26 => 2,
+        33 => 2,
+        40 => 2,
     ];
 
   } // getErrorList
