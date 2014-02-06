@@ -203,3 +203,11 @@ $truthy = 1  <=  2;
 $truthy = 1
               <=
                    2;
+
+$foo++;
+++$foo;
+
+$foo--;
+--$foo;
+
+!$foo;
