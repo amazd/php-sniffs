@@ -8,7 +8,12 @@ class Behance_Sniffs_Operators_OperatorSpacingSniff implements PHP_CodeSniffer_S
    */
   public function register() {
 
-    return array_merge( [ T_STRING_CONCAT ], PHP_CodeSniffer_Tokens::$arithmeticTokens );
+    return array_unique( array_merge(
+        [ T_STRING_CONCAT ],
+        PHP_CodeSniffer_Tokens::$operators,
+        PHP_CodeSniffer_Tokens::$comparisonTokens,
+        PHP_CodeSniffer_Tokens::$assignmentTokens
+    ) );
 
   } // register
 
