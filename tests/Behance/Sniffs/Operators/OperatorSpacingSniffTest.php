@@ -7,12 +7,10 @@ class Behance_Sniffs_Operators_OperatorSpacingSniffTest extends AbstractSniffUni
     return [
         5   => 4,
         12  => 2,
-        19  => 2,
         26  => 2,
         33  => 2,
         40  => 2,
         47  => 2,
-        54  => 2,
         61  => 2,
         86  => 2,
         93  => 2,
