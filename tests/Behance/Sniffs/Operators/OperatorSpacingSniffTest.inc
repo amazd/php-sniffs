@@ -205,9 +205,13 @@ $truthy = 1
                    2;
 
 $foo++;
-++$foo;
+$foo ++;
+++ $foo;
 
 $foo--;
+$foo --;
 --$foo;
+-- $foo;
 
 !$foo;
+! $foo;
