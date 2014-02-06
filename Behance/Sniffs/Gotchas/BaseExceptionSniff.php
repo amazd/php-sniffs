@@ -32,7 +32,7 @@ class Behance_Sniffs_Gotchas_BaseExceptionSniff implements PHP_CodeSniffer_Sniff
     $firstContent = $phpcsFile->findNext( T_STRING, $stackPtr + 1 );
 
     if ( $tokens[ $firstContent ]['content'] === 'Exception' ) {
-        $phpcsFile->addError( 'Please ' . $verb . ' ' . $this->preferredException . ' instead of Exception', $firstContent );
+      $phpcsFile->addError( 'Please ' . $verb . ' the most specific \Exception type possible', $firstContent );
     }
 
   } // process

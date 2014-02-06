@@ -1,6 +1,11 @@
 <?php
 class Behance_Sniffs_ControlStructures_ControlStructureSpacingSniff implements PHP_CodeSniffer_Sniff {
 
+  protected $_noParens = [
+      T_DO    => 'do',
+      T_ELSE  => 'else',
+      T_TRY   => 'try'
+  ];
 
   /**
    * Returns an array of tokens this test wants to listen for.
@@ -18,6 +23,8 @@ class Behance_Sniffs_ControlStructures_ControlStructureSpacingSniff implements P
           T_DO,
           T_ELSE,
           T_ELSEIF,
+          T_TRY,
+          T_CATCH
       ];
 
   } // register
@@ -41,7 +48,7 @@ class Behance_Sniffs_ControlStructures_ControlStructureSpacingSniff implements P
       $whitespacePtr = $stackPtr + 1;
 
       if ( $tokens[ $whitespacePtr ]['code'] !== T_WHITESPACE ) {
-        $type  = ( $tokens[ $stackPtr ]['code'] === T_DO ) ? 'do' : 'else';
+        $type  = $this->_noParens[ $tokens[ $stackPtr ]['code'] ];
         $error = "Expected at least 1 space after '{$type}'";
         $phpcsFile->addError( $error, $whitespacePtr, 'SpacingAfterControlStructure' );
       }
@@ -50,6 +57,7 @@ class Behance_Sniffs_ControlStructures_ControlStructureSpacingSniff implements P
 
     } // if T_ELSE or T_DO
 
+    $code = $tokens[ $stackPtr ]['code'];
     $parenOpener = $tokens[ $stackPtr ]['parenthesis_opener'];
     $parenCloser = $tokens[ $stackPtr ]['parenthesis_closer'];
 
@@ -58,7 +66,9 @@ class Behance_Sniffs_ControlStructures_ControlStructureSpacingSniff implements P
       $phpcsFile->addError( $error, $parenOpener, 'SpacingAfterOpenBrace' );
     } // if SpacingAfterOpenBrace
 
-    if ( $tokens[ ($parenOpener - 1) ]['code'] !== T_WHITESPACE ) {
+    // catch is not a control structure, it is a reserved word
+    // therefore, it needs zero spaces before it, which is handled by another sniff
+    if ( $code !== T_CATCH && $tokens[ ($parenOpener - 1) ]['code'] !== T_WHITESPACE ) {
       $error = 'Expected at least 1 space before opening bracket';
       $phpcsFile->addError( $error, $parenOpener, 'SpacingBeforeOpenBrace' );
     } // if SpacingBeforeOpenBrace
