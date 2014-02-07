@@ -49,7 +49,11 @@ class Behance_Sniffs_Keywords_KeywordParensSpacingSniffTest extends AbstractSnif
         78 => 1,
         81 => 1,
         82 => 1,
-        83 => 1
+        83 => 1,
+        86 => 1,
+        87 => 1,
+        88 => 1,
+        89 => 1
     ];
 
   } // getErrorList
