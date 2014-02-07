@@ -11,6 +11,7 @@ class Behance_Sniffs_Keywords_KeywordParensSpacingSniff implements PHP_CodeSniff
 
     return [
         T_ARRAY,
+        T_CATCH,
         T_ECHO,
         T_EMPTY,
         T_EVAL,
