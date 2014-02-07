@@ -83,5 +83,10 @@ try {} catch( $oopsInsideAfter) { $a = $b; }
 try {} catch ( $oopsBefore ) { $a = $b; }
 try {} catch( $ok ) { $a = $b; }
 
+include $oops;
+include_once $oops;
+require $oops;
+require_once $oops;
+
 die;
 exit;

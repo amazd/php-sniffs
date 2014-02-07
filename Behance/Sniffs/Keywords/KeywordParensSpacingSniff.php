@@ -41,14 +41,20 @@ class Behance_Sniffs_Keywords_KeywordParensSpacingSniff implements PHP_CodeSniff
 
     $tokens = $phpcsFile->getTokens();
 
-    // ignore echo and print without parens
-    $code = $tokens[ $stackPtr ]['code'];
-    if ( $code === T_PRINT || $code === T_ECHO || $code === T_EXIT ) {
-      $nextPtr = $phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, ($stackPtr + 1), null, true );
-      if ( $tokens[ $nextPtr ]['code'] !== T_OPEN_PARENTHESIS ) {
+    $nextNonEmpty = $phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, ($stackPtr + 1), null, true );
+    $hasNoParens = $tokens[ $nextNonEmpty ]['code'] !== T_OPEN_PARENTHESIS;
+
+    if ( $hasNoParens ) {
+      $code = $tokens[ $stackPtr ]['code'];
+      if ( $code === T_PRINT || $code === T_ECHO || $code === T_EXIT ) {
         return;
       }
-    } // if code === T_PRINT || T_ECHO
+
+      $error = 'Expected parentheses for keyword ' . $tokens[ $stackPtr ]['content'];
+      $phpcsFile->addError( $error, $stackPtr + 1, 'MissingParens' );
+      return;
+
+    } // if hasNoParens
 
     if ( $tokens[ $stackPtr + 1 ]['code'] !== T_OPEN_PARENTHESIS ) {
       $error = 'Expected no space before opening parenthesis';
