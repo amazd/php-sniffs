@@ -78,5 +78,10 @@ require_once( $oopsInsideAfter);
 require_once ( $oopsBefore );
 require_once( $ok );
 
+try {} catch($oopsInsideBefore ) { $a = $b; }
+try {} catch( $oopsInsideAfter) { $a = $b; }
+try {} catch ( $oopsBefore ) { $a = $b; }
+try {} catch( $ok ) { $a = $b; }
+
 die;
 exit;
