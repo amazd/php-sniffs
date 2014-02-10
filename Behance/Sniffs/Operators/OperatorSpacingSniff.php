@@ -130,11 +130,13 @@ class Behance_Sniffs_Operators_OperatorSpacingSniff implements PHP_CodeSniffer_S
     }
 
     if ( $tokens[ $stackPtr ]['code'] === T_COMMA ) {
+
       if ( $tokens[ $stackPtr + 1 ]['code'] !== T_VARIABLE ) {
         $error = "Ampersand is not immediately followed by a variable.";
         $phpcsFile->addError( $error, $stackPtr, 'AmpersandSpacing' );
       }
-    }
+
+    } // if T_COMMA
 
     return true;
 
@@ -195,6 +197,6 @@ class Behance_Sniffs_Operators_OperatorSpacingSniff implements PHP_CodeSniffer_S
 
     return true;
 
-  } // _processNot
+  } // _processMinus
 
 } // Behance_Sniffs_Operators_OperatorSpacingSniff
