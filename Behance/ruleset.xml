@@ -62,7 +62,6 @@
   </rule>
   <rule ref="Behance.Arrays.ShortHandArrayOnly"/>
   <rule ref="Behance.Classes.ClassDeclaration"/>
-  <rule ref="Behance.Classes.ClassNaming"/>
   <rule ref="Behance.Comments.TrailingComment"/>
   <rule ref="Behance.Comments.DisallowHashComments"/>
   <rule ref="Behance.ControlStructures.ControlSignature"/>
