@@ -199,7 +199,7 @@ class Behance_Sniffs_Operators_OperatorSpacingSniff implements PHP_CodeSniffer_S
   private function _processMinus( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
 
     $tokens = $phpcsFile->getTokens();
-    $before = $phpcsFile->findPrevious( [ T_VARIABLE, T_LNUMBER, T_EQUAL ], $stackPtr - 1, null, false, null, true );
+    $before = $phpcsFile->findPrevious( [ T_CLOSE_PARENTHESIS, T_VARIABLE, T_LNUMBER, T_EQUAL ], $stackPtr - 1, null, false, null, true );
 
     if ( $tokens[ $before ]['code'] !== T_EQUAL ) {
       return false;

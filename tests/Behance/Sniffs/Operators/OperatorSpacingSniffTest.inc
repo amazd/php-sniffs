@@ -246,3 +246,8 @@ function blah2(&$things ) {}
 function blah3( $thing, &$things ) {}
 function blah4( $thing, & $things ) {}
 function blah5( $thing,&$things ) {}
+
+$diff = microtime( true ) - microtime( true );
+$diff = microtime( true ) -microtime( true );
+$diff = microtime( true )- microtime( true );
+$diff = microtime( true )-microtime( true );
