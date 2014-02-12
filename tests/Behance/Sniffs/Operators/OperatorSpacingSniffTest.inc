@@ -230,3 +230,19 @@ $foo = $bar - $bleh;
 $foo = -$bleh;        // parens required
 $foo = - $bleh;       // parens required
 $foo = -($bleh);
+
+// more cases for ampersand
+foreach ( $values as &$val ) {}
+foreach ( $values as & $val ) {}
+$refArr = [
+    'foo' => &$val,
+    'bar' =>&$val,
+    'bak' =>& $val,
+    'bar' => & $val,
+];
+
+function blah1( &$things ) {}
+function blah2(&$things ) {}
+function blah3( $thing, &$things ) {}
+function blah4( $thing, & $things ) {}
+function blah5( $thing,&$things ) {}

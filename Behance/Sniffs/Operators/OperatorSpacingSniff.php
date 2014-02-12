@@ -43,7 +43,6 @@ class Behance_Sniffs_Operators_OperatorSpacingSniff implements PHP_CodeSniffer_S
   public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
 
     $tokens = $phpcsFile->getTokens();
-
     // if token **can** be unary and successfully processed, return
     // otherwise, fallthrough to regular logic
     if ( in_array( $tokens[ $stackPtr ]['code'], $this->_unary ) ) {
@@ -109,9 +108,12 @@ class Behance_Sniffs_Operators_OperatorSpacingSniff implements PHP_CodeSniffer_S
     $tokens           = $phpcsFile->getTokens();
     $allowedTokens    = [
         T_EQUAL,
-        T_COMMA
+        T_COMMA,
+        T_DOUBLE_ARROW,
+        T_OPEN_PARENTHESIS,
+        T_AS
     ];
-    $nonWhitespacePtr = $phpcsFile->findPrevious( $allowedTokens, $stackPtr - 1, null, false, null, true );
+    $nonWhitespacePtr = $phpcsFile->findPrevious( $allowedTokens, $stackPtr, null, false, null, true );
 
     if ( $tokens[ $nonWhitespacePtr ]['line'] !== $tokens[ $stackPtr ]['line'] ) {
       return false;
@@ -119,24 +121,43 @@ class Behance_Sniffs_Operators_OperatorSpacingSniff implements PHP_CodeSniffer_S
 
     // Equal sign being used before ampersand - is unary (reference operator, not bitwise-and)
 
-    if ( $tokens[ $stackPtr - 1 ]['code'] !== T_EQUAL && $tokens[ $nonWhitespacePtr ]['code'] !== T_COMMA ) {
-      $error = "Ampersand is not immediately after '=' or after a comma.";
-      $phpcsFile->addError( $error, $stackPtr, 'AmpersandSpacing' );
+    switch ( $tokens[ $nonWhitespacePtr ]['code'] ) {
+
+      case T_EQUAL:
+
+        if ( $stackPtr - 1 !== $nonWhitespacePtr ) {
+          $error = "Ampersand is not immediately after '='.";
+          $phpcsFile->addError( $error, $stackPtr, 'AmpersandSpacing' );
+        }
+
+        if ( $tokens[ $stackPtr + 1 ]['code'] !== T_WHITESPACE ) {
+          $error = "Ampersand is not immediately followed by whitespace.";
+          $phpcsFile->addError( $error, $stackPtr, 'AmpersandSpacing' );
+        }
+
+        break;
+
+      case T_COMMA:
+      case T_DOUBLE_ARROW:
+      case T_OPEN_PARENTHESIS:
+      case T_AS:
+
+        if ( $tokens[ $stackPtr - 1 ]['code'] !== T_WHITESPACE ) {
+          $error = "Ampersand requires whitespace before it.";
+          $phpcsFile->addError( $error, $stackPtr, 'AmpersandSpacing' );
+        }
+
+        if ( $tokens[ $stackPtr + 1 ]['code'] !== T_VARIABLE ) {
+          $error = "Ampersand is not immediately followed by a variable.";
+          $phpcsFile->addError( $error, $stackPtr, 'AmpersandSpacing' );
+        }
+
+        break;
+
+      default:
+        return false;
+        break;
     }
-
-    if ( $tokens[ $stackPtr ]['code'] === T_EQUAL && $tokens[ $stackPtr + 1 ]['code'] !== T_WHITESPACE ) {
-      $error = "Ampersand is not immediately followed by whitespace.";
-      $phpcsFile->addError( $error, $stackPtr, 'AmpersandSpacing' );
-    }
-
-    if ( $tokens[ $stackPtr ]['code'] === T_COMMA ) {
-
-      if ( $tokens[ $stackPtr + 1 ]['code'] !== T_VARIABLE ) {
-        $error = "Ampersand is not immediately followed by a variable.";
-        $phpcsFile->addError( $error, $stackPtr, 'AmpersandSpacing' );
-      }
-
-    } // if T_COMMA
 
     return true;
 
