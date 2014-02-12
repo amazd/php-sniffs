@@ -157,7 +157,8 @@ class Behance_Sniffs_Operators_OperatorSpacingSniff implements PHP_CodeSniffer_S
       default:
         return false;
         break;
-    }
+
+    } // switch token code
 
     return true;
 
