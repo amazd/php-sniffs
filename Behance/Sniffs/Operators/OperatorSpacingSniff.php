@@ -128,15 +128,15 @@ class Behance_Sniffs_Operators_OperatorSpacingSniff implements PHP_CodeSniffer_S
         // @TODO: RE-ENABLE - per Bryan, after more talk
         return true;
 
-        if ( $stackPtr - 1 !== $nonWhitespacePtr ) {
-          $error = "Ampersand is not immediately after '='.";
-          $phpcsFile->addError( $error, $stackPtr, 'AmpersandSpacing' );
-        }
+      //if ( $stackPtr - 1 !== $nonWhitespacePtr ) {
+      //  $error = "Ampersand is not immediately after '='.";
+      //  $phpcsFile->addError( $error, $stackPtr, 'AmpersandSpacing' );
+      //}
 
-        if ( $tokens[ $stackPtr + 1 ]['code'] !== T_WHITESPACE ) {
-          $error = "Ampersand is not immediately followed by whitespace.";
-          $phpcsFile->addError( $error, $stackPtr, 'AmpersandSpacing' );
-        }
+      //if ( $tokens[ $stackPtr + 1 ]['code'] !== T_WHITESPACE ) {
+      //  $error = "Ampersand is not immediately followed by whitespace.";
+      //  $phpcsFile->addError( $error, $stackPtr, 'AmpersandSpacing' );
+      //}
 
         break;
 
@@ -153,10 +153,10 @@ class Behance_Sniffs_Operators_OperatorSpacingSniff implements PHP_CodeSniffer_S
         // @TODO: RE-ENABLE - per Bryan, after more talk
         return true;
 
-        if ( $tokens[ $stackPtr + 1 ]['code'] !== T_VARIABLE ) {
-          $error = "Ampersand is not immediately followed by a variable.";
-          $phpcsFile->addError( $error, $stackPtr, 'AmpersandSpacing' );
-        }
+      //if ( $tokens[ $stackPtr + 1 ]['code'] !== T_VARIABLE ) {
+      //  $error = "Ampersand is not immediately followed by a variable.";
+      //  $phpcsFile->addError( $error, $stackPtr, 'AmpersandSpacing' );
+      //}
 
         break;
 
