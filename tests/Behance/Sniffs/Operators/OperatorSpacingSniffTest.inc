@@ -217,8 +217,8 @@ $foo --;
 ! $foo; // BAD
 
 $foo =& $bar;
-$foo = & $bar; // BAD
-$foo = &$bar;  // BAD
+$foo = & $bar;
+$foo = &$bar;
 $foo =&
         $bar;
 
