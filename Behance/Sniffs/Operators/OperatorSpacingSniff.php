@@ -2,19 +2,33 @@
 class Behance_Sniffs_Operators_OperatorSpacingSniff implements PHP_CodeSniffer_Sniff {
 
   /**
+   * @var array
+   *
+   * Unary operators that may or may not require spaces after them
+   * depending on their context
+   */
+  protected $_unary = [
+      T_EQUAL,
+      T_BITWISE_AND,
+      T_MINUS,
+      T_BOOLEAN_NOT
+  ];
+
+  /**
    * Returns the token types that this sniff is interested in.
    *
    * @return array(int)
    */
   public function register() {
 
-    return array_diff( array_unique( array_merge(
-        [ T_STRING_CONCAT ],
+    return array_unique( array_merge(
         PHP_CodeSniffer_Tokens::$assignmentTokens,
         PHP_CodeSniffer_Tokens::$comparisonTokens,
         PHP_CodeSniffer_Tokens::$equalityTokens,
-        PHP_CodeSniffer_Tokens::$operators
-    ) ), [ T_BITWISE_AND, T_MINUS ] );
+        PHP_CodeSniffer_Tokens::$operators,
+        $this->_unary,
+        [ T_STRING_CONCAT ]
+    ) );
 
   } // register
 
@@ -24,12 +38,18 @@ class Behance_Sniffs_Operators_OperatorSpacingSniff implements PHP_CodeSniffer_S
    * @param PHP_CodeSniffer_File $phpcsFile The file where the token was found.
    * @param int                  $stackPtr  The position in the stack where
    *                                        the token was found.
-   *
    * @return void
    */
   public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
 
     $tokens = $phpcsFile->getTokens();
+    // if token **can** be unary and successfully processed, return
+    // otherwise, fallthrough to regular logic
+    if ( in_array( $tokens[ $stackPtr ]['code'], $this->_unary ) ) {
+      if ( $this->_processUnary( $phpcsFile, $stackPtr ) ) {
+        return;
+      }
+    }
 
     if ( $tokens[ $stackPtr - 1 ]['code'] !== T_WHITESPACE ) {
       $error = '"%s" operator requires whitespace before it';
@@ -44,5 +64,174 @@ class Behance_Sniffs_Operators_OperatorSpacingSniff implements PHP_CodeSniffer_S
     }
 
   } // process
+
+  /**
+   * Process an operator that is potentially being used in a unary context
+   *
+   * @param PHP_CodeSniffer_File $phpcsFile The file where the token was found.
+   * @param int                  $stackPtr  The position in the stack where
+   *                                        the token was found.
+   * @return bool                           Whether the token was evaluated as a unary operator or not
+   */
+  protected function _processUnary( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
+
+    $tokens = $phpcsFile->getTokens();
+
+    if ( $tokens[ $stackPtr ]['code'] === T_EQUAL && $tokens[ $stackPtr + 1 ]['code'] === T_BITWISE_AND ) {
+      return true;
+    }
+
+    if ( $tokens[ $stackPtr ]['code'] === T_BITWISE_AND ) {
+      return $this->_processAmpersand( $phpcsFile, $stackPtr );
+    }
+    if ( $tokens[ $stackPtr ]['code'] === T_MINUS ) {
+      return $this->_processMinus( $phpcsFile, $stackPtr );
+    }
+    if ( $tokens[ $stackPtr ]['code'] === T_BOOLEAN_NOT ) {
+      return $this->_processNot( $phpcsFile, $stackPtr );
+    }
+
+    return false;
+
+  } // _processUnary
+
+  /**
+   * Process an ampersand that is potentially being used in a unary context
+   *
+   * @param PHP_CodeSniffer_File $phpcsFile The file where the token was found.
+   * @param int                  $stackPtr  The position in the stack where
+   *                                        the token was found.
+   * @return bool                           Whether the ampersand was evaluated as a unary operator or not
+   */
+  private function _processAmpersand( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
+
+    $tokens           = $phpcsFile->getTokens();
+    $allowedTokens    = [
+        T_EQUAL,
+        T_COMMA,
+        T_DOUBLE_ARROW,
+        T_OPEN_PARENTHESIS,
+        T_AS
+    ];
+    $nonWhitespacePtr = $phpcsFile->findPrevious( $allowedTokens, $stackPtr, null, false, null, true );
+
+    if ( $tokens[ $nonWhitespacePtr ]['line'] !== $tokens[ $stackPtr ]['line'] ) {
+      return false;
+    }
+
+    // Equal sign being used before ampersand - is unary (reference operator, not bitwise-and)
+
+    switch ( $tokens[ $nonWhitespacePtr ]['code'] ) {
+
+      case T_EQUAL:
+
+        // @TODO: RE-ENABLE - per Bryan, after more talk
+        return true;
+
+      //if ( $stackPtr - 1 !== $nonWhitespacePtr ) {
+      //  $error = "Ampersand is not immediately after '='.";
+      //  $phpcsFile->addError( $error, $stackPtr, 'AmpersandSpacing' );
+      //}
+
+      //if ( $tokens[ $stackPtr + 1 ]['code'] !== T_WHITESPACE ) {
+      //  $error = "Ampersand is not immediately followed by whitespace.";
+      //  $phpcsFile->addError( $error, $stackPtr, 'AmpersandSpacing' );
+      //}
+
+        break;
+
+      case T_COMMA:
+      case T_DOUBLE_ARROW:
+      case T_OPEN_PARENTHESIS:
+      case T_AS:
+
+        if ( $tokens[ $stackPtr - 1 ]['code'] !== T_WHITESPACE ) {
+          $error = "Ampersand requires whitespace before it.";
+          $phpcsFile->addError( $error, $stackPtr, 'AmpersandSpacing' );
+        }
+
+        // @TODO: RE-ENABLE - per Bryan, after more talk
+        return true;
+
+      //if ( $tokens[ $stackPtr + 1 ]['code'] !== T_VARIABLE ) {
+      //  $error = "Ampersand is not immediately followed by a variable.";
+      //  $phpcsFile->addError( $error, $stackPtr, 'AmpersandSpacing' );
+      //}
+
+        break;
+
+      default:
+        return false;
+        break;
+
+    } // switch token code
+
+    return true;
+
+  } // _processAmpersand
+
+  /**
+   * Process an exclamation that is potentially being used in a unary context
+   *
+   * @param PHP_CodeSniffer_File $phpcsFile The file where the token was found.
+   * @param int                  $stackPtr  The position in the stack where
+   *                                        the token was found.
+   * @return bool                           Whether the exclamation was evaluated as a unary operator or not
+   */
+  private function _processNot( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
+
+    $tokens = $phpcsFile->getTokens();
+
+    if ( $tokens[ $stackPtr - 1 ]['code'] !== T_WHITESPACE ) {
+      $phpcsFile->addError( 'Boolean Not should have whitespace before it.', $stackPtr, 'BooleanNotSpacing' );
+    }
+
+    if ( $tokens[ $stackPtr + 1 ]['code'] === T_WHITESPACE ) {
+      $phpcsFile->addError( 'Boolean Not should not have whitespace after it.', $stackPtr, 'BooleanNotSpacing' );
+    }
+
+    return true;
+
+  } // _processNot
+
+  /**
+   * Process an exclamation that is potentially being used in a unary context
+   *
+   * @param PHP_CodeSniffer_File $phpcsFile The file where the token was found.
+   * @param int                  $stackPtr  The position in the stack where
+   *                                        the token was found.
+   * @return bool                           Whether the minus was evaluated as a unary operator or not
+   */
+  private function _processMinus( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
+
+    $tokens       = $phpcsFile->getTokens();
+    $prevTokens   = [
+        T_CLOSE_PARENTHESIS,
+        T_VARIABLE,
+        T_LNUMBER,
+        T_EQUAL,
+        T_DOUBLE_ARROW
+    ];
+    $nonUnaryPrev = [
+        T_EQUAL,
+        T_DOUBLE_ARROW
+    ];
+    $before       = $phpcsFile->findPrevious( $prevTokens, $stackPtr - 1, null, false, null, true );
+
+    if ( !in_array( $tokens[ $before ]['code'], $nonUnaryPrev ) ) {
+      return false;
+    }
+
+    if ( $tokens[ $stackPtr - 1 ]['code'] !== T_WHITESPACE ) {
+      $phpcsFile->addError( "'-' requires whitespace before it.", $stackPtr, 'MinusSpacing' );
+    }
+
+    if ( $tokens[ $stackPtr + 1 ]['code'] === T_WHITESPACE ) {
+      $phpcsFile->addError( "'-' as unary should not have whitespace after it.", $stackPtr, 'MinusSpacing' );
+    }
+
+    return true;
+
+  } // _processMinus
 
 } // Behance_Sniffs_Operators_OperatorSpacingSniff

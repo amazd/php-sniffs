@@ -7,10 +7,12 @@ class Behance_Sniffs_Operators_OperatorSpacingSniffTest extends AbstractSniffUni
     return [
         5   => 4,
         12  => 2,
+        19  => 2,
         26  => 2,
         33  => 2,
         40  => 2,
         47  => 2,
+        54  => 2,
         61  => 2,
         86  => 2,
         93  => 2,
@@ -29,6 +31,18 @@ class Behance_Sniffs_Operators_OperatorSpacingSniffTest extends AbstractSniffUni
         186 => 2,
         193 => 2,
         200 => 2,
+        217 => 1,
+        226 => 1,
+        228 => 2,
+        231 => 1,
+        238 => 2,
+        239 => 2,
+        244 => 1,
+        247 => 1,
+        250 => 1,
+        251 => 1,
+        252 => 2,
+        255 => 1,
     ];
 
   } // getErrorList

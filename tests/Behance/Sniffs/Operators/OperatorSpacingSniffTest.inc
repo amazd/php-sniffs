@@ -214,4 +214,43 @@ $foo --;
 -- $foo;
 
 !$foo;
-! $foo;
+! $foo; // BAD
+
+$foo =& $bar;
+$foo = & $bar;
+$foo = &$bar;
+$foo =&
+        $bar;
+
+// more cases for minus - unary too
+$foo = - 5;           // no space for flat LNUMBER
+$foo = -5;
+$foo = $bar-$bleh;    // spaces required
+$foo = $bar - $bleh;
+$foo = -$bleh;
+$foo = - $bleh;       // no space
+
+// more cases for ampersand
+foreach ( $values as &$val ) {}
+foreach ( $values as & $val ) {}
+$refArr = [
+    'foo' => &$val,
+    'bar' =>&$val,
+    'bak' =>& $val,
+    'bar' => & $val,
+];
+
+function blah1( &$things ) {}
+function blah2(&$things ) {}
+function blah3( $thing, &$things ) {}
+function blah4( $thing, & $things ) {}
+function blah5( $thing,&$things ) {}
+
+$diff = microtime( true ) - microtime( true );
+$diff = microtime( true ) -microtime( true );
+$diff = microtime( true )- microtime( true );
+$diff = microtime( true )-microtime( true );
+$arr  = [
+  'negval' => -1,
+  'negval' => - 1,
+];
