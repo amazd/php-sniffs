@@ -227,9 +227,8 @@ $foo = - 5;           // no space for flat LNUMBER
 $foo = -5;
 $foo = $bar-$bleh;    // spaces required
 $foo = $bar - $bleh;
-$foo = -$bleh;        // parens required
-$foo = - $bleh;       // parens required
-$foo = -($bleh);
+$foo = -$bleh;
+$foo = - $bleh;       // no space
 
 // more cases for ampersand
 foreach ( $values as &$val ) {}

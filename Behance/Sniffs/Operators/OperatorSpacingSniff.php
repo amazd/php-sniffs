@@ -219,10 +219,6 @@ class Behance_Sniffs_Operators_OperatorSpacingSniff implements PHP_CodeSniffer_S
       $phpcsFile->addError( "'-' as unary should not have whitespace after it.", $stackPtr, 'MinusSpacing' );
     }
 
-    if ( $tokens[ $stackPtr + 1 ]['code'] === T_VARIABLE ) {
-      $phpcsFile->addError( "'-' as unary on variable should have parenthesis around variable.", $stackPtr, 'MinusSpacing' );
-    }
-
     return true;
 
   } // _processMinus
