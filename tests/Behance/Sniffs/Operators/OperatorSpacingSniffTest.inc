@@ -250,3 +250,7 @@ $diff = microtime( true ) - microtime( true );
 $diff = microtime( true ) -microtime( true );
 $diff = microtime( true )- microtime( true );
 $diff = microtime( true )-microtime( true );
+$arr  = [
+  'negval' => -1,
+  'negval' => - 1,
+];
