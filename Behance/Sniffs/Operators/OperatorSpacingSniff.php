@@ -206,6 +206,7 @@ class Behance_Sniffs_Operators_OperatorSpacingSniff implements PHP_CodeSniffer_S
 
     $tokens     = $phpcsFile->getTokens();
     $prevTokens = [
+        T_OPEN_SQUARE_BRACKET,
         T_COMMA,
         T_OPEN_PARENTHESIS,
         T_CLOSE_PARENTHESIS,
@@ -218,6 +219,7 @@ class Behance_Sniffs_Operators_OperatorSpacingSniff implements PHP_CodeSniffer_S
 
     // if any of these are immediately before the '-', then it should be in a unary context
     $unaryPrev  = [
+        T_OPEN_SQUARE_BRACKET,
         T_OPEN_PARENTHESIS,
         T_COMMA,
         T_EQUAL,
