@@ -266,3 +266,11 @@ $arr = [ -1 ];
 $arr = [ - 1 ];
 $create_modules[ -1 ] = $good_modules[ -1 ];
 $create_modules[ - 1 ] = $good_modules[ - 1 ];
+
+    return [
+        -1 => $this->_valid_image_module(),
+        -2 => $this->_valid_video_module(),
+        -3 => $this->_valid_audio_module(),
+        -4 => $this->_valid_text_module(),
+        -5 => $this->_valid_embed_module(),
+    ];
