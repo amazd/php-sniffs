@@ -274,3 +274,11 @@ $create_modules[ - 1 ] = $good_modules[ - 1 ];
         -4 => $this->_valid_text_module(),
         -5 => $this->_valid_embed_module(),
     ];
+
+$thing = ( false )
+         ? -2
+         : -1;
+
+$thing = ( true )
+         ? - 2
+         : - 1;

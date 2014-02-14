@@ -15,6 +15,25 @@ class Behance_Sniffs_Operators_OperatorSpacingSniff implements PHP_CodeSniffer_S
   ];
 
   /**
+   * @var array
+   *
+   * Tokens before an operator that *can* be unary that would indicate
+   * that it's actually being used in a unary context
+   */
+  protected $_unaryIndicators = [
+      T_INLINE_THEN,
+      T_INLINE_ELSE,
+      T_COLON,
+      T_OPEN_TAG,
+      T_OPEN_SQUARE_BRACKET,
+      T_OPEN_PARENTHESIS,
+      T_COMMA,
+      T_EQUAL,
+      T_DOUBLE_ARROW
+  ];
+
+
+  /**
    * Returns the token types that this sniff is interested in.
    *
    * @return array(int)
@@ -205,29 +224,15 @@ class Behance_Sniffs_Operators_OperatorSpacingSniff implements PHP_CodeSniffer_S
   private function _processMinus( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
 
     $tokens     = $phpcsFile->getTokens();
-    $prevTokens = [
-        T_OPEN_TAG,
-        T_OPEN_SQUARE_BRACKET,
-        T_COMMA,
-        T_OPEN_PARENTHESIS,
+    $prevTokens = array_merge( $this->_unaryIndicators, [
         T_CLOSE_PARENTHESIS,
         T_VARIABLE,
         T_LNUMBER,
-        T_EQUAL,
-        T_DOUBLE_ARROW
-    ];
+    ] );
     $before     = $phpcsFile->findPrevious( $prevTokens, $stackPtr - 1, null, false, null, true );
-    // if any of these are immediately before the '-', then it should be in a unary context
-    $unaryPrev  = [
-        T_OPEN_TAG,
-        T_OPEN_SQUARE_BRACKET,
-        T_OPEN_PARENTHESIS,
-        T_COMMA,
-        T_EQUAL,
-        T_DOUBLE_ARROW
-    ];
 
-    if ( !in_array( $tokens[ $before ]['code'], $unaryPrev ) ) {
+    // if any of these are immediately before the '-', then it should be in a unary context
+    if ( !in_array( $tokens[ $before ]['code'], $this->_unaryIndicators ) ) {
       return false;
     }
 
