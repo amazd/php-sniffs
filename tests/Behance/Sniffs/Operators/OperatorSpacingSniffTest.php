@@ -43,6 +43,9 @@ class Behance_Sniffs_Operators_OperatorSpacingSniffTest extends AbstractSniffUni
         251 => 1,
         252 => 2,
         255 => 1,
+        257 => 1,
+        261 => 1,
+        262 => 2,
     ];
 
   } // getErrorList

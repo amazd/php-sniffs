@@ -253,4 +253,10 @@ $diff = microtime( true )-microtime( true );
 $arr  = [
   'negval' => -1,
   'negval' => - 1,
+  -1 => $foo,
+  - 1 => $blah
 ];
+
+$thing->passNegativeFirstKay( -1, $foo );
+$thing->passNegativeFirstKay( - 1, $foo );
+$thing->passNegativeFirstKay(- 1, $foo );

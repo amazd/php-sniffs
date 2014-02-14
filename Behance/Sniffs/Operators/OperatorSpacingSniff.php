@@ -204,21 +204,27 @@ class Behance_Sniffs_Operators_OperatorSpacingSniff implements PHP_CodeSniffer_S
    */
   private function _processMinus( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
 
-    $tokens       = $phpcsFile->getTokens();
-    $prevTokens   = [
+    $tokens     = $phpcsFile->getTokens();
+    $prevTokens = [
+        T_COMMA,
+        T_OPEN_PARENTHESIS,
         T_CLOSE_PARENTHESIS,
         T_VARIABLE,
         T_LNUMBER,
         T_EQUAL,
         T_DOUBLE_ARROW
     ];
-    $nonUnaryPrev = [
+    $before     = $phpcsFile->findPrevious( $prevTokens, $stackPtr - 1, null, false, null, true );
+
+    // if any of these are immediately before the '-', then it should be in a unary context
+    $unaryPrev  = [
+        T_OPEN_PARENTHESIS,
+        T_COMMA,
         T_EQUAL,
         T_DOUBLE_ARROW
     ];
-    $before       = $phpcsFile->findPrevious( $prevTokens, $stackPtr - 1, null, false, null, true );
 
-    if ( !in_array( $tokens[ $before ]['code'], $nonUnaryPrev ) ) {
+    if ( !in_array( $tokens[ $before ]['code'], $unaryPrev ) ) {
       return false;
     }
 
