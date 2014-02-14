@@ -260,3 +260,9 @@ $arr  = [
 $thing->passNegativeFirstKay( -1, $foo );
 $thing->passNegativeFirstKay( - 1, $foo );
 $thing->passNegativeFirstKay(- 1, $foo );
+
+$arr  = [ -1 => 'REAL' ];
+$arr = [ -1 ];
+$arr = [ - 1 ];
+$create_modules[ -1 ] = $good_modules[ -1 ];
+$create_modules[ - 1 ] = $good_modules[ - 1 ];
