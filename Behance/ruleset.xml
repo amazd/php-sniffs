@@ -12,16 +12,19 @@
     <exclude name="PSR2.Classes.ClassDeclaration.OpenBraceNewLine"/>
     <exclude name="PSR2.Classes.ClassDeclaration.CloseBraceAfterBody"/>
     <exclude name="PSR2.Classes.ClassDeclaration.CloseBraceSameLine"/>
+    <exclude name="PSR2.Classes.PropertyDeclaration.Underscore"/>
     <exclude name="PSR2.Methods.FunctionCallSignature.SpaceAfterOpenBracket"/>
     <exclude name="PSR2.Methods.FunctionCallSignature.SpaceBeforeCloseBracket"/>
     <exclude name="PSR2.Methods.FunctionCallSignature.ContentAfterOpenBracket"/>
     <exclude name="PSR2.Methods.FunctionCallSignature.CloseBracketLine"/>
+    <exclude name="PSR2.Methods.MethodDeclaration.Underscore"/>
     <exclude name="PSR2.ControlStructures.ControlStructureSpacing.SpacingAfterOpenBrace"/>
     <exclude name="PSR2.ControlStructures.ControlStructureSpacing.SpaceBeforeCloseBrace"/>
     <exclude name="PSR2.Classes.PropertyDeclaration.Multiple"/>
 
     <!-- Generic standards that are inherited via PSR2 -->
     <exclude name="Generic.ControlStructures.InlineControlStructure"/>
+    <exclude name="Generic.Files.LineLength"/>
     <exclude name="Generic.Functions.FunctionCallArgumentSpacing"/>
 
     <!-- Squiz standards that are inherited via PSR2 -->
