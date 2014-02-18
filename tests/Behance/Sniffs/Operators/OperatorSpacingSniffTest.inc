@@ -282,3 +282,7 @@ $thing = ( false )
 $thing = ( true )
          ? - 2
          : - 1;
+
+$foo = $params['page'] - 1;
+$foo = $params['page']- 1;
+$foo = $params['page'] -1;

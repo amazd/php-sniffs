@@ -214,7 +214,7 @@ class Behance_Sniffs_Operators_OperatorSpacingSniff implements PHP_CodeSniffer_S
   } // _processNot
 
   /**
-   * Process an exclamation that is potentially being used in a unary context
+   * Process a minus that is potentially being used in a unary context
    *
    * @param PHP_CodeSniffer_File $phpcsFile The file where the token was found.
    * @param int                  $stackPtr  The position in the stack where
@@ -226,6 +226,7 @@ class Behance_Sniffs_Operators_OperatorSpacingSniff implements PHP_CodeSniffer_S
     $tokens     = $phpcsFile->getTokens();
     $prevTokens = array_merge( $this->_unaryIndicators, [
         T_CLOSE_PARENTHESIS,
+        T_CLOSE_SQUARE_BRACKET,
         T_VARIABLE,
         T_LNUMBER,
     ] );
