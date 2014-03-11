@@ -149,30 +149,18 @@ class Behance_Sniffs_Arrays_ArrayDeclarationSniff implements PHP_CodeSniffer_Sni
         // We have a multiple value array that is inside a condition or
         // function. Check its spacing is correct.
         foreach ( $commas as $comma ) {
-          //TODO: potentially re-enable
-          // if ($tokens[ ($comma + 1) ]['code'] !== T_WHITESPACE) {
-          //   $content = $tokens[ ($comma + 1) ]['content'];
-          //   $error   = 'Expected 1 space between comma and "%s"; 0 found';
-          //   $data  = [$content];
-          //   $phpcsFile->addError($error, $comma, 'NoSpaceAfterComma', $data);
-          // } else {
-          //   $spaceLength = strlen($tokens[ ($comma + 1) ]['content']);
-          //   if ($spaceLength !== 1) {
-          //     $content = $tokens[ ($comma + 2) ]['content'];
-          //     $error   = 'Expected 1 space between comma and "%s"; %s found';
-          //     $data  = [
-          //           $content,
-          //           $spaceLength,
-          //          ];
-          //     $phpcsFile->addError($error, $comma, 'SpaceAfterComma', $data);
-          //   }
-          // }
+          if ( $tokens[ $comma + 1 ]['code'] !== T_WHITESPACE ) {
+            $content = $tokens[ $comma + 1 ]['content'];
+            $error = 'Expected at least 1 space between comma and "%s"; 0 found';
+            $data = [ $content ];
+            $phpcsFile->addError( $error, $comma, 'NoSpaceAfterComma', $data );
+          } // if comma + 1 !== T_WHITESPACE
 
-          if ( $tokens[ ($comma - 1) ]['code'] === T_WHITESPACE ) {
-            $content   = $tokens[ ($comma - 2) ]['content'];
-            $spaceLength = strlen( $tokens[ ($comma - 1) ]['content'] );
+          if ( $tokens[ $comma - 1 ]['code'] === T_WHITESPACE ) {
+            $content   = $tokens[ $comma - 2 ]['content'];
+            $spaceLength = strlen( $tokens[ $comma - 1 ]['content'] );
             $error     = 'Expected 0 spaces between "%s" and comma; %s found';
-            $data    = [
+            $data = [
                 $content,
                 $spaceLength,
             ];

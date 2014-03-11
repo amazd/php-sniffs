@@ -16,3 +16,9 @@ $goodArr = [
 $oneLineMissingSpaceBeforeDoubleArrow = [ 'key1'=> $val ];
 $oneLineMissingSpaceAfterDoubleArrow  = [ 'key2' =>$val ];
 $oneLineGoodDoubleArrow               = [ 'key3' => $val ];
+
+$oneLineExtraSpaceBeforeComma  = [ 'val' , 'val' ];
+$oneLineMissingSpaceAfterComma = [ 'val','val' ];
+$oneLinebackwardsCommaSpacing  = [ 'val' ,'val' ];
+$oneLineGoodComma              = [ 'val', 'val' ];
+$oneLineGoodCommaExtraSpaces   = [ 'val',           'val' ];
