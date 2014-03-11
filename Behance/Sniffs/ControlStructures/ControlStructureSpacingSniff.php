@@ -43,7 +43,7 @@ class Behance_Sniffs_ControlStructures_ControlStructureSpacingSniff implements P
 
     $tokens = $phpcsFile->getTokens();
 
-    if ( !isset($tokens[ $stackPtr ]['parenthesis_opener']) ) {
+    if ( !isset( $tokens[ $stackPtr ]['parenthesis_opener'] ) ) {
 
       $whitespacePtr = $stackPtr + 1;
 

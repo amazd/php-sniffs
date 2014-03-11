@@ -229,6 +229,7 @@ class Behance_Sniffs_Operators_OperatorSpacingSniff implements PHP_CodeSniffer_S
         T_CLOSE_SQUARE_BRACKET,
         T_VARIABLE,
         T_LNUMBER,
+        T_STRING
     ] );
     $before     = $phpcsFile->findPrevious( $prevTokens, $stackPtr - 1, null, false, null, true );
 
