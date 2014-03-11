@@ -8,7 +8,9 @@ class Behance_Sniffs_Arrays_ArrayDeclarationSniffTest extends AbstractSniffUnitT
         2 => 1,
         4 => 1,
         5 => 1,
-        6 => 1
+        6 => 1,
+        16 => 1,
+        17 => 1
     ];
 
   } // getErrorList

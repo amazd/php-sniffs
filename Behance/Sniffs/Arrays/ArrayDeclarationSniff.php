@@ -119,45 +119,22 @@ class Behance_Sniffs_Arrays_ArrayDeclarationSniff implements PHP_CodeSniffer_Sni
       } // for arrayStart -> arrayEnd
 
       // Now check each of the double arrows (if any).
-      //TODO: potentially re-enable
       $nextArrow = $arrayStart;
-      // while (($nextArrow = $phpcsFile->findNext(T_DOUBLE_ARROW, ($nextArrow + 1), $arrayEnd)) !== false) {
-      //   if ($tokens[ ($nextArrow - 1) ]['code'] !== T_WHITESPACE) {
-      //     $content = $tokens[ ($nextArrow - 1) ]['content'];
-      //     $error   = 'Expected 1 space between "%s" and double arrow; 0 found';
-      //     $data  = [$content];
-      //     $phpcsFile->addError($error, $nextArrow, 'NoSpaceBeforeDoubleArrow', $data);
-      //   } else {
-      //     $spaceLength = strlen($tokens[ ($nextArrow - 1) ]['content']);
-      //     if ($spaceLength !== 1) {
-      //       $content = $tokens[ ($nextArrow - 2) ]['content'];
-      //       $error   = 'Expected 1 space between "%s" and double arrow; %s found';
-      //       $data  = [
-      //             $content,
-      //             $spaceLength,
-      //            ];
-      //       $phpcsFile->addError($error, $nextArrow, 'SpaceBeforeDoubleArrow', $data);
-      //     }
-      //   }
+      while ( ( $nextArrow = $phpcsFile->findNext( T_DOUBLE_ARROW, ( $nextArrow + 1 ), $arrayEnd ) ) !== false ) {
+        if ( $tokens[ $nextArrow - 1 ]['code'] !== T_WHITESPACE ) {
+          $content = $tokens[ $nextArrow - 1 ]['content'];
+          $error   = 'Expected at least 1 space between "%s" and double arrow; 0 found';
+          $data  = [$content];
+          $phpcsFile->addError( $error, $nextArrow, 'NoSpaceBeforeDoubleArrow', $data );
+        } // if nextArrow - 1 !== T_WHITESPACE
 
-      //   if ($tokens[ ($nextArrow + 1) ]['code'] !== T_WHITESPACE) {
-      //     $content = $tokens[ ($nextArrow + 1) ]['content'];
-      //     $error   = 'Expected 1 space between double arrow and "%s"; 0 found';
-      //     $data  = [$content];
-      //     $phpcsFile->addError($error, $nextArrow, 'NoSpaceAfterDoubleArrow', $data);
-      //   } else {
-      //     $spaceLength = strlen($tokens[ ($nextArrow + 1) ]['content']);
-      //     if ($spaceLength !== 1) {
-      //       $content = $tokens[ ($nextArrow + 2) ]['content'];
-      //       $error   = 'Expected 1 space between double arrow and "%s"; %s found';
-      //       $data  = [
-      //             $content,
-      //             $spaceLength,
-      //            ];
-      //       $phpcsFile->addError($error, $nextArrow, 'SpaceAfterDoubleArrow', $data);
-      //     }
-      //   }
-      // }//end while
+        if ( $tokens[ ($nextArrow + 1) ]['code'] !== T_WHITESPACE ) {
+          $content = $tokens[ ($nextArrow + 1) ]['content'];
+          $error   = 'Expected at least 1 space between double arrow and "%s"; 0 found';
+          $data  = [$content];
+          $phpcsFile->addError( $error, $nextArrow, 'NoSpaceAfterDoubleArrow', $data );
+        } // if nextArrow + 1 !== T_WHITESPACE
+      } // while nextArrow
 
       if ( $valueCount > 0 ) {
         $conditionCheck = $phpcsFile->findPrevious( [T_OPEN_PARENTHESIS, T_SEMICOLON ], ($stackPtr - 1), null, false );
