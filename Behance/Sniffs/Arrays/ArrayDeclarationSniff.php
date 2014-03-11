@@ -23,7 +23,7 @@ class Behance_Sniffs_Arrays_ArrayDeclarationSniff implements PHP_CodeSniffer_Sni
    */
   public function register() {
 
-    return [T_ARRAY, T_OPEN_SHORT_ARRAY];
+    return [ T_ARRAY, T_OPEN_SHORT_ARRAY ];
 
   } // register
 
@@ -69,6 +69,7 @@ class Behance_Sniffs_Arrays_ArrayDeclarationSniff implements PHP_CodeSniffer_Sni
     $indentPtr    = $phpcsFile->findFirstOnLine( PHP_CodeSniffer_Tokens::$emptyTokens, $stackPtr, true );
     $indentStart  = $tokens[ $indentPtr ]['column'];
     $indentSpaces = $this->indent * $this->elementIndentLevel;
+    $isEmpty      = false;
 
     if ( !$isShortArray && $arrayStart != ($stackPtr + 1) ) {
       $error = 'There must be no space between the Array keyword and the opening parenthesis';
@@ -76,8 +77,9 @@ class Behance_Sniffs_Arrays_ArrayDeclarationSniff implements PHP_CodeSniffer_Sni
     }
 
     // Check for empty arrays.
-    $content = $phpcsFile->findNext( [T_WHITESPACE ], ($arrayStart + 1), ($arrayEnd + 1), true );
+    $content = $phpcsFile->findNext( [ T_WHITESPACE ], ($arrayStart + 1), ($arrayEnd + 1), true );
     if ( $content === $arrayEnd ) {
+      $isEmpty = true;
       // Empty array, but if the brackets aren't together, there's a problem.
       if ( ($arrayEnd - $arrayStart) !== 1 ) {
         $error = 'Empty array declaration must have no spaces';
@@ -90,6 +92,20 @@ class Behance_Sniffs_Arrays_ArrayDeclarationSniff implements PHP_CodeSniffer_Sni
     } // if content = arrayEnd
 
     if ( $tokens[ $arrayStart ]['line'] === $tokens[ $arrayEnd ]['line'] ) {
+
+      if ( !$isEmpty ) {
+        // ensure whitespace after start and before close
+        if ( $tokens[ $arrayStart + 1 ]['content'] !== ' ' ) {
+          $error = 'Expected exactly 1 space after array open';
+          $phpcsFile->addError( $error, $stackPtr, 'NoSpaceAfterArrayOpen' );
+        }
+
+        if ( $tokens[ $arrayEnd - 1 ]['content'] !== ' ' ) {
+          $error = 'Expected exactly 1 space before array close';
+          $phpcsFile->addError( $error, $stackPtr, 'NoSpaceBeforeArrayClose' );
+        }
+      } // if !isEmpty
+
       // Single line array.
       // Check if there are multiple values. If so, then it has to be multiple lines
       // unless it is contained inside a function call or condition.
@@ -124,20 +140,20 @@ class Behance_Sniffs_Arrays_ArrayDeclarationSniff implements PHP_CodeSniffer_Sni
         if ( $tokens[ $nextArrow - 1 ]['code'] !== T_WHITESPACE ) {
           $content = $tokens[ $nextArrow - 1 ]['content'];
           $error   = 'Expected at least 1 space between "%s" and double arrow; 0 found';
-          $data  = [$content];
+          $data  = [ $content ];
           $phpcsFile->addError( $error, $nextArrow, 'NoSpaceBeforeDoubleArrow', $data );
         } // if nextArrow - 1 !== T_WHITESPACE
 
         if ( $tokens[ ($nextArrow + 1) ]['code'] !== T_WHITESPACE ) {
           $content = $tokens[ ($nextArrow + 1) ]['content'];
           $error   = 'Expected at least 1 space between double arrow and "%s"; 0 found';
-          $data  = [$content];
+          $data  = [ $content ];
           $phpcsFile->addError( $error, $nextArrow, 'NoSpaceAfterDoubleArrow', $data );
         } // if nextArrow + 1 !== T_WHITESPACE
       } // while nextArrow
 
       if ( $valueCount > 0 ) {
-        $conditionCheck = $phpcsFile->findPrevious( [T_OPEN_PARENTHESIS, T_SEMICOLON ], ($stackPtr - 1), null, false );
+        $conditionCheck = $phpcsFile->findPrevious( [ T_OPEN_PARENTHESIS, T_SEMICOLON ], ($stackPtr - 1), null, false );
 
         //TODO: potentially re-enable this
         // if (($conditionCheck === false) || ($tokens[ $conditionCheck ]['line'] !== $tokens[ $stackPtr ]['line'])) {
@@ -199,12 +215,12 @@ class Behance_Sniffs_Arrays_ArrayDeclarationSniff implements PHP_CodeSniffer_Sni
     $maxLength  = 0;
 
     // Find all the double arrows that reside in this scope.
-    while ( ($nextToken = $phpcsFile->findNext( [T_DOUBLE_ARROW, T_COMMA, T_ARRAY, T_OPEN_SHORT_ARRAY ], ($nextToken + 1), $arrayEnd )) !== false ) {
+    while ( ($nextToken = $phpcsFile->findNext( [ T_DOUBLE_ARROW, T_COMMA, T_ARRAY, T_OPEN_SHORT_ARRAY ], ($nextToken + 1), $arrayEnd )) !== false ) {
       $currentEntry = [];
 
       if ( $this->_isArrayOpener( $tokens[ $nextToken ] ) ) {
         // Let subsequent calls of this test handle nested arrays.
-        $indices[] = ['value' => $nextToken];
+        $indices[] = [ 'value' => $nextToken ];
         $nextTokenString = $tokens[ $nextToken ]['code'] === T_ARRAY ? 'parenthesis' : 'bracket';
         $nextToken = $tokens[ $tokens[ $nextToken ][ $nextTokenString . '_opener' ] ][ $nextTokenString . '_closer' ];
         continue;
@@ -262,7 +278,7 @@ class Behance_Sniffs_Arrays_ArrayDeclarationSniff implements PHP_CodeSniffer_Sni
           } // while valueContent === nextToken
 
           $valueContent = $phpcsFile->findNext( T_WHITESPACE, ($valueContent + 1), $nextToken, true );
-          $indices[]  = ['value' => $valueContent];
+          $indices[]  = [ 'value' => $valueContent ];
           $singleUsed   = true;
         } // if !keyUsed
 
@@ -300,7 +316,7 @@ class Behance_Sniffs_Arrays_ArrayDeclarationSniff implements PHP_CodeSniffer_Sni
         }
 
         // Find the value of this index.
-        $nextContent       = $phpcsFile->findNext( [T_WHITESPACE ], ($nextToken + 1), $arrayEnd, true );
+        $nextContent       = $phpcsFile->findNext( [ T_WHITESPACE ], ($nextToken + 1), $arrayEnd, true );
         $currentEntry['value'] = $nextContent;
         $indices[]       = $currentEntry;
         $lastToken       = T_DOUBLE_ARROW;
