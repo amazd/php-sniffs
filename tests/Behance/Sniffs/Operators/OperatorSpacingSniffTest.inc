@@ -286,3 +286,11 @@ $thing = ( true )
 $foo = $params['page'] - 1;
 $foo = $params['page']- 1;
 $foo = $params['page'] -1;
+
+$foo = Foo::FOO - 1;
+$foo = Foo::FOO- 1;
+$foo = Foo::FOO -1;
+
+$foo = Foo::$FOO - 1;
+$foo = Foo::$FOO- 1;
+$foo = Foo::$FOO -1;
