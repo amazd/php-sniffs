@@ -246,7 +246,7 @@ class Behance_Sniffs_Arrays_ArrayIndentSniff implements PHP_CodeSniffer_Sniff {
       } // if isArrayOpener
 
       if ( $tokens[ $nextToken ]['code'] === T_COMMA ) {
-        $stackPtrCount = isset($tokens[ $stackPtr ]['nested_parenthesis'])
+        $stackPtrCount = isset( $tokens[ $stackPtr ]['nested_parenthesis'] )
           ? count( $tokens[ $stackPtr ]['nested_parenthesis'] )
           : 0;
 
@@ -254,7 +254,7 @@ class Behance_Sniffs_Arrays_ArrayIndentSniff implements PHP_CodeSniffer_Sniff {
           $stackPtrCount++;
         }
 
-        $nextPtrCount = isset($tokens[ $nextToken ]['nested_parenthesis'])
+        $nextPtrCount = isset( $tokens[ $nextToken ]['nested_parenthesis'] )
           ? count( $tokens[ $nextToken ]['nested_parenthesis'] )
           : 0;
 
@@ -345,7 +345,7 @@ class Behance_Sniffs_Arrays_ArrayIndentSniff implements PHP_CodeSniffer_Sniff {
     // Check for mutli-line arrays that should be single-line.
     $singleValue = false;
 
-    if ( empty($indices) ) {
+    if ( empty( $indices ) ) {
       $singleValue = true;
     }
     elseif ( count( $indices ) === 1 && $lastToken === T_COMMA ) {

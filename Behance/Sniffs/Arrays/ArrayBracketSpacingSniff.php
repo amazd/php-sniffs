@@ -75,7 +75,7 @@ class Behance_Sniffs_Arrays_ArrayBracketSpacingSniff implements PHP_CodeSniffer_
     }
 
     if ( $stackPtr + ( ( $spaces + 1 ) * $direction ) !== $nonSpace ) {
-      $phpcsFile->addError( 'Expected %s spaces %s bracket', $stackPtr, 'Spacing'.$code, [$spaces, $position] );
+      $phpcsFile->addError( 'Expected %s spaces %s bracket', $stackPtr, 'Spacing' . $code, [$spaces, $position] );
     }
 
   } // process

@@ -57,7 +57,7 @@ class Behance_Sniffs_ControlStructures_InlineControlStructureSniff implements PH
 
           $brace = $tokens[ $lastContent ];
 
-          if ( isset($brace['scope_condition']) ) {
+          if ( isset( $brace['scope_condition'] ) ) {
 
             $condition = $tokens[ $brace['scope_condition'] ];
             if ( $condition['code'] === T_DO ) {
