@@ -1,5 +1,5 @@
 <?php
-class Behance_Sniffs_Arrays_ArrayIndentSniff implements PHP_CodeSniffer_Sniff {
+class Behance_Sniffs_Arrays_ArrayDeclarationSniff implements PHP_CodeSniffer_Sniff {
 
   /**
    * The number of spaces code should be indented.
@@ -80,7 +80,7 @@ class Behance_Sniffs_Arrays_ArrayIndentSniff implements PHP_CodeSniffer_Sniff {
     if ( $content === $arrayEnd ) {
       // Empty array, but if the brackets aren't together, there's a problem.
       if ( ($arrayEnd - $arrayStart) !== 1 ) {
-        $error = 'Empty array declaration must have no space between the parentheses';
+        $error = 'Empty array declaration must have no spaces';
         $phpcsFile->addError( $error, $stackPtr, 'SpaceInEmptyArray' );
 
         // We can return here because there is nothing else to check. All code
@@ -496,4 +496,4 @@ class Behance_Sniffs_Arrays_ArrayIndentSniff implements PHP_CodeSniffer_Sniff {
   } // process
 
 
-} // Behance_Sniffs_Arrays_ArrayIndentSniff
+} // Behance_Sniffs_Arrays_ArrayDeclarationSniff

@@ -1,6 +1,6 @@
 <?php
 
-class Behance_Sniffs_Arrays_ArrayIndentSniffTest extends AbstractSniffUnitTest {
+class Behance_Sniffs_Arrays_ArrayDeclarationSniffTest extends AbstractSniffUnitTest {
 
   public function getErrorList() {
 
@@ -19,4 +19,4 @@ class Behance_Sniffs_Arrays_ArrayIndentSniffTest extends AbstractSniffUnitTest {
 
   } // getWarningList
 
-} // Behance_Sniffs_Arrays_ArrayIndentSniffTest
+} // Behance_Sniffs_Arrays_ArrayDeclarationSniffTest
