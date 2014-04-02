@@ -220,13 +220,13 @@ class Behance_Sniffs_Arrays_ArrayDeclarationSniff implements PHP_CodeSniffer_Sni
 
       if ( $this->_isArrayOpener( $tokens[ $nextToken ] ) ) {
         // Let subsequent calls of this test handle nested arrays.
-        $indices[] = [ 'value' => $nextToken ];
         $nextTokenString = $tokens[ $nextToken ]['code'] === T_ARRAY ? 'parenthesis' : 'bracket';
         $nextToken = $tokens[ $tokens[ $nextToken ][ $nextTokenString . '_opener' ] ][ $nextTokenString . '_closer' ];
         continue;
       } // if isArrayOpener
 
       if ( $tokens[ $nextToken ]['code'] === T_COMMA ) {
+        $lastComma  = $nextToken;
         $stackPtrCount = isset( $tokens[ $stackPtr ]['nested_parenthesis'] )
           ? count( $tokens[ $stackPtr ]['nested_parenthesis'] )
           : 0;
@@ -298,14 +298,7 @@ class Behance_Sniffs_Arrays_ArrayDeclarationSniff implements PHP_CodeSniffer_Sni
 
         // Find the start of index that uses this double arrow.
         $indexEnd   = $phpcsFile->findPrevious( T_WHITESPACE, ($nextToken - 1), $arrayStart, true );
-        $indexStart = $phpcsFile->findPrevious( T_WHITESPACE, $indexEnd, $arrayStart );
-
-        if ( $indexStart === false ) {
-          $index = $indexEnd;
-        }
-        else {
-          $index = ($indexStart + 1);
-        }
+        $index = $phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, $lastComma + 1, $arrayEnd, true );
 
         $currentEntry['index']     = $index;
         $currentEntry['index_content'] = $phpcsFile->getTokensAsString( $index, ($indexEnd - $index + 1) );
