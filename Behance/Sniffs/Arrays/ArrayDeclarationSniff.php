@@ -297,16 +297,8 @@ class Behance_Sniffs_Arrays_ArrayDeclarationSniff implements PHP_CodeSniffer_Sni
 
         // Find the start of index that uses this double arrow.
         $indexEnd   = $phpcsFile->findPrevious( T_WHITESPACE, ($nextToken - 1), $arrayStart, true );
-        $indexStart = $phpcsFile->findPrevious( [ T_COMMA, T_ARRAY, T_OPEN_SHORT_ARRAY ], $nextToken - 1, $arrayStart );
-        $indexStart = $phpcsFile->findNext( [ T_COMMA, T_ARRAY, T_OPEN_SHORT_ARRAY ], $indexStart + 1, $nextToken );
-        $indexEnd   = $phpcsFile->findPrevious( T_WHITESPACE, ($indexStart + 1), $nextToken, true );
-
-        if ( $indexStart === false ) {
-          $index = $indexEnd;
-        }
-        else {
-          $index = ($indexStart + 1);
-        }
+        $indexStart = $phpcsFile->findPrevious( [ T_COMMA, T_ARRAY, T_OPEN_SHORT_ARRAY ], $indexEnd - 1, $arrayStart - 1 );
+        $index      = $phpcsFile->findNext( T_WHITESPACE, $indexStart + 1, $indexEnd, true );
 
         $currentEntry['index']     = $index;
         $currentEntry['index_content'] = $phpcsFile->getTokensAsString( $index, ($indexEnd - $index + 1) );

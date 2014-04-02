@@ -53,3 +53,14 @@ $misalignedNestedArr = [
     4,
     5]
 ];
+
+$goodArrWithConcatenatedKeys = [
+    $key . '_val'  => 'a',
+    $key . '_val2' => 'b'
+];
+
+$misalignedArrWithConcatenatedKeys = [$key . '_val1'  => 'a',
+  $key . '_val2'  => 'b',
+    $key . '_val3' => 'c',
+      $key . '_val4' => 'd',
+$key . '_val5' => 'e'];
