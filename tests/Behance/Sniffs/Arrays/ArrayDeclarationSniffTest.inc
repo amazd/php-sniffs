@@ -37,3 +37,19 @@ $oneLineMissingSpaceAfterOpen = ['val', 'val2' ];
 $oneLineMissingSpaceBeforeClose = [ 'val', 'val2'];
 $oneLineMissingSpaceAround = ['val', 'val2'];
 $oneLineGoodSpacing = [ 'val', 'val2' ];
+
+$goodArrWithFunctionValuesWithArrParams = [
+    $this->something( [ 'key' => 'val' ] ),
+    $this->something( [ 'key' => 'val' ] ),
+    $this->something( [ 'key' => 'val' ] ),
+];
+
+$misalignedNestedArr = [
+    [ 'a' => 'b' ],
+      [ 'a' => 'b' ],
+    [1,
+        2,
+      3,
+    4,
+    5]
+];
