@@ -102,7 +102,7 @@ class Behance_Sniffs_Arrays_ArrayDeclarationSniff implements PHP_CodeSniffer_Sni
 
         if ( $tokens[ $arrayEnd - 1 ]['content'] !== ' ' ) {
           $error = 'Expected exactly 1 space before array close';
-          $phpcsFile->addError( $error, $stackPtr, 'NoSpaceBeforeArrayClose' );
+          $phpcsFile->addError( $error, $arrayEnd - 1, 'NoSpaceBeforeArrayClose' );
         }
       } // if !isEmpty
 
