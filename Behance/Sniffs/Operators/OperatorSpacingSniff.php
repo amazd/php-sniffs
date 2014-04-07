@@ -18,19 +18,9 @@ class Behance_Sniffs_Operators_OperatorSpacingSniff implements PHP_CodeSniffer_S
    * @var array
    *
    * Tokens before an operator that *can* be unary that would indicate
-   * that it's actually being used in a unary context
+   * that it's actually being used in a unary context, will be defined in process()
    */
-  protected $_unaryIndicators = [
-      T_INLINE_THEN,
-      T_INLINE_ELSE,
-      T_COLON,
-      T_OPEN_TAG,
-      T_OPEN_SQUARE_BRACKET,
-      T_OPEN_PARENTHESIS,
-      T_COMMA,
-      T_EQUAL,
-      T_DOUBLE_ARROW
-  ];
+  protected $_unaryIndicators;
 
 
   /**
@@ -43,7 +33,6 @@ class Behance_Sniffs_Operators_OperatorSpacingSniff implements PHP_CodeSniffer_S
     return array_unique( array_merge(
         PHP_CodeSniffer_Tokens::$assignmentTokens,
         PHP_CodeSniffer_Tokens::$comparisonTokens,
-        PHP_CodeSniffer_Tokens::$equalityTokens,
         PHP_CodeSniffer_Tokens::$operators,
         $this->_unary,
         [ T_STRING_CONCAT ]
@@ -60,6 +49,17 @@ class Behance_Sniffs_Operators_OperatorSpacingSniff implements PHP_CodeSniffer_S
    * @return void
    */
   public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
+
+    $this->_unaryIndicators = array_merge( PHP_CodeSniffer_Tokens::$comparisonTokens, PHP_CodeSniffer_Tokens::$assignmentTokens, [
+        T_COLON,
+        T_COMMA,
+        T_INLINE_ELSE,
+        T_INLINE_THEN,
+        T_OPEN_PARENTHESIS,
+        T_OPEN_SQUARE_BRACKET,
+        T_OPEN_TAG,
+        T_RETURN
+    ] );
 
     $tokens = $phpcsFile->getTokens();
     // if token **can** be unary and successfully processed, return

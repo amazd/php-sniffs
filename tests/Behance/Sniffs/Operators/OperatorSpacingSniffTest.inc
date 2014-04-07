@@ -294,3 +294,30 @@ $foo = Foo::FOO -1;
 $foo = Foo::$FOO - 1;
 $foo = Foo::$FOO- 1;
 $foo = Foo::$FOO -1;
+
+return -1;
+return - 1;
+
+$foo == -1;
+$foo == - 1;
+
+$foo === -1;
+$foo === - 1;
+
+$foo != -1;
+$foo != - 1;
+
+$foo !== -1;
+$foo !== - 1;
+
+$foo > -1;
+$foo > - 1;
+
+$foo >= -1;
+$foo >= - 1;
+
+$foo < -1;
+$foo < - 1;
+
+$foo <= -1;
+$foo <= - 1;
