@@ -32,6 +32,9 @@
       <directory>../vendor</directory>
       <directory>./</directory>
     </blacklist>
+    <whitelist processUncoveredFilesFromWhitelist="true">
+      <directory>../Behance/Sniffs</directory>
+    </whitelist>
   </filter>
 
 </phpunit>
