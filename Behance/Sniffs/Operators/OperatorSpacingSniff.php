@@ -134,7 +134,7 @@ class Behance_Sniffs_Operators_OperatorSpacingSniff implements PHP_CodeSniffer_S
     ];
     $nonWhitespacePtr = $phpcsFile->findPrevious( $allowedTokens, $stackPtr, null, false, null, true );
 
-    if ( $tokens[ $nonWhitespacePtr ]['line'] !== $tokens[ $stackPtr ]['line'] ) {
+    if ( $nonWhitespacePtr === false || $tokens[ $nonWhitespacePtr ]['line'] !== $tokens[ $stackPtr ]['line'] ) {
       return false;
     }
 
@@ -145,7 +145,6 @@ class Behance_Sniffs_Operators_OperatorSpacingSniff implements PHP_CodeSniffer_S
       case T_EQUAL:
 
         // @TODO: RE-ENABLE - per Bryan, after more talk
-        return true;
 
       //if ( $stackPtr - 1 !== $nonWhitespacePtr ) {
       //  $error = "Ampersand is not immediately after '='.";
@@ -170,17 +169,12 @@ class Behance_Sniffs_Operators_OperatorSpacingSniff implements PHP_CodeSniffer_S
         }
 
         // @TODO: RE-ENABLE - per Bryan, after more talk
-        return true;
 
       //if ( $tokens[ $stackPtr + 1 ]['code'] !== T_VARIABLE ) {
       //  $error = "Ampersand is not immediately followed by a variable.";
       //  $phpcsFile->addError( $error, $stackPtr, 'AmpersandSpacing' );
       //}
 
-        break;
-
-      default:
-        return false;
         break;
 
     } // switch token code
