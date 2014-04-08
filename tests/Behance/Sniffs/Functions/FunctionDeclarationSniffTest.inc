@@ -1,9 +1,7 @@
 <?php
 // this comment should be ok?
 class blah {
-
   protected function warningProtected() {}
-
   protected function _okProtected() {}
 
   private function badPrivate() {}
@@ -40,6 +38,9 @@ class blah {
 
 }
 
+function test() {$a = 'hi
+'; }
+
 function badMultiLine(
   $arg1 = false ) {}
 
@@ -61,3 +62,21 @@ function noImmediateNewline() { $blah = 'foo'
 // no newline right after curly is bad too
 function noNewlineAboveCloser() {
   $blah = 'foo' }
+
+interface AnInterface {
+  public function aFunction();
+}
+
+function __notAllowed() {}
+
+function needsAnotherNewLineAfterComment() {
+
+  $a++;
+  // this comment ruins it
+
+} // needsAnotherNewLineAfterComment
+
+function needsAnotherNewLineAfterComment() {
+
+  $a++;/**/
+} // needsAnotherNewLineAfterComment

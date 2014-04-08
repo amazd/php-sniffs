@@ -111,6 +111,7 @@ class Behance_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniff
 
     $missingIndices = array_diff( $indices, array_keys( $tokens[ $stackPtr ] ) );
 
+    // interface functions don't have parens
     if ( !empty( $missingIndices ) ) {
       return;
     }
