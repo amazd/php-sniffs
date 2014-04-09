@@ -10,7 +10,7 @@ class Behance_Sniffs_Gotchas_BaseExceptionSniff implements PHP_CodeSniffer_Sniff
    */
   public function register() {
 
-    return [T_CATCH, T_THROW];
+    return [ T_CATCH, T_THROW ];
 
   } // register
 
