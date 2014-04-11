@@ -1,4 +1,5 @@
 <?php
+// this comment should be ok?
 class blah {
 
   protected function warningProtected() {}
