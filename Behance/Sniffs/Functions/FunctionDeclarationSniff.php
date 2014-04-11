@@ -237,6 +237,13 @@ class Behance_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniff
 
     } // while content !== Behance_Constants::UNIX_EOL
 
+    // something real weird happening here
+    // see this PR: https://github.com/behance/php-sniffs/pull/126
+    // cannot replicate in the test cases though :(
+    if ( !isset( $tokens[ $tracePtr - 2 ] ) ) {
+      return;
+    }
+
     $upperLineEnd   = $tokens[ $tracePtr - 1 ]['content'];
     $upperLineBegin = $tokens[ $tracePtr - 2 ]['content'];
 
