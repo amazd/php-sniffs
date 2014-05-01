@@ -14,6 +14,8 @@ class Behance_Sniffs_Comments_TrailingCommentSniffTest extends AbstractSniffUnit
         52 => 1,
         60 => 1,
         68 => 1,
+        76 => 1,
+        80 => 1,
     ];
 
   } // getErrorList

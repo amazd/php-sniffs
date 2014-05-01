@@ -111,6 +111,7 @@ class Behance_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniff
 
     $missingIndices = array_diff( $indices, array_keys( $tokens[ $stackPtr ] ) );
 
+    // interface functions don't have parens
     if ( !empty( $missingIndices ) ) {
       return;
     }
@@ -201,12 +202,12 @@ class Behance_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniff
     } // if opening curly bracket on same line as closing
 
 
-    if ( $tokens[ $openingBrace + 1 ]['content'] !== Behance_Constants::UNIX_EOL ) {
+    if ( $tokens[ $openingBrace + 1 ]['content'] !== $phpcsFile->eolChar ) {
       $error = 'Newline not found immediately after opening curly bracket';
       $phpcsFile->addError( $error, $openingBrace, static::INCORRECT_NEWLINES );
     }
 
-    if ( $tokens[ $openingBrace + 2 ]['content'] !== Behance_Constants::UNIX_EOL ) {
+    if ( $tokens[ $openingBrace + 2 ]['content'] !== $phpcsFile->eolChar ) {
       $error = 'Empty line not found immediately function definition; there was trailing whitespace or non-whitespace';
       $phpcsFile->addError( $error, $openingBrace, static::INCORRECT_NEWLINES );
     }
@@ -218,7 +219,7 @@ class Behance_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniff
     // this can happen for multiple characters / tokens
     $whitespaceErrorAdded = false;
 
-    while ( $token['content'] !== Behance_Constants::UNIX_EOL && $token['code'] !== T_COMMENT ) {
+    while ( $token['content'] !== $phpcsFile->eolChar && $token['code'] !== T_COMMENT ) {
 
       if ( $token['code'] !== T_WHITESPACE && !$whitespaceErrorAdded ) {
         $whitespaceErrorAdded = true;
@@ -235,7 +236,7 @@ class Behance_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniff
 
       $token = $tokens[ $tracePtr ];
 
-    } // while content !== Behance_Constants::UNIX_EOL
+    } // while content !== EOL
 
     // something real weird happening here
     // see this PR: https://github.com/behance/php-sniffs/pull/126
@@ -252,7 +253,7 @@ class Behance_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniff
     //   ...\n
     //   \n
     //   ...}
-    if ( $upperLineEnd !== Behance_Constants::UNIX_EOL && $upperLineBegin !== Behance_Constants::UNIX_EOL ) {
+    if ( $upperLineEnd !== $phpcsFile->eolChar && $upperLineBegin !== $phpcsFile->eolChar ) {
 
       $hasCommentAbove = $tokens[ $tracePtr - 1 ]['code'] === T_COMMENT;
 
@@ -262,7 +263,7 @@ class Behance_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniff
 
         $comment = strrev( $tokens[ $tracePtr - 1 ]['content'] );
 
-        if ( $comment[0] === Behance_Constants::UNIX_EOL ) {
+        if ( $comment[0] === $phpcsFile->eolChar ) {
           return;
         }
 
@@ -271,7 +272,7 @@ class Behance_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniff
       $error = 'No empty newline found above closing curly brace';
       $phpcsFile->addError( $error, $closingBrace, static::INCORRECT_NEWLINES );
 
-    } // if not 2x Behance_Constants::UNIX_EOL
+    } // if not 2x EOL
 
   } // _processCurlyBraceNewlines
 

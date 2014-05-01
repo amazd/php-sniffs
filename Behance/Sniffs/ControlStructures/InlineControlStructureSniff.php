@@ -2,13 +2,6 @@
 class Behance_Sniffs_ControlStructures_InlineControlStructureSniff implements PHP_CodeSniffer_Sniff {
 
   /**
-   * If true, an error will be thrown; otherwise a warning.
-   *
-   * @var bool
-   */
-  public $error = true;
-
-  /**
    * Returns an array of tokens this test wants to listen for.
    *
    * @return array
@@ -72,12 +65,7 @@ class Behance_Sniffs_ControlStructures_InlineControlStructureSniff implements PH
 
       // This is a control structure without an opening brace,
       // so it is an inline statement.
-      if ( $this->error === true ) {
-        $phpcsFile->addError( 'Inline control structures are not allowed', $stackPtr, 'NotAllowed' );
-      }
-      else {
-        $phpcsFile->addWarning( 'Inline control structures are discouraged', $stackPtr, 'Discouraged' );
-      }
+      $phpcsFile->addError( 'Inline control structures are not allowed', $stackPtr, 'NotAllowed' );
 
       return;
 

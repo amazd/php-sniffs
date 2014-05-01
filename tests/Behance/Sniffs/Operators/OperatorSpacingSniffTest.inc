@@ -321,3 +321,6 @@ $foo < - 1;
 
 $foo <= -1;
 $foo <= - 1;
+
+$badNot = $a &&!$b;
+$goodNot = $a && !$b;

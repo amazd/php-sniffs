@@ -66,3 +66,30 @@ if ( true ) {
   // STUFF
   // STUFF
 } // if YO $DIS $VAR
+
+$goodClosureAssignment = function() {
+  $a++;
+}; // goodClosureAssignment
+
+$badClosureAssignmentNoTrailing = function() {
+  $a++;
+};
+
+function badNonMatchingComment() {
+  $a++;
+} // doesntMatch
+
+function goodSingleLineNoComment() {}
+
+sort( function() {
+
+} );
+
+interface iFace {
+  public function goodNoScope();
+}
+
+switch ( $a ) {
+  case 'noCommentsNeeded':
+    $b++;
+}

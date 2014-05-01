@@ -64,3 +64,60 @@ $misalignedArrWithConcatenatedKeys = [$key . '_val1'  => 'a',
     $key . '_val3' => 'c',
       $key . '_val4' => 'd',
 $key . '_val5' => 'e'];
+
+Array ( 1, 2, 3 );
+
+$emptyGood = [];
+$emptyBad = [ ];
+
+$goodArrayWithClosure = [ 1, function() {}, 2 ];
+$badTrailingCommaInSingleLine = [ 1, 2, ];
+
+$misAlignedClose = [
+    1,
+    2,
+  ];
+
+$arrWithFuncCall = array(
+    1,
+    funcCall( $a, $b ),
+    3
+);
+
+$badAssocMixedWithNumeric = [
+    'a' => 1,
+    2,
+    3
+];
+
+$badNumericMixedWithAssoc = [
+    1,
+    'b' => 2
+];
+
+$badMultiLineCommaSpace = [
+    1 ,
+    2
+];
+
+$singleValueMultilineOk = [
+    1
+];
+
+$singleValueMultilineOk = [
+    'a' => 1 + funcCall( $a, $b ),
+];
+
+$arr = [
+    1,
+    ,
+];
+
+$badMultilineAssocCommaSpacing = [
+    'a' => 1,
+    'b' => 2 ,
+];
+
+$okArrWithTrailingComma = [
+    1,
+];

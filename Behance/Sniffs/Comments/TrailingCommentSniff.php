@@ -70,7 +70,7 @@ class Behance_Sniffs_Comments_TrailingCommentSniff implements PHP_CodeSniffer_Sn
 
     // newline right after closing brace - check that this is a control structure
     // and that it only has one line in it
-    if ( $tokens[ $nextTokenPtr ]['content'] === Behance_Constants::UNIX_EOL ) {
+    if ( $tokens[ $nextTokenPtr ]['content'] === $phpcsFile->eolChar ) {
 
       $numberOfLines = $this->_numberOfLinesInScope( $openCurlyPtr, $closeCurlyPtr, $phpcsFile );
 
@@ -93,7 +93,7 @@ class Behance_Sniffs_Comments_TrailingCommentSniff implements PHP_CodeSniffer_Sn
 
       while ( isset( $tokens[ $whitespacePtr ] ) && $tokens[ $whitespacePtr ]['code'] === T_WHITESPACE ) {
 
-        $content        = str_replace( Behance_Constants::UNIX_EOL, '', $tokens[ $whitespacePtr ]['content'] );
+        $content        = str_replace( $phpcsFile->eolChar, '', $tokens[ $whitespacePtr ]['content'] );
         $amountOfSpace += strlen( $content );
 
         ++$whitespacePtr;

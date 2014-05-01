@@ -5,21 +5,25 @@ class Behance_Sniffs_Functions_FunctionDeclarationSniffTest extends AbstractSnif
   public function getErrorList() {
 
     return [
-        9  => 1,
-        17 => 1,
-        18 => 1,
-        43 => 1,
-        47 => 2,
-        50 => 1,
-        52 => 1,
+        7  => 1,
+        15 => 1,
+        16 => 1,
+        41 => 2,
+        42 => 1,
+        44 => 1,
+        48 => 2,
+        51 => 1,
         53 => 1,
         54 => 1,
         55 => 1,
-        57 => 1,
-        58 => 2,
-        59 => 1,
-        62 => 1,
-        63 => 2,
+        56 => 1,
+        58 => 1,
+        59 => 2,
+        60 => 1,
+        63 => 1,
+        64 => 2,
+        70 => 2,
+        82 => 1,
     ];
 
   } // getErrorList
@@ -27,7 +31,7 @@ class Behance_Sniffs_Functions_FunctionDeclarationSniffTest extends AbstractSnif
   public function getWarningList() {
 
     return [
-        5 => 1
+        4 => 1
     ];
 
   } // getWarningList

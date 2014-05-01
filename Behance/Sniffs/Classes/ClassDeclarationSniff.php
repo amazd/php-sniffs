@@ -72,12 +72,9 @@ class Behance_Sniffs_Classes_ClassDeclarationSniff implements PHP_CodeSniffer_Sn
       if ( $prevContent === $phpcsFile->eolChar ) {
         $spaces = 0;
       }
-
       else {
-
         $blankSpace = substr( $prevContent, strpos( $prevContent, $phpcsFile->eolChar ) );
         $spaces     = strlen( $blankSpace );
-
       } // else
 
       if ( $spaces !== 1 ) {
