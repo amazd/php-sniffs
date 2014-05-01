@@ -67,15 +67,8 @@ class Behance_Sniffs_Classes_ClassDeclarationSniff implements PHP_CodeSniffer_Sn
 
     if ( $tokens[ $beforeCurly ]['code'] === T_WHITESPACE ) {
 
-      $prevContent = $tokens[ $beforeCurly ]['content'];
-
-      if ( $prevContent === $phpcsFile->eolChar ) {
-        $spaces = 0;
-      }
-      else {
-        $blankSpace = substr( $prevContent, strpos( $prevContent, $phpcsFile->eolChar ) );
-        $spaces     = strlen( $blankSpace );
-      } // else
+      $whitespaceContent = $tokens[ $beforeCurly ]['content'];
+      $spaces = strlen( $whitespaceContent );
 
       if ( $spaces !== 1 ) {
 
