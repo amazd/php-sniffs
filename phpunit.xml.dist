@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit backupGlobals="false"
          backupStaticAttributes="false"
-         bootstrap="bootstrap.php"
+         bootstrap="./tests/bootstrap.php"
          colors="true"
          convertErrorsToExceptions="true"
          convertNoticesToExceptions="true"
@@ -19,7 +19,7 @@
 
   <testsuites>
     <testsuite name="Unit Tests">
-      <directory suffix=".php">./</directory>
+      <directory suffix=".php">./tests</directory>
     </testsuite>
   </testsuites>
 
@@ -29,11 +29,11 @@
 
   <filter>
     <blacklist>
-      <directory>../vendor</directory>
-      <directory>./</directory>
+      <directory>./vendor</directory>
+      <directory>./tests/</directory>
     </blacklist>
     <whitelist processUncoveredFilesFromWhitelist="true">
-      <directory>../Behance/Sniffs</directory>
+      <directory suffix=".php">./Behance</directory>
     </whitelist>
   </filter>
 
