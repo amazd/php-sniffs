@@ -93,3 +93,5 @@ switch ( $a ) {
   case 'noCommentsNeeded':
     $b++;
 }
+
+function {}
