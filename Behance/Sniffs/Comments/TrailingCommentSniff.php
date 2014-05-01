@@ -235,9 +235,6 @@ class Behance_Sniffs_Comments_TrailingCommentSniff implements PHP_CodeSniffer_Sn
     }
 
     $assignmentPtr = $phpcsFile->findPrevious( PHP_CodeSniffer_Tokens::$emptyTokens, $curlyOpenerPtr - 1, null, true );
-    if ( $assignmentPtr === false ) {
-      return false;
-    }
 
     return in_array( $tokens[ $assignmentPtr ]['code'], PHP_CodeSniffer_Tokens::$assignmentTokens );
 

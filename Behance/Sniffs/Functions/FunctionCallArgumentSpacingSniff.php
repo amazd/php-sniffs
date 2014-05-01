@@ -64,7 +64,7 @@ class Behance_Sniffs_Functions_FunctionCallArgumentSpacingSniff implements PHP_C
     } // if SpaceAfterOpenParens
 
 
-    while ( ($nextSeparator = $phpcsFile->findNext( [T_COMMA, T_VARIABLE, T_CLOSURE ], ($nextSeparator + 1), $closeBracket )) !== false ) {
+    while ( ($nextSeparator = $phpcsFile->findNext( [ T_COMMA, T_VARIABLE, T_CLOSURE ], ($nextSeparator + 1), $closeBracket )) !== false ) {
 
       if ( $tokens[ $nextSeparator ]['code'] === T_CLOSURE ) {
         $nextSeparator = $tokens[ $nextSeparator ]['scope_closer'];
@@ -89,24 +89,6 @@ class Behance_Sniffs_Functions_FunctionCallArgumentSpacingSniff implements PHP_C
           $error = 'No space found after comma in function call';
           $phpcsFile->addError( $error, $nextSeparator + 1, 'NoSpaceAfterComma' );
         }
-
-        else {
-
-          // If there is a newline in the space, then the must be formatting
-          // each argument on a newline, which is valid, so ignore it.
-          if ( strpos( $tokens[ ($nextSeparator + 1) ]['content'], $phpcsFile->eolChar ) === false ) {
-
-            $space = strlen( $tokens[ ($nextSeparator + 1) ]['content'] );
-
-            if ( $space < 1 ) {
-              $error = 'Expected @ least 1 space after comma in function call';
-              $data  = [ $space ];
-              $phpcsFile->addError( $error, $stackPtr, 'NoSpaceAfterComma', $data );
-            }
-
-          } // if no EOL
-
-        } // else
 
       } // if next is comma
 
