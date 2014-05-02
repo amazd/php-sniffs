@@ -16,5 +16,5 @@ phpcs --standard=Behance path/to/files
 ## To Test
 ```
 cd /path/to/this/repo
-composer install && cd tests && phpunit
+composer install && phpunit
 ```
