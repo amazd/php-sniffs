@@ -324,3 +324,6 @@ $foo <= - 1;
 
 $badNot = $a &&!$b;
 $goodNot = $a && !$b;
+
+$doubleNegativeGood = !!$b;
+$doubleNegativeBad = ! !$b;
