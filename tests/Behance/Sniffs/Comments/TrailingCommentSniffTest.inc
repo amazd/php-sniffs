@@ -87,11 +87,29 @@ sort( function() {
 
 interface iFace {
   public function goodNoScope();
-}
+} // iFace
 
 switch ( $a ) {
   case 'noCommentsNeeded':
     $b++;
 }
+
+function imLessThan4Lines() {
+
+  return 'but I still need a comment';
+
+}
+
+trait harkATrait {
+
+} // harkATrait
+
+trait missingDescription {
+
+}
+
+trait wrongDescription {
+
+} // wrongDesc
 
 function {}

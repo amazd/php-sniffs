@@ -8,6 +8,13 @@ class Behance_Sniffs_Comments_TrailingCommentSniff implements PHP_CodeSniffer_Sn
       T_ELSE
   ];
 
+  protected $nameTrailing = [
+      T_FUNCTION  => 'function',
+      T_CLASS     => 'class',
+      T_INTERFACE => 'interface',
+      T_TRAIT     => 'trait'
+  ];
+
   /**
    * Returns the token types that this sniff is interested in.
    *
@@ -30,8 +37,9 @@ class Behance_Sniffs_Comments_TrailingCommentSniff implements PHP_CodeSniffer_Sn
    */
   public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
 
-    $tokens         = $phpcsFile->getTokens();
-    $scopeOpenerPtr = $stackPtr;
+    $tokens          = $phpcsFile->getTokens();
+    $scopeOpenerPtr  = $stackPtr;
+    $scopeOpenerCode = $tokens[ $scopeOpenerPtr ]['code'];
 
     // ignore inline scopes
     if ( !isset( $tokens[ $scopeOpenerPtr ]['scope_opener'] ) ) {
@@ -57,7 +65,7 @@ class Behance_Sniffs_Comments_TrailingCommentSniff implements PHP_CodeSniffer_Sn
     }
 
     // ignore unassigned closures
-    if ( $tokens[ $scopeOpenerPtr ]['code'] === T_CLOSURE && !$this->_isAssignedClosure( $scopeOpenerPtr, $phpcsFile ) ) {
+    if ( $scopeOpenerCode === T_CLOSURE && !$this->_isAssignedClosure( $scopeOpenerPtr, $phpcsFile ) ) {
       return;
     }
 
@@ -77,6 +85,11 @@ class Behance_Sniffs_Comments_TrailingCommentSniff implements PHP_CodeSniffer_Sn
       if ( $numberOfLines >= $this->minLinesRequiredForTrailing ) {
         $error = 'Missing required trailing comment for scope >= %s lines; found %s lines';
         $data  = [ $this->minLinesRequiredForTrailing, $numberOfLines ];
+        $phpcsFile->addError( $error, $closeCurlyPtr, 'MissingTrailingComment', $data );
+      }
+      elseif ( isset( $this->nameTrailing[ $scopeOpenerCode ] ) ) {
+        $error = 'Missing required trailing comment for %s';
+        $data  = [ $this->nameTrailing[ $scopeOpenerCode ] ];
         $phpcsFile->addError( $error, $closeCurlyPtr, 'MissingTrailingComment', $data );
       }
 
@@ -146,12 +159,6 @@ class Behance_Sniffs_Comments_TrailingCommentSniff implements PHP_CodeSniffer_Sn
 
     $commentPtr = $closeCurlyPtr + 2;
 
-    $nameTrailing = [
-        T_FUNCTION  => 'function',
-        T_CLASS     => 'class',
-        T_INTERFACE => 'interface'
-    ];
-
     $longTrailing = [
         T_WHILE     => 'while',
         T_FOR       => 'for',
@@ -166,8 +173,8 @@ class Behance_Sniffs_Comments_TrailingCommentSniff implements PHP_CodeSniffer_Sn
     ];
 
     // ensure declaration names match expected comments
-    $codeValues   = array_merge( array_keys( $nameTrailing ), array_keys( $longTrailing ) );
-    $nameValues   = array_merge( $nameTrailing, $longTrailing );
+    $codeValues   = array_merge( array_keys( $this->nameTrailing ), array_keys( $longTrailing ) );
+    $nameValues   = array_merge( $this->nameTrailing, $longTrailing );
     $scopeTypeMap = array_combine( $codeValues, $nameValues );
 
     if ( !isset( $scopeTypeMap[ $tokens[ $scopeOpenerPtr ]['code'] ] ) ) {
@@ -177,13 +184,13 @@ class Behance_Sniffs_Comments_TrailingCommentSniff implements PHP_CodeSniffer_Sn
     $scopeCode = $tokens[ $scopeOpenerPtr ]['code'];
     $scopeType = $scopeTypeMap[ $scopeCode ];
 
-    $declarationName = ( in_array( $scopeType, $nameTrailing ) )
+    $declarationName = ( in_array( $scopeType, $this->nameTrailing ) )
                        ? $phpcsFile->getDeclarationName( $scopeOpenerPtr )
                        : $scopeType;
     $expectedComment = "// {$declarationName}";
     $actualComment   = trim( $tokens[ $commentPtr ]['content'] );
 
-    if ( in_array( $scopeType, $nameTrailing ) && $expectedComment !== $actualComment ) {
+    if ( in_array( $scopeType, $this->nameTrailing ) && $expectedComment !== $actualComment ) {
 
       $error = 'Trailing comment for %s "%s" incorrect; expected "%s", found "%s"';
       $data  = [ $scopeType, $declarationName, $expectedComment, $actualComment ];
