@@ -219,7 +219,7 @@ class Behance_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniff
     // this can happen for multiple characters / tokens
     $whitespaceErrorAdded = false;
 
-    while ( $token['content'] !== $phpcsFile->eolChar && $token['code'] !== T_COMMENT ) {
+    while ( $tracePtr > 2 && $token['content'] !== $phpcsFile->eolChar && $token['code'] !== T_COMMENT ) {
 
       if ( $token['code'] !== T_WHITESPACE && !$whitespaceErrorAdded ) {
         $whitespaceErrorAdded = true;
@@ -229,21 +229,9 @@ class Behance_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniff
 
       --$tracePtr;
 
-      if ( $tracePtr < 0 ) {
-        $phpcsFile->addError( 'Could not find /n at all', $closingBrace - 1, static::INCORRECT_NEWLINES );
-        return;
-      }
-
       $token = $tokens[ $tracePtr ];
 
     } // while content !== EOL
-
-    // something real weird happening here
-    // see this PR: https://github.com/behance/php-sniffs/pull/126
-    // cannot replicate in the test cases though :(
-    if ( !isset( $tokens[ $tracePtr - 2 ] ) ) {
-      return;
-    }
 
     $upperLineEnd   = $tokens[ $tracePtr - 1 ]['content'];
     $upperLineBegin = $tokens[ $tracePtr - 2 ]['content'];
