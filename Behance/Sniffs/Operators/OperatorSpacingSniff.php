@@ -195,7 +195,7 @@ class Behance_Sniffs_Operators_OperatorSpacingSniff implements PHP_CodeSniffer_S
 
     $tokens = $phpcsFile->getTokens();
 
-    if ( $tokens[ $stackPtr - 1 ]['code'] !== T_WHITESPACE ) {
+    if ( !in_array( $tokens[ $stackPtr - 1 ]['code'], [ T_WHITESPACE, T_BOOLEAN_NOT ] ) ) {
       $phpcsFile->addError( 'Boolean Not should have whitespace before it.', $stackPtr, 'BooleanNotSpacing' );
     }
 
