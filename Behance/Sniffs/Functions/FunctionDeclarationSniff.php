@@ -42,7 +42,8 @@ class Behance_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniff
   ];
 
   /**
-   * A list of all PHP magic methods
+   * A list of all PHP magic methods. Must always be declared here in
+   * all lower case.
    *
    * @var array
    */
@@ -283,7 +284,7 @@ class Behance_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniff
 
     if ( strpos( $fxName, '__' ) === 0 ) {
 
-      if ( in_array( substr( $fxName, 2 ), $doubleUnderAllowed ) ) {
+      if ( in_array( strtolower( substr( $fxName, 2 ) ), $doubleUnderAllowed ) ) {
         return;
       }
       else {

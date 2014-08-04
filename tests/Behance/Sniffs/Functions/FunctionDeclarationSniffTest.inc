@@ -23,7 +23,7 @@ class blah {
   public function __construct() {}
   public function __destruct() {}
   public function __call() {}
-  public function __callstatic() {}
+  public function __callStatic() {} // must be camel case to check case insensitivity
   public function __get() {}
   public function __set() {}
   public function __isset() {}
