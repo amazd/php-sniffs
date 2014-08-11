@@ -18,6 +18,7 @@ class blah {
   // exceptions for workers ............... :(
   public function _start_work() {}
   public function _end_work() {}
+  public function _flush_cache() {}
 
   // magic methods, deemed ok
   public function __construct() {}

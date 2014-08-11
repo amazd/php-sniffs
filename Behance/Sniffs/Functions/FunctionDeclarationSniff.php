@@ -37,6 +37,7 @@ class Behance_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniff
       'public' => [
           '_start_work', // gearman workers
           '_end_work',   // gearman workers
+          '_flush_cache', // gearman workers
       ],
       'private' => []
   ];
@@ -274,7 +275,6 @@ class Behance_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniff
    */
   protected function _processFunctionName( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
 
-    $tokens         = $phpcsFile->getTokens();
     $methodProps    = $phpcsFile->getMethodProperties( $stackPtr );
     $scope          = $methodProps['scope'];
     $fxName         = $phpcsFile->getDeclarationName( $stackPtr );
