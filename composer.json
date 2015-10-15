@@ -3,11 +3,13 @@
     "description": "Behance PHPCS rules",
     "minimum-stability": "stable",
     "require": {
-        "squizlabs/php_codesniffer": "~1.5"
+        "squizlabs/php_codesniffer": "~2.0"
     },
     "require-dev": {
-        "chr0n1x/php_codesniffer_tests": "~1.0",
         "phpunit/phpunit": "~3.7"
+    },
+    "autoload": {
+        "classmap": ["tests"]
     },
     "license": "MIT",
     "authors": [
