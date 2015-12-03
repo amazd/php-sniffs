@@ -21,6 +21,8 @@
     <exclude name="PSR2.ControlStructures.ControlStructureSpacing.SpacingAfterOpenBrace"/>
     <exclude name="PSR2.ControlStructures.ControlStructureSpacing.SpaceBeforeCloseBrace"/>
     <exclude name="PSR2.Classes.PropertyDeclaration.Multiple"/>
+    <exclude name="PSR2.ControlStructures.SwitchDeclaration.BodyOnNextLineCASE"/>
+    <exclude name="PSR2.ControlStructures.SwitchDeclaration.BodyOnNextLineDEFAULT"/>
 
     <!-- TODO: Reconsider for inclusion -->
     <exclude name="PSR2.Namespaces.NamespaceDeclaration.BlankLineAfter"/>
