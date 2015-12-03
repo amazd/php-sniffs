@@ -37,8 +37,8 @@
       TODO: patch phpcs proper to allow this rulename to be more granular, technically it
       should be named OneNewlineAfterCASE and OneNewlineAfterDEFAULT.
     -->
-    <exclude name="PSR2.ControlStructures.SwitchDeclaration.SpaceBeforeColonCASE"/>
-    <exclude name="PSR2.ControlStructures.SwitchDeclaration.SpaceBeforeColonDEFAULT"/>
+    <exclude name="PSR2.ControlStructures.SwitchDeclaration.BodyOnNextLineCASE"/>
+    <exclude name="PSR2.ControlStructures.SwitchDeclaration.BodyOnNextLineDEFAULT"/>
 
     <!-- Generic standards that are inherited via PSR2 -->
     <exclude name="Generic.ControlStructures.InlineControlStructure"/>
