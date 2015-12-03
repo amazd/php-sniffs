@@ -21,6 +21,8 @@
     <exclude name="PSR2.ControlStructures.ControlStructureSpacing.SpacingAfterOpenBrace"/>
     <exclude name="PSR2.ControlStructures.ControlStructureSpacing.SpaceBeforeCloseBrace"/>
     <exclude name="PSR2.Classes.PropertyDeclaration.Multiple"/>
+    <exclude name="PSR2.ControlStructures.SwitchDeclaration.BodyOnNextLineCASE"/>
+    <exclude name="PSR2.ControlStructures.SwitchDeclaration.BodyOnNextLineDEFAULT"/>
 
     <!-- TODO: Reconsider for inclusion -->
     <exclude name="PSR2.Namespaces.NamespaceDeclaration.BlankLineAfter"/>
@@ -31,14 +33,6 @@
       TODO: patch phpcs proper
     -->
     <exclude name="Generic.WhiteSpace.ScopeIndent.Incorrect"/>
-
-    <!--
-      Excluded because this also catches extra line between case and case body
-      TODO: patch phpcs proper to allow this rulename to be more granular, technically it
-      should be named OneNewlineAfterCASE and OneNewlineAfterDEFAULT.
-    -->
-    <exclude name="PSR2.ControlStructures.SwitchDeclaration.SpaceBeforeColonCASE"/>
-    <exclude name="PSR2.ControlStructures.SwitchDeclaration.SpaceBeforeColonDEFAULT"/>
 
     <!-- Generic standards that are inherited via PSR2 -->
     <exclude name="Generic.ControlStructures.InlineControlStructure"/>
