@@ -1,29 +1,33 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "152238e95636f444dd8a2567b4791963",
+    "hash": "ed93eafee65e66c022db25152cfcea62",
+    "content-hash": "0e5d9527075a2d81e894974cf31e552f",
     "packages": [
         {
             "name": "squizlabs/php_codesniffer",
-            "version": "2.3.4",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/squizlabs/PHP_CodeSniffer.git",
-                "reference": "11a2545c44a5915f883e2e5ec12e14ed345e3ab2"
+                "reference": "ded79f532d6c4c3aa8e4581d4a41ac09f8e48a32"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/11a2545c44a5915f883e2e5ec12e14ed345e3ab2",
-                "reference": "11a2545c44a5915f883e2e5ec12e14ed345e3ab2",
+                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/fe8c328f741aaebf583a3ce7ae26fd764b365e43",
+                "reference": "ded79f532d6c4c3aa8e4581d4a41ac09f8e48a32",
                 "shasum": ""
             },
             "require": {
                 "ext-tokenizer": "*",
                 "ext-xmlwriter": "*",
                 "php": ">=5.1.2"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.0"
             },
             "bin": [
                 "scripts/phpcs",
@@ -78,48 +82,10 @@
                 "phpcs",
                 "standards"
             ],
-            "time": "2015-09-09 00:18:50"
+            "time": "2015-11-24 21:51:17"
         }
     ],
     "packages-dev": [
-        {
-            "name": "chr0n1x/php_codesniffer_tests",
-            "version": "2.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/chr0n1x/php_codesniffer_tests.git",
-                "reference": "f6a26cef852b22de56035a034b5832de154a8d42"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/chr0n1x/php_codesniffer_tests/zipball/f6a26cef852b22de56035a034b5832de154a8d42",
-                "reference": "f6a26cef852b22de56035a034b5832de154a8d42",
-                "shasum": ""
-            },
-            "require": {
-                "ext-tokenizer": "*",
-                "php": ">=5.1.2",
-                "phpunit/phpunit": ">=3.7",
-                "squizlabs/php_codesniffer": "~2.0"
-            },
-            "suggest": {
-                "phpunit/php-timer": "dev-master"
-            },
-            "type": "library",
-            "autoload": {
-                "classmap": [
-                    "AbstractSniffUnitTest.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "description": "A test lib that can easily be required & used in custom PHP_CodeSniffer rulesets",
-            "keywords": [
-                "phpcs",
-                "standards",
-                "tests"
-            ],
-            "time": "2015-03-10 23:20:49"
-        },
         {
             "name": "phpunit/php-code-coverage",
             "version": "1.2.18",
@@ -484,34 +450,34 @@
         },
         {
             "name": "symfony/yaml",
-            "version": "v2.7.5",
+            "version": "v2.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "31cb2ad0155c95b88ee55fe12bc7ff92232c1770"
+                "reference": "f79824187de95064a2f5038904c4d7f0227fedb5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/31cb2ad0155c95b88ee55fe12bc7ff92232c1770",
-                "reference": "31cb2ad0155c95b88ee55fe12bc7ff92232c1770",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/f79824187de95064a2f5038904c4d7f0227fedb5",
+                "reference": "f79824187de95064a2f5038904c4d7f0227fedb5",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.9"
             },
-            "require-dev": {
-                "symfony/phpunit-bridge": "~2.7"
-            },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.7-dev"
+                    "dev-master": "2.8-dev"
                 }
             },
             "autoload": {
                 "psr-4": {
                     "Symfony\\Component\\Yaml\\": ""
-                }
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -529,12 +495,14 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
-            "time": "2015-09-14 14:14:09"
+            "time": "2015-11-30 12:35:10"
         }
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "squizlabs/php_codesniffer": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],
