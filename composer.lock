@@ -1,24 +1,23 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "ed93eafee65e66c022db25152cfcea62",
-    "content-hash": "0e5d9527075a2d81e894974cf31e552f",
+    "hash": "c53d2026c44f2a62829c0b64c5e2f91f",
     "packages": [
         {
             "name": "squizlabs/php_codesniffer",
-            "version": "dev-master",
+            "version": "2.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/squizlabs/PHP_CodeSniffer.git",
-                "reference": "ded79f532d6c4c3aa8e4581d4a41ac09f8e48a32"
+                "reference": "e4fb41d5d0387d556e2c25534d630b3cce90ea67"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/fe8c328f741aaebf583a3ce7ae26fd764b365e43",
-                "reference": "ded79f532d6c4c3aa8e4581d4a41ac09f8e48a32",
+                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/e4fb41d5d0387d556e2c25534d630b3cce90ea67",
+                "reference": "e4fb41d5d0387d556e2c25534d630b3cce90ea67",
                 "shasum": ""
             },
             "require": {
@@ -82,7 +81,7 @@
                 "phpcs",
                 "standards"
             ],
-            "time": "2015-11-24 21:51:17"
+            "time": "2015-12-11 00:12:46"
         }
     ],
     "packages-dev": [
@@ -500,9 +499,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "squizlabs/php_codesniffer": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],
