@@ -79,6 +79,7 @@ abstract class AbstractSniffUnitTest extends PHPUnit_Framework_TestCase {
     $testClassFile = ( new ReflectionClass( get_class( $this ) ) )->getFileName();
     $testClassFile = realpath( $testClassFile );
     $testFile      = dirname( $testClassFile ) . '/' . basename( $testClassFile, '.php' ) . '.inc';
+    $filename      = basename( $testFile );
 
     if ( !is_file( $testFile ) ) {
       $this->fail( "Required file [{$testFile}] not found" );
@@ -91,6 +92,25 @@ abstract class AbstractSniffUnitTest extends PHPUnit_Framework_TestCase {
 
     $phpcsFile = self::$phpcs->processFile( $testFile );
     $failureMessages = $this->generateFailureMessages( $phpcsFile );
+
+    if ( $phpcsFile->getFixableCount() > 0 ) {
+      // Attempt to fix the errors.
+      $phpcsFile->fixer->fixFile();
+      $fixable = $phpcsFile->getFixableCount();
+      if ( $fixable > 0 ) {
+        $failureMessages[] = "Failed to fix $fixable fixable violations in $filename";
+      }
+
+      // Check for a .fixed file to check for accuracy of fixes.
+      $fixedFile = $testFile . '.fixed';
+      if ( file_exists( $fixedFile ) ) {
+        $diff = $phpcsFile->fixer->generateDiff( $fixedFile );
+        if ( trim( $diff ) !== '' ) {
+          $fixedFilename     = basename( $fixedFile );
+          $failureMessages[] = "Fixed version of $filename does not match expected version in $fixedFilename; the diff is\n$diff";
+        }
+      } // if file_exists
+    } // if getFixableCount > 0
 
     if ( empty( $failureMessages ) === false ) {
         $this->fail( implode( PHP_EOL, $failureMessages ) );
