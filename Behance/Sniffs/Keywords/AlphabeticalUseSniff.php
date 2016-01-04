@@ -5,9 +5,9 @@ class Behance_Sniffs_Keywords_AlphabeticalUseSniff implements PHP_CodeSniffer_Sn
   const TYPE_NAMESPACE = 'namespace';
   const TYPE_TRAIT     = 'trait';
 
-  protected $current_name = [
+  protected $_current_name = [
       self::TYPE_NAMESPACE => 'A',
-      self::TYPE_TRAIT     => 'A'
+      self::TYPE_TRAIT     => 'A',
   ];
 
   /**
@@ -18,9 +18,7 @@ class Behance_Sniffs_Keywords_AlphabeticalUseSniff implements PHP_CodeSniffer_Sn
    */
   public function register() {
 
-    return [
-        T_USE
-    ];
+    return [ T_USE ];
 
   } // register
 
@@ -28,16 +26,14 @@ class Behance_Sniffs_Keywords_AlphabeticalUseSniff implements PHP_CodeSniffer_Sn
    * Returns whether the current use token is inside a closure.
    *
    * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
-   * @param int                  $stackPtr   The position of the current token in the
-   *                                        stack passed in $tokens.
+   * @param int                  $stackPtr  The position of the current token in the stack passed in $tokens.
    *
-   * @return string
+   * @return bool
    */
   private function _isClosureUse( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
 
     $tokens = $phpcsFile->getTokens();
-
-    $next = $phpcsFile->findNext( T_WHITESPACE, ( $stackPtr + 1 ), null, true );
+    $next   = $phpcsFile->findNext( T_WHITESPACE, ( $stackPtr + 1 ), null, true );
 
     return $tokens[ $next ]['code'] === T_OPEN_PARENTHESIS;
 
@@ -91,12 +87,12 @@ class Behance_Sniffs_Keywords_AlphabeticalUseSniff implements PHP_CodeSniffer_Sn
     $namePtr = $phpcsFile->findNext( T_WHITESPACE, ( $stackPtr + 1 ), null, true );
     $name    = $this->_getClassName( $phpcsFile, $namePtr );
 
-    if ( strcmp( $this->current_name[ $list_type ], $name ) > 0 ) {
+    if ( strcmp( $this->_current_name[ $list_type ], $name ) > 0 ) {
       $error = $name . ' is not in alphabetical order ';
       $phpcsFile->addError( $error, $namePtr, $list_type );
     }
     else {
-      $this->current_name[ $list_type ] = $name;
+      $this->_current_name[ $list_type ] = $name;
     }
 
   } // process

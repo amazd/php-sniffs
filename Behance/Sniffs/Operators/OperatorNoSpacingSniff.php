@@ -1,4 +1,5 @@
 <?php
+
 class Behance_Sniffs_Operators_OperatorNoSpacingSniff implements PHP_CodeSniffer_Sniff {
 
   /**

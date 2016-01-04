@@ -20,16 +20,15 @@ class Behance_Sniffs_Keywords_OneUsePerStatementSniff implements PHP_CodeSniffer
    * Returns whether the current use token is inside a closure.
    *
    * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
-   * @param int                  $stackPtr   The position of the current token in the
-   *                                        stack passed in $tokens.
+   * @param int                  $stackPtr  The position of the current token in the stack passed in $tokens.
    *
-   * @return string
+   * @return bool
    */
   private function _isTraitUse( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
 
     $tokens = $phpcsFile->getTokens();
+    $next   = $phpcsFile->findNext( T_WHITESPACE, ( $stackPtr + 1 ), null, true );
 
-    $next = $phpcsFile->findNext( T_WHITESPACE, ( $stackPtr + 1 ), null, true );
     if ( $tokens[ $next ]['code'] === T_OPEN_PARENTHESIS ) {
       return false;
     }
@@ -57,7 +56,7 @@ class Behance_Sniffs_Keywords_OneUsePerStatementSniff implements PHP_CodeSniffer
     $next   = $phpcsFile->findNext( [ T_COMMA, T_SEMICOLON ], ( $stackPtr + 1 ) );
 
     // One space after the use keyword.
-    if ( $tokens[ ( $stackPtr + 1 ) ]['content'] !== ' ' ) {
+    if ( $tokens[ $stackPtr + 1 ]['content'] !== ' ' ) {
       $error = 'There must be a single space after the USE keyword';
       $fix   = $phpcsFile->addFixableError( $error, $stackPtr, 'SpaceAfterUse' );
       if ( $fix ) {

@@ -55,13 +55,13 @@ class Behance_Sniffs_Functions_FunctionCallArgumentSpacingSniff implements PHP_C
       $this->_ensureNoSpace( $phpcsFile, $openBracket + 1, 'NoSpaceBetweenParensWithNoArgument' );
     }
 
-    $closeBracket  = $tokens[ $openBracket ]['parenthesis_closer'];
+    $closeBracket = $tokens[ $openBracket ]['parenthesis_closer'];
 
     $this->_ensureSpaceBefore( $phpcsFile, $closeBracket, 'SpaceBeforeCloseParens' );
     $this->_ensureSpaceAfter( $phpcsFile, $openBracket, 'SpaceAfterOpenParens' );
 
     $nextSeparator = $openBracket;
-    while ( ($nextSeparator = $phpcsFile->findNext( [ T_COMMA, T_VARIABLE, T_CLOSURE ], $nextSeparator + 1, $closeBracket )) !== false ) {
+    while ( ( $nextSeparator = $phpcsFile->findNext( [ T_COMMA, T_VARIABLE, T_CLOSURE ], $nextSeparator + 1, $closeBracket ) ) !== false ) {
 
       if ( $tokens[ $nextSeparator ]['code'] === T_CLOSURE ) {
         $nextSeparator = $tokens[ $nextSeparator ]['scope_closer'];
