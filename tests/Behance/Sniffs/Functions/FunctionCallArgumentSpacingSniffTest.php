@@ -11,7 +11,8 @@ class Behance_Sniffs_Functions_FunctionCallArgumentSpacingSniffTest extends Abst
         10 => 1,
         13 => 1,
         15 => 1,
-        18 => 2
+        18 => 2,
+        21 => 1,
     ];
 
   } // getErrorList
