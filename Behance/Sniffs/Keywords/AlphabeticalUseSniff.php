@@ -6,8 +6,8 @@ class Behance_Sniffs_Keywords_AlphabeticalUseSniff implements PHP_CodeSniffer_Sn
   const TYPE_TRAIT     = 'trait';
 
   protected $_current_name = [
-      self::TYPE_NAMESPACE => 'A',
-      self::TYPE_TRAIT     => 'A',
+      self::TYPE_NAMESPACE => '',
+      self::TYPE_TRAIT     => '',
   ];
 
   /**
@@ -74,8 +74,6 @@ class Behance_Sniffs_Keywords_AlphabeticalUseSniff implements PHP_CodeSniffer_Sn
    */
   public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
 
-    $tokens = $phpcsFile->getTokens();
-
     if ( $this->_isClosureUse( $phpcsFile, $stackPtr ) ) {
       return;
     }
@@ -87,7 +85,7 @@ class Behance_Sniffs_Keywords_AlphabeticalUseSniff implements PHP_CodeSniffer_Sn
     $namePtr = $phpcsFile->findNext( T_WHITESPACE, ( $stackPtr + 1 ), null, true );
     $name    = $this->_getClassName( $phpcsFile, $namePtr );
 
-    if ( strcmp( $this->_current_name[ $list_type ], $name ) > 0 ) {
+    if ( strcasecmp( $this->_current_name[ $list_type ], $name ) > 0 ) {
       $error = $name . ' is not in alphabetical order ';
       $phpcsFile->addError( $error, $namePtr, $list_type );
     }

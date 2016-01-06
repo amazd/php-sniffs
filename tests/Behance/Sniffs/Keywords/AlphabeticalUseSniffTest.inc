@@ -1,18 +1,18 @@
 <?php
 
-use A\B;
+use \A\B;
 use  A\C;
 use A\C\E;
 use A\D ;
 use A\D\G;
 use A\D\F;
-use J;
-use JJ;
+use JAB;
+use J_J;
 use H;
 use I;
-use \Kab;
-use \Kar;
-use \K as UsedK;
+use kab;
+use Kar;
+use K as UsedK;
 
 class Foo {
 
