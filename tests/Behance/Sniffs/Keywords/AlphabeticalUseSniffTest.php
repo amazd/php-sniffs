@@ -6,6 +6,7 @@ class Behance_Sniffs_Keywords_AlphabeticalUseSniffTest extends AbstractSniffUnit
 
     return [
         8  => 1,
+        10 => 1,
         11 => 1,
         12 => 1,
         15 => 1,
