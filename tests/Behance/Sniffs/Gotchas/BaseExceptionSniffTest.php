@@ -2,7 +2,7 @@
 
 class Behance_Sniffs_Gotchas_BaseExceptionSniffTest extends AbstractSniffUnitTest {
 
-  public function getErrorList() {
+  public function getErrorList( $testFile ) {
 
     return [
         11 => 1,
@@ -11,7 +11,7 @@ class Behance_Sniffs_Gotchas_BaseExceptionSniffTest extends AbstractSniffUnitTes
 
   } // getErrorList
 
-  public function getWarningList() {
+  public function getWarningList( $testFile ) {
 
     return [];
 

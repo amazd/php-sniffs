@@ -2,7 +2,7 @@
 
 class Behance_Sniffs_Functions_FunctionCallArgumentSpacingSniffTest extends AbstractSniffUnitTest {
 
-  public function getErrorList() {
+  public function getErrorList( $testFile ) {
 
     return [
         2  => 1,
@@ -17,7 +17,7 @@ class Behance_Sniffs_Functions_FunctionCallArgumentSpacingSniffTest extends Abst
 
   } // getErrorList
 
-  public function getWarningList() {
+  public function getWarningList( $testFile ) {
 
     return [];
 

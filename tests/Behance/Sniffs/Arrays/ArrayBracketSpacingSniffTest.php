@@ -2,7 +2,7 @@
 
 class Behance_Sniffs_Arrays_ArrayBracketSpacingSniffTest extends AbstractSniffUnitTest {
 
-  public function getErrorList() {
+  public function getErrorList( $testFile ) {
 
     return [
         4 => 2,
@@ -10,7 +10,7 @@ class Behance_Sniffs_Arrays_ArrayBracketSpacingSniffTest extends AbstractSniffUn
 
   } // getErrorList
 
-  public function getWarningList() {
+  public function getWarningList( $testFile ) {
 
     return [];
 

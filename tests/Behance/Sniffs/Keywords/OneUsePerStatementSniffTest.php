@@ -2,7 +2,7 @@
 
 class Behance_Sniffs_Keywords_OneUsePerStatementSniffTest extends AbstractSniffUnitTest {
 
-  public function getErrorList() {
+  public function getErrorList( $testFile ) {
 
     return [
         6  => 1,
@@ -12,7 +12,7 @@ class Behance_Sniffs_Keywords_OneUsePerStatementSniffTest extends AbstractSniffU
 
   } // getErrorList
 
-  public function getWarningList() {
+  public function getWarningList( $testFile ) {
 
     return [];
 
