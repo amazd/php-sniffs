@@ -2,7 +2,7 @@
 
 class Behance_Sniffs_Comments_DisallowHashCommentsSniffTest extends AbstractSniffUnitTest {
 
-  public function getErrorList() {
+  public function getErrorList( $testFile ) {
 
     return [
         3  => 1,
@@ -11,7 +11,7 @@ class Behance_Sniffs_Comments_DisallowHashCommentsSniffTest extends AbstractSnif
 
   } // getErrorList
 
-  public function getWarningList() {
+  public function getWarningList( $testFile ) {
 
     return [];
 

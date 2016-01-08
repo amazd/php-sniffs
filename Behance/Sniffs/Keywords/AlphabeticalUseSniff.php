@@ -5,10 +5,7 @@ class Behance_Sniffs_Keywords_AlphabeticalUseSniff implements PHP_CodeSniffer_Sn
   const TYPE_NAMESPACE = 'namespace';
   const TYPE_TRAIT     = 'trait';
 
-  protected $_current_name = [
-      self::TYPE_NAMESPACE => '',
-      self::TYPE_TRAIT     => '',
-  ];
+  protected $_current_names = [];
 
   /**
    * Returns an array of tokens this test wants to listen for.
@@ -78,6 +75,15 @@ class Behance_Sniffs_Keywords_AlphabeticalUseSniff implements PHP_CodeSniffer_Sn
       return;
     }
 
+    $filename = $phpcsFile->getFilename();
+
+    if ( !isset( $this->_current_names[ $filename ] ) ) {
+      $this->_current_names[ $filename ] = [
+          self::TYPE_NAMESPACE => '',
+          self::TYPE_TRAIT     => '',
+      ];
+    } // if filename not set
+
     $list_type = ( $phpcsFile->hasCondition( $stackPtr, [ T_CLASS, T_TRAIT ] ) )
                  ? self::TYPE_TRAIT
                  : self::TYPE_NAMESPACE;
@@ -85,12 +91,12 @@ class Behance_Sniffs_Keywords_AlphabeticalUseSniff implements PHP_CodeSniffer_Sn
     $namePtr = $phpcsFile->findNext( T_WHITESPACE, ( $stackPtr + 1 ), null, true );
     $name    = $this->_getClassName( $phpcsFile, $namePtr );
 
-    if ( strcasecmp( $this->_current_name[ $list_type ], $name ) > 0 ) {
+    if ( strcasecmp( $this->_current_names[ $filename ][ $list_type ], $name ) > 0 ) {
       $error = $name . ' is not in alphabetical order ';
       $phpcsFile->addError( $error, $namePtr, $list_type );
     }
     else {
-      $this->_current_name[ $list_type ] = $name;
+      $this->_current_names[ $filename ][ $list_type ] = $name;
     }
 
   } // process

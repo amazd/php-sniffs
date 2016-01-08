@@ -2,7 +2,7 @@
 
 class Behance_Sniffs_ControlStructures_InlineControlStructureSniffTest extends AbstractSniffUnitTest {
 
-  public function getErrorList() {
+  public function getErrorList( $testFile ) {
 
     return [
         12 => 1,
@@ -18,7 +18,7 @@ class Behance_Sniffs_ControlStructures_InlineControlStructureSniffTest extends A
 
   } // getErrorList
 
-  public function getWarningList() {
+  public function getWarningList( $testFile ) {
 
     return [];
 

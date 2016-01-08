@@ -2,7 +2,7 @@
 
 class Behance_Sniffs_Arrays_ArrayDeclarationSniffTest extends AbstractSniffUnitTest {
 
-  public function getErrorList() {
+  public function getErrorList( $testFile ) {
 
     return [
         2   => 1,
@@ -48,7 +48,7 @@ class Behance_Sniffs_Arrays_ArrayDeclarationSniffTest extends AbstractSniffUnitT
 
   } // getErrorList
 
-  public function getWarningList() {
+  public function getWarningList( $testFile ) {
 
     return [];
 

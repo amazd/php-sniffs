@@ -2,7 +2,11 @@
 
 class Behance_Sniffs_Keywords_AlphabeticalUseSniffTest extends AbstractSniffUnitTest {
 
-  public function getErrorList() {
+  public function getErrorList( $testFile ) {
+
+    if ( $testFile === 'AlphabeticalUseSniffTest.1.inc' ) {
+      return [];
+    }
 
     return [
         8  => 1,
@@ -16,7 +20,7 @@ class Behance_Sniffs_Keywords_AlphabeticalUseSniffTest extends AbstractSniffUnit
 
   } // getErrorList
 
-  public function getWarningList() {
+  public function getWarningList( $testFile ) {
 
     return [];
 

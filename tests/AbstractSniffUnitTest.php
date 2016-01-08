@@ -76,41 +76,61 @@ abstract class AbstractSniffUnitTest extends PHPUnit_Framework_TestCase {
    */
   final public function runTest() {
 
-    $testClassFile = ( new ReflectionClass( get_class( $this ) ) )->getFileName();
-    $testClassFile = realpath( $testClassFile );
-    $testFile      = dirname( $testClassFile ) . '/' . basename( $testClassFile, '.php' ) . '.inc';
-    $filename      = basename( $testFile );
-
-    if ( !is_file( $testFile ) ) {
-      $this->fail( "Required file [{$testFile}] not found" );
-    }
-
-
     self::$phpcs->initStandard( $this->_getStandardName(), [ $this->_getSniffCode() ] );
     self::$phpcs->setIgnorePatterns( [] );
     self::$phpcs->cli->setCommandLineValues( [ '-s' ] );
 
-    $phpcsFile = self::$phpcs->processFile( $testFile );
-    $failureMessages = $this->generateFailureMessages( $phpcsFile );
+    $failureMessages = [];
 
-    if ( $phpcsFile->getFixableCount() > 0 ) {
-      // Attempt to fix the errors.
-      $phpcsFile->fixer->fixFile();
-      $fixable = $phpcsFile->getFixableCount();
-      if ( $fixable > 0 ) {
-        $failureMessages[] = "Failed to fix {$fixable} fixable violations in {$filename}";
+    $testClassFile   = ( new ReflectionClass( get_class( $this ) ) )->getFileName();
+    $testClassFile   = realpath( $testClassFile );
+    $testFileBase    = dirname( $testClassFile ) . '/' . basename( $testClassFile, 'php' );
+
+    $testFiles       = [];
+
+    $dir             = substr( $testFileBase, 0, strrpos( $testFileBase, DIRECTORY_SEPARATOR ) );
+    $di              = new DirectoryIterator( $dir );
+
+    foreach ( $di as $file ) {
+
+      $path = $file->getPathname();
+
+      if ( substr( $path, 0, strlen( $testFileBase ) ) === $testFileBase ) {
+        if ( $path !== $testFileBase . 'php' && substr( $path, -5 ) !== 'fixed' ) {
+          $testFiles[] = $path;
+        }
       }
 
-      // Check for a .fixed file to check for accuracy of fixes.
-      $fixedFile = $testFile . '.fixed';
-      if ( file_exists( $fixedFile ) ) {
-        $diff = $phpcsFile->fixer->generateDiff( $fixedFile );
-        if ( trim( $diff ) !== '' ) {
-          $fixedFilename     = basename( $fixedFile );
-          $failureMessages[] = "Fixed version of {$filename} does not match expected version in {$fixedFilename}; the diff is\n{$diff}";
+    } // foreach di
+
+    sort( $testFiles );
+
+    foreach ( $testFiles as $testFile ) {
+
+      $filename        = basename( $testFile );
+      $phpcsFile       = self::$phpcs->processFile( $testFile );
+      $failures        = $this->generateFailureMessages( $phpcsFile );
+      $failureMessages = array_merge( $failureMessages, $failures );
+
+      if ( $phpcsFile->getFixableCount() > 0 ) {
+        // Attempt to fix the errors.
+        $phpcsFile->fixer->fixFile();
+        $fixable = $phpcsFile->getFixableCount();
+        if ( $fixable > 0 ) {
+          $failureMessages[] = "Failed to fix {$fixable} fixable violations in {$filename}";
         }
-      } // if file_exists
-    } // if getFixableCount > 0
+
+        // Check for a .fixed file to check for accuracy of fixes.
+        $fixedFile = $testFile . '.fixed';
+        if ( file_exists( $fixedFile ) ) {
+          $diff = $phpcsFile->fixer->generateDiff( $fixedFile );
+          if ( trim( $diff ) !== '' ) {
+            $fixedFilename     = basename( $fixedFile );
+            $failureMessages[] = "Fixed version of {$filename} does not match expected version in {$fixedFilename}; the diff is\n{$diff}";
+          }
+        } // if file_exists
+      } // if getFixableCount > 0
+    } // foreach testFiles
 
     if ( empty( $failureMessages ) === false ) {
         $this->fail( implode( PHP_EOL, $failureMessages ) );
@@ -376,9 +396,11 @@ abstract class AbstractSniffUnitTest extends PHPUnit_Framework_TestCase {
    * The key of the array should represent the line number and the value
    * should represent the number of errors that should occur on that line.
    *
+   * @param $testFile
+   *
    * @return array(int => int)
    */
-  abstract public function getErrorList();
+  abstract public function getErrorList( $testFile );
 
 
   /**
@@ -387,8 +409,10 @@ abstract class AbstractSniffUnitTest extends PHPUnit_Framework_TestCase {
    * The key of the array should represent the line number and the value
    * should represent the number of warnings that should occur on that line.
    *
+   * @param $testFile
+   *
    * @return array(int => int)
    */
-  abstract public function getWarningList();
+  abstract public function getWarningList( $testFile );
 
 } // AbstractSniffUnitTest

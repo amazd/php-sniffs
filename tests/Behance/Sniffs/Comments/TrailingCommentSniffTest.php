@@ -2,7 +2,7 @@
 
 class Behance_Sniffs_Comments_TrailingCommentSniffTest extends AbstractSniffUnitTest {
 
-  public function getErrorList() {
+  public function getErrorList( $testFile ) {
 
     return [
         22  => 1,
@@ -23,7 +23,7 @@ class Behance_Sniffs_Comments_TrailingCommentSniffTest extends AbstractSniffUnit
 
   } // getErrorList
 
-  public function getWarningList() {
+  public function getWarningList( $testFile ) {
 
     return [];
 
