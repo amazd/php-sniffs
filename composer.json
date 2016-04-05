@@ -20,6 +20,10 @@
         {
             "name": "Mike Sherov",
             "email": "sherov@adobe.com"
+        },
+        {
+            "name": "Jim DeLois",
+            "email": "delois@adobe.com"
         }
     ]
 }

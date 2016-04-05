@@ -4,13 +4,14 @@ class Behance_Sniffs_Gotchas_DefaultLoggerSniffTest extends AbstractSniffUnitTes
 
   public function getErrorList( $testFile ) {
 
+    // TODO: Convert these to 1s once re-enabled in the ruleset.xml
     return [
-        4  => 1,
-        8  => 1,
-        12 => 1,
-        16 => 1,
-        20 => 1,
-        24 => 1,
+        4  => 0,
+        8  => 0,
+        12 => 0,
+        16 => 0,
+        20 => 0,
+        24 => 0,
     ];
 
   } // getErrorList
