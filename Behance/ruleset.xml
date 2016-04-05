@@ -86,4 +86,9 @@
   <rule ref="Behance.Functions.FunctionCallArgumentSpacing"/>
   <rule ref="Behance.Functions.FunctionDeclaration"/>
 
+  <!-- It turns out that this rule is/was not ready for primetime. Sidelining for now. -->
+  <rule ref="Behance.Gotchas.DefaultLogger">
+    <exclude name="Behance.Gotchas.DefaultLogger"/>
+  </rule>
+
 </ruleset>
