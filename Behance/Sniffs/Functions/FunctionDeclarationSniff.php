@@ -129,7 +129,7 @@ class Behance_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniff
     }
 
     if ( $tokens[ $parenClose ]['line'] !== $tokens[ $curlyOpen ]['line'] ) {
-      $error = 'Opening curly must be be on the same line as the closing parenthis';
+      $error = 'Opening curly must be be on the same line as the closing parenthesis';
       $phpcsFile->addError( $error, $curlyOpen, static::INCORRECT_CURLY );
       return;
     }
@@ -210,7 +210,7 @@ class Behance_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniff
     }
 
     if ( $tokens[ $openingBrace + 2 ]['content'] !== $phpcsFile->eolChar ) {
-      $error = 'Empty line not found immediately function definition; there was trailing whitespace or non-whitespace';
+      $error = 'Empty line not found immediately after function definition; there was trailing whitespace or non-whitespace';
       $phpcsFile->addError( $error, $openingBrace, static::INCORRECT_NEWLINES );
     }
 
