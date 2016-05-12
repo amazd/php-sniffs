@@ -47,3 +47,40 @@ $foo = ( $dave )
 $foo = ( $dave )
        ? 'robot'
        : 'human';
+
+return ( $bob )
+       ? false
+       : true;
+
+return ( $bob )
+       ? false
+       : true;
+
+return ( $bob )
+       ? false
+       : true;
+
+$project_owner = 'something';
+
+return ( $project_owner )
+       ? false
+       : true;
+
+
+$info = [
+    \Net_FeatureQueue_Site::TABLE_PREFIX_ . 'parent_id' => ( $category )
+                                                           ? $category->id
+                                                           : 0,
+];
+
+$info = [
+    \Net_FeatureQueue_Site::TABLE_PREFIX_ . 'parent_id' => ( $category )
+                                                           ? $category->id
+                                                           : 0,
+];
+
+$info = [
+    \Net_FeatureQueue_Site::TABLE_PREFIX_ . 'parent_id' => ( $category )
+                                                           ? $category->id
+                                                           : 0,
+];

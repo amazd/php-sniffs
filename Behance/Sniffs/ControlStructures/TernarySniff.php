@@ -34,7 +34,7 @@ class Behance_Sniffs_ControlStructures_TernarySniff implements PHP_CodeSniffer_S
     $this->_stackPtr          = $stackPtr;
     $this->_equals_sign_index = $phpcsFile->findPrevious( T_EQUAL, ( $stackPtr ) );
     $current_column           = $this->_tokens[ $stackPtr ]['column'];
-    $desired_column           = $this->_tokens[ $this->_equals_sign_index + 2 ]['column'];
+    $desired_column           = $this->_getDesiredColumn();
     $current_token_code       = $this->_tokens[ $stackPtr ]['code'];
     $error                    = 'Please align ternary expression. Expected %s; found %s';
     $code                     = 'InlineTernary';
@@ -110,6 +110,10 @@ class Behance_Sniffs_ControlStructures_TernarySniff implements PHP_CodeSniffer_S
    */
   private function _canBeIgnored( $current_token_code ) {
 
+    if ( $this->_isInlineElseInReturnTernary() ) {
+      return false;
+    }
+
     return $this->_isSingleLineTernary() || ( $this->_isInnerTernary( $current_token_code ) );
 
   } // _canBeIgnored
@@ -141,6 +145,41 @@ class Behance_Sniffs_ControlStructures_TernarySniff implements PHP_CodeSniffer_S
            || ( $next_inline_else && ( $current_line !== $next_inline_else_line ) ) );
 
   } // _isInnerInlineElse
+
+
+  /**
+   * @return  int
+   */
+  private function _getDesiredColumn() {
+
+    $previous_equals_sign_index = $this->_phpcsFile->findPrevious( T_EQUAL, ( $this->_stackPtr ) );
+    $previous_return_index      = $this->_phpcsFile->findPrevious( T_RETURN, ( $this->_stackPtr ) );
+    $previous_fat_arrow_index   = $this->_phpcsFile->findPrevious( T_DOUBLE_ARROW, ( $this->_stackPtr ) );
+
+    if ( $previous_return_index > $previous_equals_sign_index ) {
+      return $this->_tokens[ $previous_return_index ]['column'] + strlen( 'return' ) + 1;
+    }
+
+    if ( $previous_fat_arrow_index > $previous_equals_sign_index ) {
+      return $this->_tokens[ $previous_fat_arrow_index ]['column'] + strlen( '=>' ) + 1;
+    }
+
+    return $this->_tokens[ $previous_equals_sign_index ]['column'] + strlen( '=' ) + 1;
+
+  } // _getDesiredColumn
+
+
+  /**
+   * @return  bool
+   */
+  private function _isInlineElseInReturnTernary() {
+
+    $previous_equals_sign_index = $this->_phpcsFile->findPrevious( T_EQUAL, ( $this->_stackPtr ) );
+    $previous_return_index      = $this->_phpcsFile->findPrevious( T_RETURN, ( $this->_stackPtr ) );
+
+    return $previous_return_index > $previous_equals_sign_index;
+
+  } // _isInlineElseInReturnTernary
 
 
 } // Behance_Sniffs_ControlStructures_TernarySniff
