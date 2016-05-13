@@ -2,7 +2,30 @@
 
 class Test {
 
+  /*
+   * GOOD - SHOULD PASS
+   */
 
+
+  /**
+   * @return bool
+   */
+  public function test_0() {
+
+
+    return true;
+
+
+    // a comment
+
+
+  } // test_0
+
+
+  /**
+   * BAD - EACH FUNCTION BELOW THIS LINE SHOULD HAVE ONE FAILURE
+   */
+  
 
   /**
    * @return bool
@@ -28,28 +51,24 @@ class Test {
   } // test_2
 
 
-
-
   /**
    *
    * @return bool
    */
   public function test_3() {
 
-
     return true;
-
 
 
 
   } // test_3
 
 
-
   /**
    * @return bool
    */
   public function test_4() {
+
 
     return true;
 

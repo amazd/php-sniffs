@@ -46,7 +46,7 @@ class Behance_Sniffs_Formatting_BlankLineSniff implements PHP_CodeSniffer_Sniff 
    */
   protected function _checkForExcessiveBlankLines( $index ) {
 
-    if ( $this->_isLastTokenBeforeBlankLine( $index ) && $this->_exceedsConsecutiveBlankLineLimit( $index + 1, $this->_limit ) ) {
+    if ( $this->_isLastTokenBeforeBlankLine( $index ) && $this->_exceedsConsecutiveBlankLineLimit( $index + 1 ) ) {
 
       $error              = 'More than ' . $this->_limit . ' consecutive blank lines are not allowed';
 
@@ -68,7 +68,7 @@ class Behance_Sniffs_Formatting_BlankLineSniff implements PHP_CodeSniffer_Sniff 
    */
   private function _isBlankLine( $index ) {
 
-    return ( ( $this->_tokens[ $index ]['column'] === 1 ) && ( $this->_tokens[ $index ]['length'] === 0 ) );
+    return ( ( $this->_tokens[ $index ]['column'] === 1 ) && ( $this->_tokens[ $index ]['content'] === $this->_phpcsFile->eolChar ) );
 
   } // _isBlankLine
 
@@ -81,7 +81,7 @@ class Behance_Sniffs_Formatting_BlankLineSniff implements PHP_CodeSniffer_Sniff 
   private function _exceedsConsecutiveBlankLineLimit( $index ) {
 
     for ( $i = 1; $i <= $this->_limit; $i++ ) {
-      if ( !$this->_isBlankLine( $index + $this->_limit ) ) {
+      if ( !$this->_isBlankLine( $index + $i ) ) {
         return false;
       }
     }
