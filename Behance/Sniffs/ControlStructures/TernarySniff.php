@@ -1,11 +1,13 @@
 <?php
 class Behance_Sniffs_ControlStructures_TernarySniff implements PHP_CodeSniffer_Sniff {
 
-  private $_equals_sign_index;
+  /** @var PHP_CodeSniffer_File $_phpcsFile */
   private $_phpcsFile;
+
   private $_stackPtr;
   private $_tokens;
-
+  private $_start_of_statement;
+  private $_previous_open_parenthesis;
 
   /**
    * Returns an array of tokens this test wants to listen for.
@@ -14,7 +16,7 @@ class Behance_Sniffs_ControlStructures_TernarySniff implements PHP_CodeSniffer_S
    */
   public function register() {
 
-    return [ T_INLINE_THEN, T_INLINE_ELSE ];
+    return [ T_INLINE_THEN ];
 
   } // register
 
@@ -22,39 +24,68 @@ class Behance_Sniffs_ControlStructures_TernarySniff implements PHP_CodeSniffer_S
   /**
    * Processes this test, when one of its tokens is encountered.
    *
-   * @param  PHP_CodeSniffer_File  $phpcsFile  The file being scanned.
-   * @param  int                   $stackPtr   The position of the current token in the stack passed in $tokens.
+   * @param  PHP_CodeSniffer_File $phpcsFile The file being scanned.
+   * @param  int                  $stackPtr  The position of the current token in the stack passed in $tokens.
    *
-   * @return void
+   * @return bool|void
    */
   public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
 
-    $this->_phpcsFile         = $phpcsFile;
-    $this->_tokens            = $phpcsFile->getTokens();
-    $this->_stackPtr          = $stackPtr;
-    $this->_equals_sign_index = $phpcsFile->findPrevious( T_EQUAL, ( $stackPtr ) );
-    $current_column           = $this->_tokens[ $stackPtr ]['column'];
-    $desired_column           = $this->_getDesiredColumn();
-    $current_token_code       = $this->_tokens[ $stackPtr ]['code'];
-    $error                    = 'Please align ternary expression. Expected %s; found %s';
-    $code                     = 'InlineTernary';
-    $correct_number_of_spaces = str_repeat( ' ', $desired_column - 1 );
+    $this->_phpcsFile = $phpcsFile;
+    $this->_tokens    = $phpcsFile->getTokens();
+    $this->_stackPtr  = $stackPtr;
+    $current_column   = $this->_tokens[ $stackPtr ]['column'];
+    $code             = 'InlineTernary';
 
-    if ( $this->_canBeIgnored( $current_token_code ) ) {
+    if ( $this->_isOptionalAssignment() ) {
       return;
     }
 
+    if ( $this->_isSingleLineTernary() ) {
+      $error = 'Single-line ternary statements are not allowed';
+      return $this->_phpcsFile->addError( $error, $this->_stackPtr, $code );
+    }
+
+
+    $this->_start_of_statement        = $this->_phpcsFile->findStartOfStatement( $stackPtr );
+    $this->_previous_open_parenthesis = $this->_getOpeningParenthesisPrecededByWhitespace();
+
+    if ( $this->_isMultilineTernaryWithoutWrappingParenthesis() ) {
+      $error = 'The first statement must be wrapped in parenthesis';
+      return $this->_phpcsFile->addError( $error, $this->_stackPtr, $code );
+    }
+
+
+    // only check for alignment and fix once it is determined that the ternary is a basically valid multi-line statement
+    $next_inline_else         = $this->_phpcsFile->findNext( T_INLINE_ELSE, $stackPtr );
+    $next_inline_else_column  = $this->_tokens[ $next_inline_else ]['column'];
+    $desired_column           = $this->_tokens[ $this->_previous_open_parenthesis ]['column'];
+    $correct_number_of_spaces = str_repeat( ' ', $desired_column - 1 );
+    $error                    = 'Please align ternary expression. Expected %s; found %s';
+
+    // check and add errors for inline-then row
     if ( $desired_column !== $current_column ) {
 
-      $data = [ $desired_column, $current_column ];
-
+      $data               = [ $desired_column, $current_column ];
       $fix_option_enabled = $this->_phpcsFile->addFixableError( $error, $this->_stackPtr, $code, $data );
 
       if ( $fix_option_enabled === true ) {
-        $this->_fixAlignment( $correct_number_of_spaces, $current_column );
+        $this->_fixAlignment( $correct_number_of_spaces, $this->_stackPtr );
       }
 
-    } // if an alignment error was found
+    } // if an alignment error was found on the inline-then
+
+    // check and add errors for inline-else row
+    if ( $desired_column !== $next_inline_else_column ) {
+
+      $data               = [ $desired_column, $next_inline_else_column ];
+      $fix_option_enabled = $this->_phpcsFile->addFixableError( $error, $next_inline_else, $code, $data );
+
+      if ( $fix_option_enabled === true ) {
+        $this->_fixAlignment( $correct_number_of_spaces, $next_inline_else );
+      }
+
+    } // if an alignment error was found on the inline-else
 
   } // process
 
@@ -64,122 +95,75 @@ class Behance_Sniffs_ControlStructures_TernarySniff implements PHP_CodeSniffer_S
    */
   private function _isSingleLineTernary() {
 
-    $current_line = ( $this->_tokens[ $this->_stackPtr ]['line'] );
-    $equals_line  = ( $this->_tokens[ $this->_equals_sign_index ]['line'] );
+    $next_inline_then      = $this->_phpcsFile->findNext( T_INLINE_ELSE, $this->_stackPtr );
+    $next_inline_then_line = $this->_tokens[ $next_inline_then ]['line'];
+    $current_line          = $this->_tokens[ $this->_stackPtr ]['line'];
 
-    return $current_line === $equals_line;
+    return $current_line === $next_inline_then_line;
 
   } // _isSingleLineTernary
 
 
   /**
-   * @param  int   $current_token_code
-   *
-   * @return bool
-   */
-  private function _isInnerTernary( $current_token_code ) {
-
-    return ( $current_token_code === T_INLINE_ELSE && $this->_isInnerInlineElse() )
-           || ( $current_token_code === T_INLINE_THEN && $this->_isInnerInlineThen() );
-
-  } // _isInnerTernary
-
-
-  /**
    * @param  int   $correct_number_of_spaces
-   * @param  int   $current_column
-   *
-   * @return void
+   * @param  int   $current_index
    */
-  private function _fixAlignment( $correct_number_of_spaces, $current_column ) {
+  private function _fixAlignment( $correct_number_of_spaces, $current_index ) {
 
-    if ( $current_column === 1 ) {
-      $this->_phpcsFile->fixer->addContentBefore( $this->_stackPtr, $correct_number_of_spaces );
+    if ( $this->_tokens[ $current_index ]['column'] === 1 ) {
+      return $this->_phpcsFile->fixer->addContentBefore( $current_index, $correct_number_of_spaces );
     }
-    else {
-      $this->_phpcsFile->fixer->replaceToken( ( $this->_stackPtr - 1 ), $correct_number_of_spaces );
-    }
+
+    $this->_phpcsFile->fixer->replaceToken( ( $current_index - 1 ), $correct_number_of_spaces );
 
   } // _fixAlignment
 
 
   /**
-   * @param  int   $current_token_code
+   * @return int
+   */
+  private function _getOpeningParenthesisPrecededByWhitespace() {
+
+    $previous_open_parenthesis = $this->_phpcsFile->findPrevious( T_OPEN_PARENTHESIS, $this->_stackPtr );
+
+    while ( $this->_isPrecededByWhitespace( $previous_open_parenthesis ) ) {
+      $previous_open_parenthesis = $this->_phpcsFile->findPrevious( T_OPEN_PARENTHESIS, ( $previous_open_parenthesis - 1 ) );
+    }
+
+    return $previous_open_parenthesis;
+
+  } // _getOpeningParenthesisPrecededByWhitespace
+
+
+  /**
+   * @return bool
+   */
+  private function _isOptionalAssignment() {
+
+    return $this->_tokens[ $this->_stackPtr + 1 ]['code'] == T_INLINE_ELSE;
+
+  } // _isOptionalAssignment
+
+
+  /**
+   * @return bool
+   */
+  private function _isMultilineTernaryWithoutWrappingParenthesis() {
+
+    return ( $this->_previous_open_parenthesis < $this->_start_of_statement ) || $this->_isPrecededByWhitespace( $this->_previous_open_parenthesis );
+
+  } // _isMultilineTernaryWithoutWrappingParenthesis
+
+
+  /**
+   * @param  $index
    *
    * @return bool
    */
-  private function _canBeIgnored( $current_token_code ) {
+  private function _isPrecededByWhitespace( $index ) {
 
-    if ( $this->_isInlineElseInReturnTernary() ) {
-      return false;
-    }
+    return $this->_tokens[ $index - 1 ]['code'] !== T_WHITESPACE;
 
-    return $this->_isSingleLineTernary() || ( $this->_isInnerTernary( $current_token_code ) );
-
-  } // _canBeIgnored
-
-
-  /**
-   * @return bool
-   */
-  private function _isInnerInlineThen() {
-
-    return $this->_phpcsFile->findPrevious( T_INLINE_THEN, $this->_stackPtr - 1, $this->_equals_sign_index );
-
-  } // _isInnerInlineThen
-
-
-  /**
-   * @return bool
-   */
-  private function _isInnerInlineElse() {
-
-    $closing_semicolon_index   = $this->_phpcsFile->findNext( T_SEMICOLON, $this->_stackPtr );
-    $previous_inline_else      = $this->_phpcsFile->findPrevious( T_INLINE_ELSE, $this->_stackPtr - 1, $this->_equals_sign_index );
-    $next_inline_else          = $this->_phpcsFile->findNext( T_INLINE_ELSE, $this->_stackPtr + 1, $closing_semicolon_index );
-    $current_line              = $this->_tokens[ $this->_stackPtr ]['line'];
-    $previous_inline_else_line = $this->_tokens[ $previous_inline_else ]['line'];
-    $next_inline_else_line     = $this->_tokens[ $next_inline_else ]['line'];
-
-    return ( ( $previous_inline_else && ( $current_line === $previous_inline_else_line ) )
-           || ( $next_inline_else && ( $current_line !== $next_inline_else_line ) ) );
-
-  } // _isInnerInlineElse
-
-
-  /**
-   * @return  int
-   */
-  private function _getDesiredColumn() {
-
-    $previous_equals_sign_index = $this->_phpcsFile->findPrevious( T_EQUAL, ( $this->_stackPtr ) );
-    $previous_return_index      = $this->_phpcsFile->findPrevious( T_RETURN, ( $this->_stackPtr ) );
-    $previous_fat_arrow_index   = $this->_phpcsFile->findPrevious( T_DOUBLE_ARROW, ( $this->_stackPtr ) );
-
-    if ( $previous_return_index > $previous_equals_sign_index ) {
-      return $this->_tokens[ $previous_return_index ]['column'] + strlen( 'return' ) + 1;
-    }
-
-    if ( $previous_fat_arrow_index > $previous_equals_sign_index ) {
-      return $this->_tokens[ $previous_fat_arrow_index ]['column'] + strlen( '=>' ) + 1;
-    }
-
-    return $this->_tokens[ $previous_equals_sign_index ]['column'] + strlen( '=' ) + 1;
-
-  } // _getDesiredColumn
-
-
-  /**
-   * @return  bool
-   */
-  private function _isInlineElseInReturnTernary() {
-
-    $previous_equals_sign_index = $this->_phpcsFile->findPrevious( T_EQUAL, ( $this->_stackPtr ) );
-    $previous_return_index      = $this->_phpcsFile->findPrevious( T_RETURN, ( $this->_stackPtr ) );
-
-    return $previous_return_index > $previous_equals_sign_index;
-
-  } // _isInlineElseInReturnTernary
-
+  } // _isPrecededByWhitespace
 
 } // Behance_Sniffs_ControlStructures_TernarySniff
