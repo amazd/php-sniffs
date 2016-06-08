@@ -1,65 +1,6 @@
 <?php
 
 /**
- * GOOD - SHOULD PASS
- */
-
-$a = $a ?: $b;
-
-$foo = ( $fruit)
-       ? 'apple'
-       : 'carrot';
-
-$nextPtrCount = ( isset( $tokens[ $foo ]['nested_parenthesis'] ) )
-                ? count( $tokens[ $foo ]['nested_parenthesis'] )
-                : 0;
-
-
-return ( $bob )
-       ? false
-       : true;
-
-
-$project_owner = 'something';
-
-
-return ( $project_owner )
-       ? false
-       : true;
-
-$info = [
-    \Net_FeatureQueue_Site::TABLE_PREFIX_ . 'parent_id' => ( $category )
-                                                           ? $category->id
-                                                           : 0,
-];
-
-
-$testing = [
-    'payment_flags' => $user_flags ?: 0,
-];
-
-$options = ( $published )
-           ? [ 'published' => \Core_Codes::YES ]
-           : [ 'unpublished' => \Core_Codes::YES ];
-
-$connector->expects( $this->once() )
-  ->method( 'unlinkAdobeId' )
-  ->with( ( $has_adobe_id )
-          ? "{$adobe_id}#deleted-{$user->id}"
-          : ''
-        );
-
-$options_and_such = ( $published )
-                    ? [ 'published' => \Core_Codes::YES ]
-                    : [ 'unpublished' => \Core_Codes::YES ];
-
-$a = ( $b )
-     ? 1
-     : ( $d )
-       ? 2
-       : 3;
-
-/**
  * BAD - SHOULD HAVE AT LEAST ONE ERROR
  */
 
@@ -186,3 +127,63 @@ $a = ( $b )
 return  ( $bob )
         ? false
        : true;
+
+
+/**
+ * GOOD - SHOULD PASS
+ */
+
+$a = $a ?: $b;
+
+$foo = ( $fruit)
+       ? 'apple'
+       : 'carrot';
+
+$nextPtrCount = ( isset( $tokens[ $foo ]['nested_parenthesis'] ) )
+                ? count( $tokens[ $foo ]['nested_parenthesis'] )
+                : 0;
+
+
+return ( $bob )
+       ? false
+       : true;
+
+
+$project_owner = 'something';
+
+
+return ( $project_owner )
+       ? false
+       : true;
+
+$info = [
+    \Net_FeatureQueue_Site::TABLE_PREFIX_ . 'parent_id' => ( $category )
+                                                           ? $category->id
+                                                           : 0,
+];
+
+
+$testing = [
+    'payment_flags' => $user_flags ?: 0,
+];
+
+$options = ( $published )
+           ? [ 'published' => \Core_Codes::YES ]
+           : [ 'unpublished' => \Core_Codes::YES ];
+
+$connector->expects( $this->once() )
+  ->method( 'unlinkAdobeId' )
+  ->with( ( $has_adobe_id )
+          ? "{$adobe_id}#deleted-{$user->id}"
+          : ''
+        );
+
+$options_and_such = ( $published )
+                    ? [ 'published' => \Core_Codes::YES ]
+                    : [ 'unpublished' => \Core_Codes::YES ];
+
+$a = ( $b )
+     ? 1
+     : ( $d )
+       ? 2
+       : 3;
