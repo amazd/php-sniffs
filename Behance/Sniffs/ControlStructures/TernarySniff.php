@@ -162,6 +162,10 @@ class Behance_Sniffs_ControlStructures_TernarySniff implements PHP_CodeSniffer_S
    */
   private function _isPrecededByWhitespace( $index ) {
 
+    if ( !isset( $this->_tokens[ $index - 1 ] ) ) {
+      return false;
+    }
+
     return $this->_tokens[ $index - 1 ]['code'] !== T_WHITESPACE;
 
   } // _isPrecededByWhitespace
