@@ -12,17 +12,18 @@
     <exclude name="PSR2.Classes.ClassDeclaration.OpenBraceNewLine"/>
     <exclude name="PSR2.Classes.ClassDeclaration.CloseBraceAfterBody"/>
     <exclude name="PSR2.Classes.ClassDeclaration.CloseBraceSameLine"/>
+    <exclude name="PSR2.Classes.PropertyDeclaration.Multiple"/>
     <exclude name="PSR2.Classes.PropertyDeclaration.Underscore"/>
+    <exclude name="PSR2.ControlStructures.ControlStructureSpacing.SpacingAfterOpenBrace"/>
+    <exclude name="PSR2.ControlStructures.ControlStructureSpacing.SpaceBeforeCloseBrace"/>
+    <exclude name="PSR2.ControlStructures.SwitchDeclaration.BodyOnNextLineCASE"/>
+    <exclude name="PSR2.ControlStructures.SwitchDeclaration.BodyOnNextLineDEFAULT"/>
     <exclude name="PSR2.Methods.FunctionCallSignature.SpaceAfterOpenBracket"/>
     <exclude name="PSR2.Methods.FunctionCallSignature.SpaceBeforeCloseBracket"/>
     <exclude name="PSR2.Methods.FunctionCallSignature.ContentAfterOpenBracket"/>
     <exclude name="PSR2.Methods.FunctionCallSignature.CloseBracketLine"/>
+    <exclude name="PSR2.Methods.FunctionClosingBrace.SpacingBeforeClose" />
     <exclude name="PSR2.Methods.MethodDeclaration.Underscore"/>
-    <exclude name="PSR2.ControlStructures.ControlStructureSpacing.SpacingAfterOpenBrace"/>
-    <exclude name="PSR2.ControlStructures.ControlStructureSpacing.SpaceBeforeCloseBrace"/>
-    <exclude name="PSR2.Classes.PropertyDeclaration.Multiple"/>
-    <exclude name="PSR2.ControlStructures.SwitchDeclaration.BodyOnNextLineCASE"/>
-    <exclude name="PSR2.ControlStructures.SwitchDeclaration.BodyOnNextLineDEFAULT"/>
 
     <!-- TODO: Reconsider for inclusion -->
     <exclude name="PSR2.Namespaces.NamespaceDeclaration.BlankLineAfter"/>
