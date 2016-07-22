@@ -1,0 +1,18 @@
+<?php
+ mb_strlen("test");
+ mb_strpos("test");
+ mb_strrpos("test");
+ mb_substr("test");
+ mb_strtolower("test");
+ mb_strtoupper("test");
+ mb_stripos("test");
+ mb_strripos("test");
+ mb_strstr("test");
+ mb_stristr("test");
+ mb_strrchr("test");
+ mb_substr_count("test");
+ mb_ereg("test");
+ mb_eregi("test");
+ mb_ereg_replace("test");
+ mb_eregi_replace("test");
+ mb_split("test");
