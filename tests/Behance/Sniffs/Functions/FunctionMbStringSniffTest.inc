@@ -1,0 +1,18 @@
+<?php
+ strlen("test");
+ strpos("test");
+ strrpos("test");
+ substr("test");
+ strtolower("test");
+ strtoupper("test");
+ stripos("test");
+ strripos("test");
+ strstr("test");
+ stristr("test");
+ strrchr("test");
+ substr_count("test");
+ ereg("test");
+ eregi("test");
+ ereg_replace("test");
+ eregi_replace("test");
+ split("test");
