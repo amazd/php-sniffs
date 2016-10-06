@@ -81,3 +81,23 @@ function needsAnotherNewLineAfterComment() {
 
   $a++;/**/
 } // needsAnotherNewLineAfterComment
+
+function invalidReturnValue1() : string{}
+function invalidReturnValue2(): string {}
+function invalidReturnValue3() :string {}
+function invalidReturnValue4() :    string {}
+function invalidReturnValue4() : 7655445 {}
+
+function usableReturnValue() : string {
+
+  $a;
+
+} // usableReturnValue
+
+function anotherUsableReturnValue() : string {}
+
+function yetAnotherUsableReturnValue() : SimpleXMLElement {}
+
+function yetAnotherUsableReturnValue() : \SimpleXMLElement {}
+
+function yetAnotherUsableReturnValueWithNamespaces() : Behance\SimpleXMLElement {}
