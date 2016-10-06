@@ -43,6 +43,10 @@ class Behance_Sniffs_ControlStructures_TernarySniffTest extends AbstractSniffUni
         122 => 1,
         124 => 1,
         129 => 1,
+        197 => 1,
+        202 => 1,
+        205 => 1,
+        206 => 1,
     ];
 
   } // getErrorList
