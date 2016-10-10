@@ -8,6 +8,7 @@ class Behance_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniff
   const INVALID_ARG_FORMAT          = 'InvalidArgumentListFormat';
   const MULTILINE_FUNC              = 'MultilineFunctionsNotAllowed';
   const NON_EMPTY_SINGLELINE        = 'NonEmptySingleLine';
+  const INVALID_RETURN_VALUE        = 'ReturnValueAfterColon';
 
   public $functionScopePrefixes = [
       'private'    => '_',
@@ -118,9 +119,10 @@ class Behance_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniff
       return;
     }
 
-    $parenOpen  = $tokens[ $stackPtr ]['parenthesis_opener'];
-    $parenClose = $tokens[ $stackPtr ]['parenthesis_closer'];
-    $curlyOpen  = $tokens[ $stackPtr ]['scope_opener'];
+    $parenOpen   = $tokens[ $stackPtr ]['parenthesis_opener'];
+    $parenClose  = $tokens[ $stackPtr ]['parenthesis_closer'];
+    $curlyOpen   = $tokens[ $stackPtr ]['scope_opener'];
+    $returnColon = $phpcsFile->findNext( T_COLON, $parenClose, $curlyOpen );
 
     if ( $tokens[ $parenOpen ]['line'] !== $tokens[ $parenClose ]['line'] ) {
       $error = 'Multiline function definitions not allowed';
@@ -134,11 +136,33 @@ class Behance_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniff
       return;
     }
 
-    if ( $tokens[ $parenClose ]['column'] !== $tokens[ $curlyOpen ]['column'] - 2 ) {
-      $error = 'Expected 1 space between closing parenthesis and open curly';
-      $phpcsFile->addError( $error, $curlyOpen, static::INCORRECT_CURLY );
-      return;
-    }
+    if ( $returnColon !== false ) {
+
+      $stackptr_before_colon = $returnColon - 1;
+      if ( $tokens[ $stackptr_before_colon ]['code'] !== T_WHITESPACE || $tokens[ $stackptr_before_colon ]['length'] != 1 ) {
+        $error = 'Expected 1 space before colon';
+        $phpcsFile->addError( $error, $returnColon, static::INCORRECT_CURLY );
+        return;
+      }
+
+      $stackptr_after_colon = $returnColon + 1;
+      if ( $tokens[ $stackptr_after_colon ]['code'] !== T_WHITESPACE || $tokens[ $stackptr_after_colon ]['length'] != 1 ) {
+        $error = 'Expected 1 space after colon';
+        $phpcsFile->addError( $error, $stackptr_after_colon, static::INCORRECT_CURLY );
+        return;
+      }
+
+      $this->_ensureReturnValueAfterColon( $phpcsFile, $stackptr_after_colon, static::INVALID_RETURN_VALUE );
+    } // if colon found
+    else {
+
+      if ( $tokens[ $parenClose ]['column'] !== $tokens[ $curlyOpen ]['column'] - 2 ) {
+        $error = 'Expected 1 space between closing parenthesis and open curly';
+        $phpcsFile->addError( $error, $curlyOpen, static::INCORRECT_CURLY );
+        return;
+      }
+
+    } // else no colon found
 
     // valid - function blah() {}
     if ( $parenOpen + 1 === $parenClose ) {
@@ -331,5 +355,36 @@ class Behance_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniff
     } // elseif !empty expectedPrefix && expected prefix not at beginning
 
   } // _processFunctionName
+
+  /**
+   * @param  PHP_CodeSniffer_File $phpcsFile
+   * @param  int                  $stackPtr
+   * @param  string               $tag
+   */
+  private function _ensureReturnValueAfterColon( PHP_CodeSniffer_File $phpcsFile, $stackPtr, $tag ) {
+
+    $tokens = $phpcsFile->getTokens();
+
+    $find = [
+        T_NS_SEPARATOR,
+        T_STRING,
+        T_WHITESPACE,
+    ];
+
+    $end  = $phpcsFile->findNext( $find, ( $stackPtr + 1 ), null, true, null, true );
+
+    if ( $tokens[ $end ]['code'] !== T_RETURN_TYPE ) {
+      $error = 'Expected return value after colon';
+      $phpcsFile->addError( $error, $stackPtr, $tag );
+      return;
+    }
+
+    if ( $tokens[ $end + 1 ]['code'] !== T_WHITESPACE || $tokens[ $end + 1 ]['length'] > 1 ) {
+        $error = 'Expected 1 space between return value and open curly';
+        $phpcsFile->addError( $error, $end, $tag );
+        return;
+    }
+
+  } // _ensureReturnValueAfterColon
 
 } // Behance_Sniffs_Functions_FunctionDeclarationSniff
