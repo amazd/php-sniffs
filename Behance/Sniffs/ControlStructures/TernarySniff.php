@@ -48,7 +48,7 @@ class Behance_Sniffs_ControlStructures_TernarySniff implements PHP_CodeSniffer_S
 
 
     $this->_start_of_statement        = $this->_phpcsFile->findStartOfStatement( $stackPtr );
-    $this->_previous_open_parenthesis = $this->_getOpeningParenthesisPrecededByWhitespace();
+    $this->_previous_open_parenthesis = $this->_getOpeningParenthesisPrecededByWhitespaceOrDesiredToken();
 
     if ( $this->_isMultilineTernaryWithoutWrappingParenthesis() ) {
       $error = 'The first statement must be wrapped in parenthesis';
@@ -122,17 +122,42 @@ class Behance_Sniffs_ControlStructures_TernarySniff implements PHP_CodeSniffer_S
   /**
    * @return int
    */
-  private function _getOpeningParenthesisPrecededByWhitespace() {
+  private function _getOpeningParenthesisPrecededByWhitespaceOrDesiredToken() {
 
-    $previous_open_parenthesis = $this->_phpcsFile->findPrevious( T_OPEN_PARENTHESIS, $this->_stackPtr );
+    $previous_open_parenthesis = $this->_phpcsFile->findPrevious( T_OPEN_PARENTHESIS, $this->_stackPtr, $this->_getSearchToIndex() );
 
-    while ( $this->_isPrecededByWhitespace( $previous_open_parenthesis ) ) {
-      $previous_open_parenthesis = $this->_phpcsFile->findPrevious( T_OPEN_PARENTHESIS, ( $previous_open_parenthesis - 1 ) );
-    }
+    while ( $this->_isPrecededByWhitespaceOrDesiredToken( $previous_open_parenthesis ) ) {
+
+      $next_previous_open_parenthesis = $this->_phpcsFile->findPrevious( T_OPEN_PARENTHESIS, ( $previous_open_parenthesis - 1 ), $this->_getSearchToIndex() );
+
+      if ( !$next_previous_open_parenthesis ) {
+        return $previous_open_parenthesis;
+      }
+
+      $previous_open_parenthesis = $next_previous_open_parenthesis;
+
+    } // while this is preceded by whitespace
 
     return $previous_open_parenthesis;
 
-  } // _getOpeningParenthesisPrecededByWhitespace
+  } // _getOpeningParenthesisPrecededByWhitespaceOrDesiredToken
+
+
+  /**
+   * @return bool
+   *
+   * Finds the index to stop at when searching for previous tokens
+   * You don't want to start aligning to opening parens in previous statements, etc.
+   */
+  private function _getSearchToIndex() {
+
+    $index_of_search_start = $this->_phpcsFile->findPrevious( T_INLINE_THEN, $this->_stackPtr - 1, $this->_start_of_statement );
+
+    return ( !$index_of_search_start )
+           ? $this->_start_of_statement
+           : $index_of_search_start;
+
+  } // _getSearchToIndex
 
 
   /**
@@ -150,10 +175,10 @@ class Behance_Sniffs_ControlStructures_TernarySniff implements PHP_CodeSniffer_S
    */
   private function _isMultilineTernaryWithoutWrappingParenthesis() {
 
-    return ( $this->_previous_open_parenthesis < $this->_start_of_statement ) || $this->_isPrecededByWhitespace( $this->_previous_open_parenthesis );
+    return ( $this->_getOpeningParenthesisPrecededByWhitespaceOrDesiredToken() < $this->_start_of_statement ) ||
+           !$this->_isPrecededByWhitespace( $this->_previous_open_parenthesis );
 
   } // _isMultilineTernaryWithoutWrappingParenthesis
-
 
   /**
    * @param  $index
@@ -166,8 +191,25 @@ class Behance_Sniffs_ControlStructures_TernarySniff implements PHP_CodeSniffer_S
       return false;
     }
 
-    return $this->_tokens[ $index - 1 ]['code'] !== T_WHITESPACE;
+    return $this->_tokens[ $index - 1 ]['code'] === T_WHITESPACE;
 
   } // _isPrecededByWhitespace
+
+
+  /**
+   * @param  $index
+   *
+   * @return bool
+   */
+  private function _isPrecededByWhitespaceOrDesiredToken( $index ) {
+
+    if ( !isset( $this->_tokens[ $index - 1 ] ) ) {
+      return false;
+    }
+
+    return ( $this->_tokens[ $index - 1 ]['code'] === T_WHITESPACE ) ||
+           ( $this->_tokens[ $index - 1 ]['code'] === T_ISSET );
+
+  } // _isPrecededByWhitespaceOrDesiredToken
 
 } // Behance_Sniffs_ControlStructures_TernarySniff

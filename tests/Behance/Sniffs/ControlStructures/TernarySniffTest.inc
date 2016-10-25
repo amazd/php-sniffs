@@ -187,3 +187,20 @@ $a = ( $b )
      : ( $d )
        ? 2
        : 3;
+
+$column  = ( $counter > ( $country_count / 2 ) )
+           ? 'right'
+           : 'left';
+
+// These below should fail
+$column  = ( $counter > ( $country_count / 2 ) )
+            ? 'right'
+           : 'left';
+
+$column  = ( $counter > ( $country_count / 2 ) )
+           ? 'right'
+             : 'left';
+
+$column  = ( $counter > ( $country_count / 2 ) )
+                        ? 'right'
+                        : 'left';
