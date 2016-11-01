@@ -208,7 +208,8 @@ class Behance_Sniffs_ControlStructures_TernarySniff implements PHP_CodeSniffer_S
     }
 
     return ( $this->_tokens[ $index - 1 ]['code'] === T_WHITESPACE ) ||
-           ( $this->_tokens[ $index - 1 ]['code'] === T_ISSET );
+           ( $this->_tokens[ $index - 1 ]['code'] === T_ISSET ) ||
+           ( $this->_tokens[ $index - 1 ]['code'] === T_EMPTY );
 
   } // _isPrecededByWhitespaceOrDesiredToken
 
