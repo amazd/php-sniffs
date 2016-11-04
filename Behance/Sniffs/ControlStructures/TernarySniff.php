@@ -1,6 +1,8 @@
 <?php
 class Behance_Sniffs_ControlStructures_TernarySniff implements PHP_CodeSniffer_Sniff {
 
+  const IS_ARRAY = 310;
+
   /** @var PHP_CodeSniffer_File $_phpcsFile */
   private $_phpcsFile;
 
@@ -209,6 +211,7 @@ class Behance_Sniffs_ControlStructures_TernarySniff implements PHP_CodeSniffer_S
 
     return ( $this->_tokens[ $index - 1 ]['code'] === T_WHITESPACE ) ||
            ( $this->_tokens[ $index - 1 ]['code'] === T_ISSET ) ||
+           ( $this->_tokens[ $index - 1 ]['code'] === self::IS_ARRAY ) ||
            ( $this->_tokens[ $index - 1 ]['code'] === T_EMPTY );
 
   } // _isPrecededByWhitespaceOrDesiredToken

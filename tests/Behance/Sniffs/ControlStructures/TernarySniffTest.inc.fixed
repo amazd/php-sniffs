@@ -204,3 +204,12 @@ $column  = ( $counter > ( $country_count / 2 ) )
 $column  = ( $counter > ( $country_count / 2 ) )
            ? 'right'
            : 'left';
+
+// These below should pass
+$adapter_options = ( !empty( $options[ $url ] ) )
+                   ? $options[ $url ]
+                   : [];
+
+$options = ( $validator->options && is_array( $validator->options ) )
+           ? $validator->options
+           : [];
