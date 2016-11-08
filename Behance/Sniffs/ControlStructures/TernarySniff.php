@@ -9,7 +9,7 @@ class Behance_Sniffs_ControlStructures_TernarySniff implements PHP_CodeSniffer_S
   private $_stackPtr;
   private $_tokens;
   private $_start_of_statement;
-  private $_previous_open_parenthesis;
+  private $_open_parenthesis;
 
   /**
    * Returns an array of tokens this test wants to listen for.
@@ -49,19 +49,25 @@ class Behance_Sniffs_ControlStructures_TernarySniff implements PHP_CodeSniffer_S
     }
 
 
-    $this->_start_of_statement        = $this->_phpcsFile->findStartOfStatement( $stackPtr );
-    $this->_previous_open_parenthesis = $this->_getOpeningParenthesisPrecededByWhitespaceOrDesiredToken();
+    $this->_start_of_statement = $this->_phpcsFile->findStartOfStatement( $stackPtr );
+    $this->_close_of_parens    = $this->_phpcsFile->findPrevious( PHP_CodeSniffer_Tokens::$emptyTokens, ($stackPtr - 1), $this->_start_of_statement, true );
 
-    if ( $this->_isMultilineTernaryWithoutWrappingParenthesis() ) {
+    if ( $this->_tokens[ $this->_close_of_parens ]['code'] !== T_CLOSE_PARENTHESIS ) {
       $error = 'The first statement must be wrapped in parenthesis';
       return $this->_phpcsFile->addError( $error, $this->_stackPtr, $code );
     }
 
+    $this->_open_parenthesis = $this->_tokens[ $this->_close_of_parens ]['parenthesis_opener'];
+
+    if ( $this->_tokens[ $this->_open_parenthesis - 1 ]['code'] !== T_WHITESPACE ) {
+      $error = 'The first statement must be wrapped in parenthesis';
+      return $this->_phpcsFile->addError( $error, $this->_open_parenthesis, $code );
+    }
 
     // only check for alignment and fix once it is determined that the ternary is a basically valid multi-line statement
     $next_inline_else         = $this->_phpcsFile->findNext( T_INLINE_ELSE, $stackPtr );
     $next_inline_else_column  = $this->_tokens[ $next_inline_else ]['column'];
-    $desired_column           = $this->_tokens[ $this->_previous_open_parenthesis ]['column'];
+    $desired_column           = $this->_tokens[ $this->_open_parenthesis ]['column'];
     $correct_number_of_spaces = str_repeat( ' ', $desired_column - 1 );
     $error                    = 'Please align ternary expression. Expected %s; found %s';
 
@@ -71,7 +77,7 @@ class Behance_Sniffs_ControlStructures_TernarySniff implements PHP_CodeSniffer_S
       $data               = [ $desired_column, $current_column ];
       $fix_option_enabled = $this->_phpcsFile->addFixableError( $error, $this->_stackPtr, $code, $data );
 
-      if ( $fix_option_enabled === true ) {
+      if ( $fix_option_enabled ) {
         $this->_fixAlignment( $correct_number_of_spaces, $this->_stackPtr );
       }
 
@@ -83,7 +89,7 @@ class Behance_Sniffs_ControlStructures_TernarySniff implements PHP_CodeSniffer_S
       $data               = [ $desired_column, $next_inline_else_column ];
       $fix_option_enabled = $this->_phpcsFile->addFixableError( $error, $next_inline_else, $code, $data );
 
-      if ( $fix_option_enabled === true ) {
+      if ( $fix_option_enabled ) {
         $this->_fixAlignment( $correct_number_of_spaces, $next_inline_else );
       }
 
@@ -122,47 +128,6 @@ class Behance_Sniffs_ControlStructures_TernarySniff implements PHP_CodeSniffer_S
 
 
   /**
-   * @return int
-   */
-  private function _getOpeningParenthesisPrecededByWhitespaceOrDesiredToken() {
-
-    $previous_open_parenthesis = $this->_phpcsFile->findPrevious( T_OPEN_PARENTHESIS, $this->_stackPtr, $this->_getSearchToIndex() );
-
-    while ( $this->_isPrecededByWhitespaceOrDesiredToken( $previous_open_parenthesis ) ) {
-
-      $next_previous_open_parenthesis = $this->_phpcsFile->findPrevious( T_OPEN_PARENTHESIS, ( $previous_open_parenthesis - 1 ), $this->_getSearchToIndex() );
-
-      if ( !$next_previous_open_parenthesis ) {
-        return $previous_open_parenthesis;
-      }
-
-      $previous_open_parenthesis = $next_previous_open_parenthesis;
-
-    } // while this is preceded by whitespace
-
-    return $previous_open_parenthesis;
-
-  } // _getOpeningParenthesisPrecededByWhitespaceOrDesiredToken
-
-
-  /**
-   * @return bool
-   *
-   * Finds the index to stop at when searching for previous tokens
-   * You don't want to start aligning to opening parens in previous statements, etc.
-   */
-  private function _getSearchToIndex() {
-
-    $index_of_search_start = $this->_phpcsFile->findPrevious( T_INLINE_THEN, $this->_stackPtr - 1, $this->_start_of_statement );
-
-    return ( !$index_of_search_start )
-           ? $this->_start_of_statement
-           : $index_of_search_start;
-
-  } // _getSearchToIndex
-
-
-  /**
    * @return bool
    */
   private function _isOptionalAssignment() {
@@ -170,50 +135,5 @@ class Behance_Sniffs_ControlStructures_TernarySniff implements PHP_CodeSniffer_S
     return $this->_tokens[ $this->_stackPtr + 1 ]['code'] == T_INLINE_ELSE;
 
   } // _isOptionalAssignment
-
-
-  /**
-   * @return bool
-   */
-  private function _isMultilineTernaryWithoutWrappingParenthesis() {
-
-    return ( $this->_getOpeningParenthesisPrecededByWhitespaceOrDesiredToken() < $this->_start_of_statement ) ||
-           !$this->_isPrecededByWhitespace( $this->_previous_open_parenthesis );
-
-  } // _isMultilineTernaryWithoutWrappingParenthesis
-
-  /**
-   * @param  $index
-   *
-   * @return bool
-   */
-  private function _isPrecededByWhitespace( $index ) {
-
-    if ( !isset( $this->_tokens[ $index - 1 ] ) ) {
-      return false;
-    }
-
-    return $this->_tokens[ $index - 1 ]['code'] === T_WHITESPACE;
-
-  } // _isPrecededByWhitespace
-
-
-  /**
-   * @param  $index
-   *
-   * @return bool
-   */
-  private function _isPrecededByWhitespaceOrDesiredToken( $index ) {
-
-    if ( !isset( $this->_tokens[ $index - 1 ] ) ) {
-      return false;
-    }
-
-    return ( $this->_tokens[ $index - 1 ]['code'] === T_WHITESPACE ) ||
-           ( $this->_tokens[ $index - 1 ]['code'] === T_ISSET ) ||
-           ( $this->_tokens[ $index - 1 ]['code'] === self::IS_ARRAY ) ||
-           ( $this->_tokens[ $index - 1 ]['code'] === T_EMPTY );
-
-  } // _isPrecededByWhitespaceOrDesiredToken
 
 } // Behance_Sniffs_ControlStructures_TernarySniff
