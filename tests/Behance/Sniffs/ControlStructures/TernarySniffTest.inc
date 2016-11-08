@@ -213,3 +213,7 @@ $adapter_options = ( !empty( $options[ $url ] ) )
 $options = ( $validator->options && is_array( $validator->options ) )
            ? $validator->options
            : [];
+
+$a = isset( $b )
+          ? $c
+          : $d;

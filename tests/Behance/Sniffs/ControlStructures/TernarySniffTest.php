@@ -8,7 +8,7 @@ class Behance_Sniffs_ControlStructures_TernarySniffTest extends AbstractSniffUni
         10  => 1,
         15  => 1,
         20  => 1,
-        24  => 1,
+        23  => 1,
         29  => 1,
         31  => 1,
         32  => 1,
@@ -47,6 +47,7 @@ class Behance_Sniffs_ControlStructures_TernarySniffTest extends AbstractSniffUni
         202 => 1,
         205 => 1,
         206 => 1,
+        217 => 1,
     ];
 
   } // getErrorList
