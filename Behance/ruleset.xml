@@ -81,17 +81,23 @@
   </rule>
   <rule ref="Behance.Arrays.ShortHandArrayOnly"/>
   <rule ref="Behance.Classes.ClassDeclaration"/>
-  <rule ref="Behance.Comments.TrailingComment"/>
   <rule ref="Behance.Comments.DisallowHashComments"/>
+  <rule ref="Behance.Comments.TrailingComment"/>
   <rule ref="Behance.ControlStructures.ControlStructureSpacing"/>
   <!-- InlineControlStructure is a copy of the Generic, but also checks elseif statements -->
   <rule ref="Behance.ControlStructures.InlineControlStructure"/>
+  <rule ref="Behance.ControlStructures.Ternary"/>
+  <rule ref="Behance.Formatting.BlankLine"/>
+  <rule ref="Behance.Functions.ChainedMethodAlignment"/>
   <rule ref="Behance.Functions.FunctionCallArgumentSpacing"/>
   <rule ref="Behance.Functions.FunctionDeclaration"/>
-
-  <!-- It turns out that this rule is/was not ready for primetime. Sidelining for now. -->
-  <rule ref="Behance.Gotchas.DefaultLogger">
-    <exclude name="Behance.Gotchas.DefaultLogger"/>
-  </rule>
+  <rule ref="Behance.Functions.FunctionMbString"/>
+  <rule ref="Behance.Gotchas.BaseException"/>
+  <rule ref="Behance.Keywords.AlphabeticalUse"/>
+  <rule ref="Behance.Keywords.KeywordParensSpacing"/>
+  <rule ref="Behance.Keywords.OneUsePerStatement"/>
+  <rule ref="Behance.Operators.EqualsAlignment"/>
+  <rule ref="Behance.Operators.OperatorNoSpacing"/>
+  <rule ref="Behance.Operators.OperatorSpacing"/>
 
 </ruleset>
