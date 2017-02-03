@@ -141,8 +141,6 @@ class Behance_Sniffs_Operators_EqualsAlignmentSniff implements PHP_CodeSniffer_S
     $start_of_statement           = $this->_phpcsFile->findStartOfStatement( $stack_pointer );
     $first_non_whitespace_on_line = $this->_phpcsFile->findFirstOnLine( [ T_WHITESPACE ], $stack_pointer ) + 1;
 
-    // or if the start of statement is at column 1
-
     return ( $start_of_statement === $first_non_whitespace_on_line ) || ( $this->_tokens[ $start_of_statement ]['column'] === 1 );
 
   } // _startOfStatementIsFirstTokenOnLine
@@ -152,87 +150,49 @@ class Behance_Sniffs_Operators_EqualsAlignmentSniff implements PHP_CodeSniffer_S
    */
   private function _getDesiredColumn() {
 
-    $stack_pointer  = $this->_stackPtr;
-    $desired_column = $this->_tokens[ $stack_pointer - 1 ]['column'] + 1;
+    $desired_column          = $this->_tokens[ $this->_stackPtr - 1 ]['column'] + 1;
+    $previous_desired_column = $this->_otherMaximumDesiredColumn( -1 );
+    $next_desired_column     = $this->_otherMaximumDesiredColumn( 1 );
 
-    $desired_column = ( $this->_previousMaximumDesiredColumn() > $desired_column )
-                      ? $this->_previousMaximumDesiredColumn()
-                      : $desired_column;
-
-    $desired_column = ( $this->_followingMaximumDesiredColumn() > $desired_column )
-                      ? $this->_followingMaximumDesiredColumn()
-                      : $desired_column;
-
-    return $desired_column;
+    return max( $previous_desired_column, $next_desired_column, $desired_column );
 
   } // _getDesiredColumn
 
   /**
+   * @param  int $direction
    * @return int
    */
-  private function _followingMaximumDesiredColumn() {
+  private function _otherMaximumDesiredColumn( $direction ) {
+
+    $find_operation = ( $direction === 1 )
+                      ? 'findNext'
+                      : 'findPrevious';
 
     $stack_pointer  = $this->_stackPtr;
     $desired_column = $this->_tokens[ $stack_pointer - 1 ]['column'] + 1;
 
-    while ( $stack_pointer < $this->_phpcsFile->numTokens - 0 ) {
+    while ( $stack_pointer < $this->_phpcsFile->numTokens && $stack_pointer > 0 ) {
 
-      $next_equals         = $this->_phpcsFile->findNext( T_EQUAL, $stack_pointer + 1 );
+      $other_equals        = $this->_phpcsFile->$find_operation( T_EQUAL, $stack_pointer + $direction );
       $current_line_number = $this->_tokens[ $stack_pointer ]['line'];
 
-      if ( !$next_equals ) {
+      if ( !$other_equals
+          || !$this->_startOfStatementIsFirstTokenOnLine( $stack_pointer )
+          || abs( $current_line_number - $this->_tokens[ $other_equals ]['line'] ) > 1) {
         break;
       }
 
-      if ( !$this->_startOfStatementIsFirstTokenOnLine( $stack_pointer )
-          || $this->_tokens[ $next_equals ]['line'] - $current_line_number > 1 ) {
-        break;
+      if ( $this->_tokens[ $other_equals - 1 ]['column'] + 1 > $desired_column ) {
+        $desired_column = $this->_tokens[ $other_equals - 1 ]['column'] + 1;
       }
 
-      // set the $desired_column to the column with the greater value
-      if ( $this->_tokens[ $next_equals - 1 ]['column'] + 1 > $desired_column ) {
-        $desired_column = $this->_tokens[ $next_equals - 1 ]['column'] + 1;
-      }
-
-      $stack_pointer = $next_equals;
+      $stack_pointer = $other_equals;
 
     } // while there are tokens to check
 
     return $desired_column;
 
-  } // _followingMaximumDesiredColumn
-
-  /**
-   * @return int
-   */
-  private function _previousMaximumDesiredColumn() {
-
-    $stack_pointer  = $this->_stackPtr;
-    $desired_column = $this->_tokens[ $stack_pointer - 1 ]['column'] + 1;
-
-    // check preceding equals signs until a blank line is encountered
-    while ( $stack_pointer > 0 ) {
-
-      $previous_equals     = $this->_phpcsFile->findPrevious( T_EQUAL, $stack_pointer - 1 );
-      $current_line_number = $this->_tokens[ $stack_pointer ]['line'];
-
-      if ( !$previous_equals
-          || !$this->_startOfStatementIsFirstTokenOnLine( $stack_pointer )
-          || $current_line_number - $this->_tokens[ $previous_equals ]['line'] > 1) {
-        break;
-      }
-
-      if ( $this->_tokens[ $previous_equals - 1 ]['column'] + 1 > $desired_column ) {
-        $desired_column = $this->_tokens[ $previous_equals - 1 ]['column'] + 1;
-      }
-
-      $stack_pointer = $previous_equals;
-
-    } // while index is greater than 0
-
-    return $desired_column;
-
-  } // _previousMaximumDesiredColumn
+  } // _otherMaximumDesiredColumn
 
   /**
    * @param  int $correct_number_of_spaces
