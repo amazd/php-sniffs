@@ -178,6 +178,7 @@ class Behance_Sniffs_Operators_EqualsAlignmentSniff implements PHP_CodeSniffer_S
 
       if ( !$other_equals
           || !$this->_startOfStatementIsFirstTokenOnLine( $stack_pointer )
+          || !$this->_startOfStatementIsFirstTokenOnLine( $other_equals )
           || abs( $current_line_number - $this->_tokens[ $other_equals ]['line'] ) > 1) {
         break;
       }
