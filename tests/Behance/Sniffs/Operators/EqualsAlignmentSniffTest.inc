@@ -152,3 +152,18 @@ $i = 2;
 // will fail
 $i =  2;
 $i  = 2;
+
+// will pass
+$i = 1;
+for ( $i = 3; $i < 3; $i++ ) {}
+
+// will pass
+$this->_phpcsFile            = $phpcsFile;
+$this->_tokens               = $phpcsFile->getTokens();
+$this->_stackPtr             = $stackPtr;
+$this->_current_column       = $this->_tokens[ $stackPtr ]['column'];
+$this->_current_line         = $this->_tokens[ $stackPtr ]['line'];
+$this->_previous_equals_sign = $this->_phpcsFile->findPrevious( T_EQUAL, $this->_stackPtr - 1 );
+$code                        = 'EqualsAlignment';
+$next_token_column           = $this->_tokens[ $stackPtr + 2 ]['column'];
+$desired_column_after_equals = $this->_tokens[ $stackPtr ]['column'] + 2;
