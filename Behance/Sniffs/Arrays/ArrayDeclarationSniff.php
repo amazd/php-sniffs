@@ -65,7 +65,6 @@ class Behance_Sniffs_Arrays_ArrayDeclarationSniff implements PHP_CodeSniffer_Sni
       $arrayEnd   = $tokens[ $arrayStart ]['parenthesis_closer'];
     }
 
-    $keywordStart = $tokens[ $stackPtr ]['column'];
     $indentPtr    = $phpcsFile->findFirstOnLine( PHP_CodeSniffer_Tokens::$emptyTokens, $stackPtr, true );
     $indentStart  = $tokens[ $indentPtr ]['column'];
     $indentSpaces = $this->indent * $this->elementIndentLevel;
@@ -153,9 +152,9 @@ class Behance_Sniffs_Arrays_ArrayDeclarationSniff implements PHP_CodeSniffer_Sni
       } // while nextArrow
 
       if ( $valueCount > 0 ) {
-        $conditionCheck = $phpcsFile->findPrevious( [ T_OPEN_PARENTHESIS, T_SEMICOLON ], ($stackPtr - 1), null, false );
-
         //TODO: potentially re-enable this
+        // $conditionCheck = $phpcsFile->findPrevious( [ T_OPEN_PARENTHESIS, T_SEMICOLON ], ($stackPtr - 1), null, false );
+        //
         // if (($conditionCheck === false) || ($tokens[ $conditionCheck ]['line'] !== $tokens[ $stackPtr ]['line'])) {
         //   $error = 'Array with multiple values cannot be declared on a single line';
         //   $phpcsFile->addError($error, $stackPtr, 'SingleLineNotAllowed');
@@ -345,11 +344,12 @@ class Behance_Sniffs_Arrays_ArrayDeclarationSniff implements PHP_CodeSniffer_Sni
     // }
 
     if ( $keyUsed === false && !empty( $indices ) ) {
-      $count     = count( $indices );
-      $lastIndex = $indices[ ($count - 1) ]['value'];
-
-      $trailingContent = $phpcsFile->findPrevious( T_WHITESPACE, ($arrayEnd - 1), $lastIndex, true );
       //TODO: potentially re-enable this
+      //
+      // $count        = count( $indices );
+      // $lastIndex = $indices[ ($count - 1) ]['value'];
+      //
+      // $trailingContent = $phpcsFile->findPrevious( T_WHITESPACE, ($arrayEnd - 1), $lastIndex, true );
       // if ($tokens[ $trailingContent ]['code'] !== T_COMMA) {
       //   $error = 'Comma required after last value in array declaration';
       //   $phpcsFile->addError($error, $trailingContent, 'NoCommaAfterLast');
