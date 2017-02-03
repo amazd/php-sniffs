@@ -404,33 +404,32 @@ class Behance_Sniffs_Arrays_ArrayDeclarationSniff implements PHP_CodeSniffer_Sni
         ];
         $phpcsFile->addError( $error, $index['index'], 'KeyNotAligned', $data );
         continue;
-      } // if column !- indicesStart
+      } // if column != indicesStart
 
-      //TODO: re-enable this
-      // if ($tokens[ $index['arrow']]['column'] !== $arrowStart) {
-      //   $expected = ($arrowStart - (strlen($index['index_content']) + $tokens[ $index['index']]['column']));
-      //   $found  = ($tokens[ $index['arrow']]['column'] - (strlen($index['index_content']) + $tokens[ $index['index']]['column']));
+      if ( $tokens[ $index['arrow'] ]['column'] !== $arrowStart ) {
+        $expected = ( $arrowStart - ( mb_strlen( $index['index_content'] ) + $tokens[ $index['index'] ]['column'] ) );
+        $found    = ( $tokens[ $index['arrow'] ]['column'] - (mb_strlen( $index['index_content'] ) + $tokens[ $index['index'] ]['column'] ) );
 
-      //   $error = 'Array double arrow not aligned correctly; expected %s space(s) but found %s';
-      //   $data  = [
-      //         $expected,
-      //         $found,
-      //        ];
-      //   $phpcsFile->addError($error, $index['arrow'], 'DoubleArrowNotAligned', $data);
-      //   continue;
-      // }
+        $error = 'Array double arrow not aligned correctly; expected %s space(s) but found %s';
+        $data  = [
+            $expected,
+            $found,
+        ];
+        $phpcsFile->addError( $error, $index['arrow'], 'DoubleArrowNotAligned', $data );
+        continue;
+      } // if arrow column != arrowstart
 
-      // if ($tokens[ $index['value']]['column'] !== $valueStart) {
-      //   $expected = ($valueStart - (strlen($tokens[ $index['arrow']]['content']) + $tokens[ $index['arrow']]['column']));
-      //   $found  = ($tokens[ $index['value']]['column'] - (strlen($tokens[ $index['arrow']]['content']) + $tokens[ $index['arrow']]['column']));
+      if ( $tokens[ $index['value'] ]['column'] !== $valueStart ) {
+        $expected = ( $valueStart - (mb_strlen( $tokens[ $index['arrow'] ]['content'] ) + $tokens[ $index['arrow'] ]['column']));
+        $found    = ( $tokens[ $index['value'] ]['column'] - ( mb_strlen( $tokens[ $index['arrow'] ]['content'] ) + $tokens[ $index['arrow'] ]['column'] ) );
 
-      //   $error = 'Array value not aligned correctly; expected %s space(s) but found %s';
-      //   $data  = [
-      //         $expected,
-      //         $found,
-      //        ];
-      //   $phpcsFile->addError($error, $index['arrow'], 'ValueNotAligned', $data);
-      // }
+        $error = 'Array value not aligned correctly; expected %s space(s) but found %s';
+        $data  = [
+            $expected,
+            $found,
+        ];
+        $phpcsFile->addError( $error, $index['arrow'], 'ValueNotAligned', $data );
+      } // if arrow column != valuestart
 
       // Check each line ends in a comma.
       if ( !$this->_isArrayOpener( $tokens[ $index['value'] ] ) ) {
