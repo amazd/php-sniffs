@@ -121,23 +121,3 @@ $badMultilineAssocCommaSpacing = [
 $okArrWithTrailingComma = [
     1,
 ];
-
-$badMultilineAssocAlignment = [
-    'a'  => 1,
-    'b' =>  2,
-    'cds' => [
-        'a'  => 1,
-        'b' =>  2,
-        'cds' =>  3
-    ]
-];
-
-$goodMultilineAssocAlignment = [
-    'a'   => 1,
-    'b'   => 2,
-    'cds' => [
-        'a'   => 1,
-        'b'   => 2,
-        'cds' => 3
-    ]
-];
