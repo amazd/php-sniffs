@@ -146,3 +146,7 @@ $resume->method( 'getSectionsByKey' )
 $resume->method( 'getSectionsByKey' )
        ->with( $sub_entity_key )
        ->willReturn( [] );
+
+$resume->method( 'getSectionsByKey' )
+->with( $sub_entity_key )
+->willReturn( [] );
