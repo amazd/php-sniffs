@@ -121,3 +121,14 @@ $badMultilineAssocCommaSpacing = [
 $okArrWithTrailingComma = [
     1,
 ];
+
+$okArrWithTrailingComma = [
+    'test' => array( 'something', 'a thing' )
+];
+
+$gooArray = array(
+    'some_key' => array(
+        1, ( 3 + ( 5 + 2 ) )
+    )
+);
+

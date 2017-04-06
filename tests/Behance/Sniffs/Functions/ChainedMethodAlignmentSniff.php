@@ -29,6 +29,8 @@ class Behance_Sniffs_Functions_ChainedMethodAlignmentSniffTest extends AbstractS
         144  => 1,
         147  => 1,
         148  => 1,
+        151  => 1,
+        152  => 1,
     ];
 
   } // getErrorList
@@ -39,4 +41,4 @@ class Behance_Sniffs_Functions_ChainedMethodAlignmentSniffTest extends AbstractS
 
   } // getWarningList
 
-} // Behance_Sniffs_Functions_ChainedMethodAlignmentSniff
+} // Behance_Sniffs_Functions_ChainedMethodAlignmentSniffTest

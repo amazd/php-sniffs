@@ -20,9 +20,6 @@ class Behance_Sniffs_Arrays_ArrayDeclarationSniffTest extends AbstractSniffUnitT
         31  => 1,
         32  => 1,
         33  => 2,
-        20  => 1,
-        21  => 1,
-        22  => 2,
         36  => 1,
         37  => 1,
         38  => 2,
@@ -44,6 +41,7 @@ class Behance_Sniffs_Arrays_ArrayDeclarationSniffTest extends AbstractSniffUnitT
         99  => 1,
         113 => 1,
         118 => 1,
+        129 => 1,
     ];
 
   } // getErrorList
