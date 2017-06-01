@@ -104,9 +104,9 @@ class Behance_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniff
    */
   protected function _processDefinitionWhitespace( $phpcsFile, $stackPtr ) {
 
-    $tokens     = $phpcsFile->getTokens();
+    $tokens = $phpcsFile->getTokens();
 
-    $indices    = [
+    $indices = [
         'parenthesis_opener',
         'parenthesis_closer',
         'scope_opener'
@@ -174,9 +174,9 @@ class Behance_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniff
       $error = 'No whitespace found between opening parenthesis & first argument';
       $phpcsFile->addError( $error, $parenOpen + 1, static::INVALID_ARG_FORMAT );
     }
-    elseif ( strlen( $tokens[ $parenOpen + 1 ]['content'] ) > 1 ) {
+    elseif ( mb_strlen( $tokens[ $parenOpen + 1 ]['content'] ) > 1 ) {
       $error = 'Expected 1 space between opening parenthesis & first argument; found %s';
-      $data  = [ strlen( $tokens[ $parenOpen + 1 ]['content'] ) ];
+      $data  = [ mb_strlen( $tokens[ $parenOpen + 1 ]['content'] ) ];
       $phpcsFile->addError( $error, $parenOpen + 1, static::INVALID_ARG_FORMAT, $data );
     }
 
@@ -185,9 +185,9 @@ class Behance_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniff
       $error = 'No whitespace found between last argument & closing parenthesis';
       $phpcsFile->addError( $error, $parenClose, static::INVALID_ARG_FORMAT );
     }
-    elseif ( strlen( $tokens[ $parenClose - 1 ]['content'] ) > 1 ) {
+    elseif ( mb_strlen( $tokens[ $parenClose - 1 ]['content'] ) > 1 ) {
       $error = 'Expected 1 space between last argument & closing parenthesis; found %s';
-      $data  = [ strlen( $tokens[ $parenClose - 1 ]['content'] ) ];
+      $data  = [ mb_strlen( $tokens[ $parenClose - 1 ]['content'] ) ];
       $phpcsFile->addError( $error, $parenClose - 1, static::INVALID_ARG_FORMAT, $data );
     }
 
@@ -206,7 +206,7 @@ class Behance_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniff
    */
   protected function _processCurlyBraceNewlines( $phpcsFile, $stackPtr ) {
 
-    $tokens       = $phpcsFile->getTokens();
+    $tokens = $phpcsFile->getTokens();
 
     // interface functions have no curly braces!
     if ( !isset( $tokens[ $stackPtr ]['scope_opener'] ) ) {
@@ -249,7 +249,7 @@ class Behance_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniff
 
       if ( $token['code'] !== T_WHITESPACE && !$whitespaceErrorAdded ) {
         $whitespaceErrorAdded = true;
-        $error = 'Non-whitespace found before closing curly brace';
+        $error                = 'Non-whitespace found before closing curly brace';
         $phpcsFile->addError( $error, $tracePtr, static::INCORRECT_NEWLINES );
       }
 
@@ -306,9 +306,9 @@ class Behance_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniff
 
     $doubleUnderAllowed = array_merge( $this->magicMethods, $this->doubleUnderscoreAllowedMethods );
 
-    if ( strpos( $fxName, '__' ) === 0 ) {
+    if ( mb_strpos( $fxName, '__' ) === 0 ) {
 
-      if ( in_array( strtolower( substr( $fxName, 2 ) ), $doubleUnderAllowed ) ) {
+      if ( in_array( mb_strtolower( mb_substr( $fxName, 2 ) ), $doubleUnderAllowed ) ) {
         return;
       }
       else {
@@ -327,7 +327,7 @@ class Behance_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniff
           continue;
         }
 
-        if ( strpos( $fxName, $prefix ) === 0 && ( !in_array( $fxName, $this->prefixExemptions[ $scope ] )) ) {
+        if ( mb_strpos( $fxName, $prefix ) === 0 && ( !in_array( $fxName, $this->prefixExemptions[ $scope ] )) ) {
           $error = 'Expected no prefix for %s function "%s"; found "%s"';
           $phpcsFile->addError( $error, $stackPtr, static::INCORRECT_PREFIX, [ $scope, $fxName, $prefix ] );
           return;
@@ -337,7 +337,7 @@ class Behance_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniff
 
     } // if empty expectedPrefix
 
-    elseif ( strpos( $fxName, $expectedPrefix ) !== 0 ) {
+    elseif ( mb_strpos( $fxName, $expectedPrefix ) !== 0 ) {
 
       if ( isset( $this->prefixExemptions[ $scope ] ) && in_array( $fxName, $this->prefixExemptions[ $scope ] ) ) {
         return;
@@ -346,7 +346,7 @@ class Behance_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniff
       $error = 'Expected prefix "%s" for %s function "%s" not found';
       $data  = [ $expectedPrefix, $scope, $fxName ];
 
-      if ( strtolower( $scope ) === 'protected' ) {
+      if ( mb_strtolower( $scope ) === 'protected' ) {
         return $phpcsFile->addWarning( $error, $stackPtr, static::INCORRECT_PREFIX, $data );
       }
 
@@ -371,7 +371,12 @@ class Behance_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniff
         T_WHITESPACE,
     ];
 
-    $end  = $phpcsFile->findNext( $find, ( $stackPtr + 1 ), null, true, null, true );
+    $end = $phpcsFile->findNext( $find, ( $stackPtr + 1 ), null, true, null, true );
+
+    // php change for return type, if ? is in front, make sure next argument is return type
+    if ( $tokens[ $end ]['code'] === T_NULLABLE ) {
+      $end++;
+    }
 
     if ( $tokens[ $end ]['code'] !== T_RETURN_TYPE ) {
       $error = 'Expected return value after colon';

@@ -96,6 +96,20 @@ function usableReturnValue() : string {
 
 function anotherUsableReturnValue() : string {}
 
+function usableReturnValue() : ?string {
+
+  $a;
+
+} // usableReturnValue
+
+function anotherUsableReturnValue() : ?string {}
+
+function notUsableReturnValue() : ? string {}
+
+function anotherUsableReturnValue() : void {}
+
+function anotherUsableReturnValue() : ? {}
+
 function yetAnotherUsableReturnValue() : SimpleXMLElement {}
 
 function yetAnotherUsableReturnValue() : \SimpleXMLElement {}
