@@ -31,6 +31,7 @@ class Behance_Sniffs_Functions_FunctionDeclarationSniffTest extends AbstractSnif
         89 => 1,
         107 => 1,
         111 => 1,
+        119 => 1,
     ];
 
   } // getErrorList
