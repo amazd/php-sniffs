@@ -375,8 +375,16 @@ class Behance_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniff
 
     // php change for return type, if ? is in front, make sure next argument is return type
     if ( $tokens[ $end ]['code'] === T_NULLABLE ) {
-      $end++;
-    }
+
+      if ( $tokens[ $end + 1 ]['code'] === T_WHITESPACE ) {
+        $error = 'No space allowed between nullable and return type';
+        $phpcsFile->addError( $error, $end, $tag );
+        return;
+      }
+
+      $end = $phpcsFile->findNext( $find, ( $end + 1 ), null, true, null, true );
+
+    } // if type is nullable
 
     if ( $tokens[ $end ]['code'] !== T_RETURN_TYPE ) {
       $error = 'Expected return value after colon';

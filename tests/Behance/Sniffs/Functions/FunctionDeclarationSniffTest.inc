@@ -114,4 +114,10 @@ function yetAnotherUsableReturnValue() : SimpleXMLElement {}
 
 function yetAnotherUsableReturnValue() : \SimpleXMLElement {}
 
+function yetAnotherUsableReturnValueOrNull() : ?\SimpleXMLElement {}
+
+function thisWillFailBecauseSpaceBetweenNullableAndNameSpace() : ? \SimpleXMLElement {}
+
 function yetAnotherUsableReturnValueWithNamespaces() : Behance\SimpleXMLElement {}
+
+function yetAnotherUsableReturnValueWithNamespacesOrNull() : ?Behance\SimpleXMLElement {}
