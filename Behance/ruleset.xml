@@ -59,6 +59,12 @@
     <exclude name="Squiz.Functions.MultiLineFunctionDeclaration.SpaceAfterFunction"/>
   </rule>
 
+  <rule ref="Generic.PHP.ForbiddenFunctions">
+    <properties>
+      <property name="forbiddenFunctions" type="array" value="sizeof=>count,delete=>unset"/>
+    </properties>
+  </rule>
+
   <rule ref="PSR2.ControlStructures.SwitchDeclaration">
     <properties>
       <property name="indent" value="2"/>
