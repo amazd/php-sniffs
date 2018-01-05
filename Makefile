@@ -12,8 +12,6 @@ ci:
 	# Static Analysis
 	./vendor/bin/phpcs --standard=./Behance -s -n $(SPACE_SEPARATED_CHANGED_PHP_FILES)
 	./vendor/bin/phpcpd $(SPACE_SEPARATED_CHANGED_PHP_FILES)
-	# @todo: Re-enable phpmd when unused variable $testFile in test suite can be refactored
-	# ./vendor/bin/phpmd $(COMMA_SEPARATED_CHANGED_PHP_FILES)  text vendor/behance/phpmd-rules/phpmd.xml.dist
 
 	# Tests
 	./vendor/bin/phpunit
