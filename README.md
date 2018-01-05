@@ -1,4 +1,4 @@
-Behance PHP_CodeSniffer Sniffs
+Behance PHP_CodeSniffer Sniffs ![ci](https://travis-ci.org/behance/php-sniffs.svg?branch=master)
 ==========
 
 Something smells bad.
