@@ -6,17 +6,10 @@
         "squizlabs/php_codesniffer": "^2.5.0"
     },
     "require-dev": {
-        "behance/phpmd-rules": "~0.0.3",
         "jakub-onderka/php-parallel-lint": "~0.7",
         "phpunit/phpunit": "~3.7",
         "sebastian/phpcpd": "^2.0.0"
     },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "git@github.com:behance/phpmd-rules.git"
-        }
-    ],
     "autoload": {
         "classmap": ["tests"]
     },
