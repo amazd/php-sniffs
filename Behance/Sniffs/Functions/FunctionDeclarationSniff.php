@@ -36,9 +36,9 @@ class Behance_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniff
           'tearDown'  // phpunit
       ],
       'public' => [
-          '_start_work', // gearman workers
-          '_end_work',   // gearman workers
-          '_flush_cache', // gearman workers
+          '_start_work', // workers
+          '_end_work',   // workers
+          '_flush_cache', // workers
       ],
       'private' => []
   ];
