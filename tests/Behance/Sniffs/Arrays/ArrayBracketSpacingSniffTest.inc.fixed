@@ -1,15 +1,15 @@
 <?php
 $arrayPush[] = 'ok';
 $ok = $arr[$var]['string'][1][true][false];
-$badVarSpacing = $arr[ $var ];
+$badVarSpacing = $arr[$var];
 $okMultiline = $arr[funcCall(
     'a',
     'b'
 )];
-$badMultiline = $arr[ funcCall(
+$badMultiline = $arr[funcCall(
     'a',
     'b'
-) ];
+)];
 $ignoreMultiline = $arr[
     'string'
 ];
