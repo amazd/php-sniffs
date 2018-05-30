@@ -10,8 +10,8 @@ class Behance_Sniffs_Arrays_ArrayBracketSpacingSniff implements PHP_CodeSniffer_
   public function register() {
 
     return [
-        T_OPEN_SQUARE_BRACKET,
-        T_CLOSE_SQUARE_BRACKET,
+      T_OPEN_SQUARE_BRACKET,
+      T_CLOSE_SQUARE_BRACKET,
     ];
 
   } // register
@@ -54,7 +54,7 @@ class Behance_Sniffs_Arrays_ArrayBracketSpacingSniff implements PHP_CodeSniffer_
     }
 
     if ( $stackPtr + $direction !== $nonSpace ) {
-      $should_fix = $phpcsFile->addFixableError( 'Expected 0 spaces %s bracket', $stackPtr, 'Spacing' . $code, [ $position ] );
+      $should_fix = $phpcsFile->addFixableError( 'Expected 0 spaces %s bracket', $stackPtr, 'Spacing' . $code, [$position] );
       if ( $should_fix ) {
         $phpcsFile->fixer->replaceToken( $stackPtr + $direction, '' );
       }

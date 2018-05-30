@@ -82,7 +82,6 @@
   <rule ref="Behance.Arrays.ArrayDeclaration">
     <properties>
       <property name="indent" value="2"/>
-      <property name="elementIndentLevel" value="2"/>
     </properties>
   </rule>
   <rule ref="Behance.Arrays.ShortHandArrayOnly"/>
