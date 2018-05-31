@@ -18,7 +18,7 @@ class Behance_Sniffs_Operators_OperatorSpacingSniff implements PHP_CodeSniffer_S
    * @var array
    *
    * Tokens before an operator that *can* be unary that would indicate
-   * that it's actually being used in a unary context, will be defined in process().
+   * that it's actually being used in a unary context, will be defined in process()
    */
   protected $_unaryIndicators;
 
