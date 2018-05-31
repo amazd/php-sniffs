@@ -77,7 +77,6 @@
   <rule ref="Behance.Formatting.BlankLine"/>
   <rule ref="Behance.Functions.ChainedMethodAlignment"/>
   <rule ref="Behance.Functions.FunctionMbString"/>
-  <rule ref="Behance.Gotchas.BaseException"/>
   <rule ref="Behance.Keywords.AlphabeticalUse"/>
   <rule ref="Behance.Keywords.KeywordParensSpacing"/>
   <rule ref="Behance.Keywords.OneUsePerStatement"/>
