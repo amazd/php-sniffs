@@ -1,4 +1,4 @@
-SPACE_SEPARATED_CHANGED_PHP_FILES := $(shell git diff HEAD HEAD^ --name-only -- "./*.php" "./*composer.*")
+SPACE_SEPARATED_CHANGED_PHP_FILES := $(shell git diff HEAD HEAD^ --name-only --diff-filter=ACMRTUXB -- "./*.php" "./*composer.*")
 COMMA_SEPARATED_CHANGED_PHP_FILES := $(shell echo $(SPACE_SEPARATED_CHANGED_PHP_FILES) | sed 's/ /,/g' )
 
 .PHONY: ci
