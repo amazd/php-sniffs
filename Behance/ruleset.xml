@@ -22,15 +22,7 @@
     <!-- TODO: Reconsider for inclusion -->
     <exclude name="PSR2.Namespaces.NamespaceDeclaration.BlankLineAfter"/>
 
-    <!--
-      Excluded because this incorrectly reports properties that come after a
-      onevar style declaration of a class property that is a multiline array
-      TODO: patch phpcs proper
-    -->
-    <exclude name="Generic.WhiteSpace.ScopeIndent.Incorrect"/>
-
     <!-- Generic standards that are inherited via PSR2 -->
-    <exclude name="Generic.ControlStructures.InlineControlStructure"/>
     <exclude name="Generic.Files.LineLength"/>
 
     <!-- Squiz standards that are inherited via PSR2 -->
