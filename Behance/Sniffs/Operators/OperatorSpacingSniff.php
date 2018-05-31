@@ -18,7 +18,7 @@ class Behance_Sniffs_Operators_OperatorSpacingSniff implements PHP_CodeSniffer_S
    * @var array
    *
    * Tokens before an operator that *can* be unary that would indicate
-   * that it's actually being used in a unary context, will be defined in process()
+   * that it's actually being used in a unary context, will be defined in process().
    */
   protected $_unaryIndicators;
 
@@ -124,8 +124,8 @@ class Behance_Sniffs_Operators_OperatorSpacingSniff implements PHP_CodeSniffer_S
    */
   private function _processAmpersand( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
 
-    $tokens           = $phpcsFile->getTokens();
-    $allowedTokens    = [
+    $tokens        = $phpcsFile->getTokens();
+    $allowedTokens = [
         T_EQUAL,
         T_COMMA,
         T_DOUBLE_ARROW,
@@ -225,7 +225,7 @@ class Behance_Sniffs_Operators_OperatorSpacingSniff implements PHP_CodeSniffer_S
         T_LNUMBER,
         T_STRING
     ] );
-    $before     = $phpcsFile->findPrevious( $prevTokens, $stackPtr - 1, null, false, null, true );
+    $before = $phpcsFile->findPrevious( $prevTokens, $stackPtr - 1, null, false, null, true );
 
     // if any of these are immediately before the '-', then it should be in a unary context
     if ( !in_array( $tokens[ $before ]['code'], $this->_unaryIndicators ) ) {
