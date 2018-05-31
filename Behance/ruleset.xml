@@ -27,16 +27,13 @@
 
     <!-- Squiz standards that are inherited via PSR2 -->
     <exclude name="Squiz.ControlStructures.ControlSignature"/>
-    <exclude name="Squiz.Functions.FunctionDeclarationArgumentSpacing.SpacingBeforeClose"/>
-    <exclude name="Squiz.Functions.FunctionDeclarationArgumentSpacing.SpacingAfterOpen"/>
-    <exclude name="Squiz.Functions.FunctionDeclarationArgumentSpacing.SpacingAfterOpenHint"/>
     <exclude name="Squiz.Functions.MultiLineFunctionDeclaration.BraceOnSameLine"/>
+    <exclude name="Squiz.Functions.MultiLineFunctionDeclaration.SpaceAfterFunction"/>
     <exclude name="Squiz.Classes.ValidClassName.NotCamelCaps"/>
     <exclude name="Squiz.Classes.ClassDeclaration.CloseBraceSameLine"/>
     <!-- TODO: ControlStructureSpacing enforces no blank lines after control structure spacing; reconsider -->
     <exclude name="Squiz.WhiteSpace.ControlStructureSpacing"/>
     <exclude name="Squiz.WhiteSpace.ScopeClosingBrace.ContentBefore"/>
-    <exclude name="Squiz.Functions.MultiLineFunctionDeclaration.SpaceAfterFunction"/>
   </rule>
 
   <rule ref="Generic.PHP.ForbiddenFunctions">
@@ -63,6 +60,12 @@
     </properties>
   </rule>
 
+  <rule ref="Squiz.Functions.MultiLineFunctionDeclaration">
+    <properties>
+      <property name="indent" value="2"/>
+    </properties>
+  </rule>
+
   <!-- Custom standards -->
   <rule ref="Behance.Arrays.ArrayBracketSpacing"/>
   <rule ref="Behance.Arrays.ArrayDeclaration"/>
@@ -73,7 +76,6 @@
   <rule ref="Behance.ControlStructures.Ternary"/>
   <rule ref="Behance.Formatting.BlankLine"/>
   <rule ref="Behance.Functions.ChainedMethodAlignment"/>
-  <rule ref="Behance.Functions.FunctionDeclaration"/>
   <rule ref="Behance.Functions.FunctionMbString"/>
   <rule ref="Behance.Gotchas.BaseException"/>
   <rule ref="Behance.Keywords.AlphabeticalUse"/>
