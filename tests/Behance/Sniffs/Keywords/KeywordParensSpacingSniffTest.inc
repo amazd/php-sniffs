@@ -90,3 +90,7 @@ require_once $oops;
 
 die;
 exit;
+
+empty(
+  $ok
+);
