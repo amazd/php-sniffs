@@ -2,7 +2,7 @@
 
 class Behance_Sniffs_Operators_OperatorSpacingSniffTest extends AbstractSniffUnitTest {
 
-  public function getErrorList( $testFile ) {
+  public function getErrorList($testFile) {
 
     return [
       5 => 4,
@@ -80,7 +80,7 @@ class Behance_Sniffs_Operators_OperatorSpacingSniffTest extends AbstractSniffUni
 
   } // getErrorList
 
-  public function getWarningList( $testFile ) {
+  public function getWarningList($testFile) {
 
     return [];
 

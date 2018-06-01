@@ -2,7 +2,7 @@
 
 class Behance_Sniffs_Keywords_KeywordParensSpacingSniffTest extends AbstractSniffUnitTest {
 
-  public function getErrorList( $testFile ) {
+  public function getErrorList($testFile) {
 
     return [
       4 => 1,
@@ -73,7 +73,7 @@ class Behance_Sniffs_Keywords_KeywordParensSpacingSniffTest extends AbstractSnif
 
   } // getErrorList
 
-  public function getWarningList( $testFile ) {
+  public function getWarningList($testFile) {
 
     return [];
 

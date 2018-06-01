@@ -26,12 +26,12 @@ class Behance_Sniffs_Arrays_ArrayBracketSpacingSniff implements PHP_CodeSniffer_
    *
    * @return void
    */
-  public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
+  public function process(PHP_CodeSniffer_File $phpcsFile, $stackPtr) {
 
     $tokens = $phpcsFile->getTokens();
 
-    if ( $tokens[$stackPtr]['code'] === T_OPEN_SQUARE_BRACKET ) {
-      $nonSpace   = $phpcsFile->findNext( PHP_CodeSniffer_Tokens::$emptyTokens, ($stackPtr + 1), null, true );
+    if ($tokens[$stackPtr]['code'] === T_OPEN_SQUARE_BRACKET) {
+      $nonSpace   = $phpcsFile->findNext(PHP_CodeSniffer_Tokens::$emptyTokens, ($stackPtr + 1), null, true);
       $direction  = 1;
       $position   = 'after opening';
       $code       = 'AfterOpen';
@@ -40,7 +40,7 @@ class Behance_Sniffs_Arrays_ArrayBracketSpacingSniff implements PHP_CodeSniffer_
 
     else {
 
-      $nonSpace   = $phpcsFile->findPrevious( PHP_CodeSniffer_Tokens::$emptyTokens, ($stackPtr - 1), null, true );
+      $nonSpace   = $phpcsFile->findPrevious(PHP_CodeSniffer_Tokens::$emptyTokens, ($stackPtr - 1), null, true);
       $direction  = -1;
       $position   = 'before closing';
       $code       = 'BeforeClose';
@@ -49,14 +49,14 @@ class Behance_Sniffs_Arrays_ArrayBracketSpacingSniff implements PHP_CodeSniffer_
     } // else T_CLOSE_SQUARE_BRACKET
 
     // don't deal with multiline array dereferencing
-    if ( $tokens[$nonSpace]['line'] !==  $tokens[$stackPtr]['line'] ) {
+    if ($tokens[$nonSpace]['line'] !==  $tokens[$stackPtr]['line']) {
       return;
     }
 
-    if ( $stackPtr + $direction !== $nonSpace ) {
-      $should_fix = $phpcsFile->addFixableError( 'Expected 0 spaces %s bracket', $stackPtr, 'Spacing' . $code, [$position] );
-      if ( $should_fix ) {
-        $phpcsFile->fixer->replaceToken( $stackPtr + $direction, '' );
+    if ($stackPtr + $direction !== $nonSpace) {
+      $should_fix = $phpcsFile->addFixableError('Expected 0 spaces %s bracket', $stackPtr, 'Spacing' . $code, [$position]);
+      if ($should_fix) {
+        $phpcsFile->fixer->replaceToken($stackPtr + $direction, '');
       }
     } // if stackPtr
 
