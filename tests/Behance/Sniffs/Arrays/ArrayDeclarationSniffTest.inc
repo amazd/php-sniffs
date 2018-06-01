@@ -130,3 +130,12 @@ $okArrWithTrailingComma = [
   'test' => array('something', 'a thing'),
   'testitup' => array('something', 'a thing'),
 ];
+
+$uhohBadArrowsComingUp = [
+  'test'     => 1,
+  'testitup' => 2,
+  'tests' =>    3,
+  'come'  =>    4,
+  'on'  =>      5,
+  'fqhgwadssas'  => 6,
+];
