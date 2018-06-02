@@ -96,7 +96,7 @@ class Behance_Sniffs_Operators_OperatorSpacingSniff extends Behance_AbstractSnif
   protected function _processUnary(PHP_CodeSniffer_File $phpcsFile, $stackPtr) {
 
     $tokens = $phpcsFile->getTokens();
-    $code   = $tokens[$stackPtr]['code'];
+    $code = $tokens[$stackPtr]['code'];
 
 
     if ($code === T_BITWISE_AND) {
@@ -127,7 +127,7 @@ class Behance_Sniffs_Operators_OperatorSpacingSniff extends Behance_AbstractSnif
    */
   private function _processAmpersand(PHP_CodeSniffer_File $phpcsFile, $stackPtr) {
 
-    $tokens        = $phpcsFile->getTokens();
+    $tokens = $phpcsFile->getTokens();
     $allowedTokens = [
       T_EQUAL,
       T_COMMA,
@@ -156,7 +156,7 @@ class Behance_Sniffs_Operators_OperatorSpacingSniff extends Behance_AbstractSnif
    */
   private function _processIncDec(PHP_CodeSniffer_File $phpcsFile, $stackPtr) {
 
-    $tokens    = $phpcsFile->getTokens();
+    $tokens = $phpcsFile->getTokens();
     $nextToken = $phpcsFile->findNext(T_WHITESPACE, $stackPtr + 1, null, true);
 
     // if ++ or -- is before a $, it's prefix, otherwise postfix
@@ -181,7 +181,7 @@ class Behance_Sniffs_Operators_OperatorSpacingSniff extends Behance_AbstractSnif
    */
   private function _processMinus(PHP_CodeSniffer_File $phpcsFile, $stackPtr) {
 
-    $tokens     = $phpcsFile->getTokens();
+    $tokens = $phpcsFile->getTokens();
     $prevTokens = array_merge($this->_unaryIndicators, [
       T_CLOSE_PARENTHESIS,
       T_CLOSE_SQUARE_BRACKET,

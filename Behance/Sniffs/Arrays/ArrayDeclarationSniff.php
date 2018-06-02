@@ -35,13 +35,13 @@ class Behance_Sniffs_Arrays_ArrayDeclarationSniff extends Behance_AbstractSniff 
     $tokens = $phpcsFile->getTokens();
 
     $arrayStart = $tokens[$stackPtr]['bracket_opener'];
-    $arrayEnd   = $tokens[$arrayStart]['bracket_closer'];
+    $arrayEnd = $tokens[$arrayStart]['bracket_closer'];
 
-    $indentPtr    = $phpcsFile->findFirstOnLine(PHP_CodeSniffer_Tokens::$emptyTokens, $stackPtr, true);
-    $indentStart  = $tokens[$indentPtr]['column'];
+    $indentPtr = $phpcsFile->findFirstOnLine(PHP_CodeSniffer_Tokens::$emptyTokens, $stackPtr, true);
+    $indentStart = $tokens[$indentPtr]['column'];
     $indentSpaces = $this->indent;
-    $content      = $phpcsFile->findNext(T_WHITESPACE, ($arrayStart + 1), ($arrayEnd + 1), true);
-    $lastContent  = $phpcsFile->findPrevious(T_WHITESPACE, ($arrayEnd - 1), $arrayStart, true);
+    $content = $phpcsFile->findNext(T_WHITESPACE, ($arrayStart + 1), ($arrayEnd + 1), true);
+    $lastContent = $phpcsFile->findPrevious(T_WHITESPACE, ($arrayEnd - 1), $arrayStart, true);
 
     if ($content === $arrayEnd) {
       $this->_ensureNoSpaceAfter($phpcsFile, $arrayStart, 'array open', 'ArrayOpen');
@@ -55,7 +55,7 @@ class Behance_Sniffs_Arrays_ArrayDeclarationSniff extends Behance_AbstractSniff 
 
     // Check the closing bracket is on a new line.
     if ($tokens[$lastContent]['line'] == ($tokens[$arrayEnd]['line'])) {
-      $error      = 'Closer of array declaration must be on a new line';
+      $error = 'Closer of array declaration must be on a new line';
       $should_fix = $phpcsFile->addFixableError($error, $arrayEnd, 'CloseBraceNewLine');
       if ($should_fix) {
         $phpcsFile->fixer->addContentBefore($arrayEnd, $phpcsFile->eolChar);
@@ -65,12 +65,12 @@ class Behance_Sniffs_Arrays_ArrayDeclarationSniff extends Behance_AbstractSniff 
       $this->_ensureAlignment($phpcsFile, $arrayEnd, $indentStart - 1, 'CloseBraceNotAligned', 'Closer of array');
     } // elseif arrayEnd column !== indentStart
 
-    $nextToken  = $stackPtr;
-    $lastComma  = $stackPtr;
-    $keyUsed    = false;
+    $nextToken = $stackPtr;
+    $lastComma = $stackPtr;
+    $keyUsed = false;
     $singleUsed = false;
-    $lastToken  = '';
-    $indices    = [];
+    $lastToken = '';
+    $indices = [];
 
     // Find all the double arrows that reside in this scope.
     for ($nextToken = ($stackPtr + 1); $nextToken < $arrayEnd + 1; $nextToken++) {
@@ -103,8 +103,8 @@ class Behance_Sniffs_Arrays_ArrayDeclarationSniff extends Behance_AbstractSniff 
           } // while valueContent === nextToken
 
           $valueContent = $phpcsFile->findNext(T_WHITESPACE, ($valueContent + 1), $nextToken, true);
-          $indices[]    = ['value' => $valueContent];
-          $singleUsed   = true;
+          $indices[] = ['value' => $valueContent];
+          $singleUsed = true;
         } // if !keyUsed
 
         $lastToken = T_CLOSE_SHORT_ARRAY;
@@ -142,8 +142,8 @@ class Behance_Sniffs_Arrays_ArrayDeclarationSniff extends Behance_AbstractSniff 
           } // while valueContent === nextToken
 
           $valueContent = $phpcsFile->findNext(T_WHITESPACE, ($valueContent + 1), $nextToken, true);
-          $indices[]    = ['value' => $valueContent];
-          $singleUsed   = true;
+          $indices[] = ['value' => $valueContent];
+          $singleUsed = true;
         } // if !keyUsed
 
         $lastToken = T_COMMA;
@@ -162,8 +162,8 @@ class Behance_Sniffs_Arrays_ArrayDeclarationSniff extends Behance_AbstractSniff 
 
         $currentEntry['index'] = $phpcsFile->findNext(PHP_CodeSniffer_Tokens::$emptyTokens, $lastComma + 1, $arrayEnd, true);
         $currentEntry['value'] = $phpcsFile->findNext([T_WHITESPACE], ($nextToken + 1), $arrayEnd, true);
-        $indices[]             = $currentEntry;
-        $lastToken             = T_DOUBLE_ARROW;
+        $indices[] = $currentEntry;
+        $lastToken = T_DOUBLE_ARROW;
       } // if code = T_DOUBLE_ARROW
     } // for nextToken
 
@@ -175,8 +175,8 @@ class Behance_Sniffs_Arrays_ArrayDeclarationSniff extends Behance_AbstractSniff 
     }
     elseif (count($indices) === 1 && $lastToken === T_COMMA) {
       // There may be another array value without a comma.
-      $exclude     = PHP_CodeSniffer_Tokens::$emptyTokens;
-      $exclude[]   = T_COMMA;
+      $exclude = PHP_CodeSniffer_Tokens::$emptyTokens;
+      $exclude[] = T_COMMA;
       $nextContent = $phpcsFile->findNext($exclude, ($indices[0]['value'] + 1), $arrayEnd, true);
       if ($nextContent === false) {
         $singleValue = true;
@@ -201,7 +201,7 @@ class Behance_Sniffs_Arrays_ArrayDeclarationSniff extends Behance_AbstractSniff 
       if (!isset($index['index'])) {
         // Array value only.
         if (($tokens[$index['value']]['line'] === $tokens[$stackPtr]['line']) && ($numValues > 1)) {
-          $error      = 'The first value in a multi-value array must be on a new line';
+          $error = 'The first value in a multi-value array must be on a new line';
           $should_fix = $phpcsFile->addFixableError($error, $index['value'], 'FirstValueNoNewline');
           if ($should_fix) {
             $phpcsFile->fixer->addContentBefore($index['value'], $phpcsFile->eolChar);
@@ -212,7 +212,7 @@ class Behance_Sniffs_Arrays_ArrayDeclarationSniff extends Behance_AbstractSniff 
       } // if index[index]
 
       if ($tokens[$index['index']]['line'] === $tokens[$stackPtr]['line']) {
-        $error      = 'The first index in a multi-value array must be on a new line';
+        $error = 'The first index in a multi-value array must be on a new line';
         $should_fix = $phpcsFile->addFixableError($error, $index['index'], 'FirstIndexNoNewline');
         if ($should_fix) {
           $phpcsFile->fixer->addContentBefore($index['index'], $phpcsFile->eolChar);
@@ -231,7 +231,7 @@ class Behance_Sniffs_Arrays_ArrayDeclarationSniff extends Behance_AbstractSniff 
         for ($i = ($index['value'] + 1); $i < $arrayEnd; $i++) {
           // Skip bracketed statements, like function calls.
           if ($tokens[$i]['code'] === T_OPEN_PARENTHESIS) {
-            $i         = $tokens[$i]['parenthesis_closer'];
+            $i = $tokens[$i]['parenthesis_closer'];
             $valueLine = $tokens[$i]['line'];
             continue;
           }
@@ -262,7 +262,7 @@ class Behance_Sniffs_Arrays_ArrayDeclarationSniff extends Behance_AbstractSniff 
     // Check if there are multiple values. If so, then it has to be multiple lines
     // unless it is contained inside a function call or condition.
     $valueCount = 0;
-    $commas     = [];
+    $commas = [];
     for ($i = ($arrayStart + 1); $i < $arrayEnd; $i++) {
       // Skip bracketed statements, like function calls.
       if ($tokens[$i]['code'] === T_OPEN_PARENTHESIS) {
@@ -324,8 +324,8 @@ class Behance_Sniffs_Arrays_ArrayDeclarationSniff extends Behance_AbstractSniff 
       return false;
     }
 
-    $error      = $content_type . ' not aligned correctly; expected %s spaces but found %s';
-    $data       = [$expected_spaces, $actual_spaces];
+    $error = $content_type . ' not aligned correctly; expected %s spaces but found %s';
+    $data = [$expected_spaces, $actual_spaces];
     $should_fix = $phpcsFile->addFixableError($error, $token, $errCode, $data);
     if ($should_fix) {
       $spaces_string = str_repeat(' ', $expected_spaces);

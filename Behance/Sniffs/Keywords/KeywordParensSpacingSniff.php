@@ -42,7 +42,7 @@ class Behance_Sniffs_Keywords_KeywordParensSpacingSniff implements PHP_CodeSniff
     $tokens = $phpcsFile->getTokens();
 
     $nextNonEmpty = $phpcsFile->findNext(PHP_CodeSniffer_Tokens::$emptyTokens, ($stackPtr + 1), null, true);
-    $hasNoParens  = $tokens[$nextNonEmpty]['code'] !== T_OPEN_PARENTHESIS;
+    $hasNoParens = $tokens[$nextNonEmpty]['code'] !== T_OPEN_PARENTHESIS;
 
     if ($hasNoParens) {
       $code = $tokens[$stackPtr]['code'];
@@ -57,7 +57,7 @@ class Behance_Sniffs_Keywords_KeywordParensSpacingSniff implements PHP_CodeSniff
     } // if hasNoParens
 
     if ($tokens[$stackPtr + 1]['code'] !== T_OPEN_PARENTHESIS) {
-      $error      = 'Expected no space before opening parenthesis';
+      $error = 'Expected no space before opening parenthesis';
       $should_fix = $phpcsFile->addFixableError($error, $stackPtr + 1, 'NoSpaceBeforeOpenParens');
       if ($should_fix) {
         $phpcsFile->fixer->replaceToken($stackPtr + 1, '');
@@ -73,18 +73,18 @@ class Behance_Sniffs_Keywords_KeywordParensSpacingSniff implements PHP_CodeSniff
     }
 
     if ($openingSpace === T_WHITESPACE && $tokens[$stackPtr + 2]['content'] !== $phpcsFile->eolChar) {
-      $error      = 'Expected no space after opening parenthesis';
+      $error = 'Expected no space after opening parenthesis';
       $should_fix = $phpcsFile->addFixableError($error, $stackPtr + 2, 'NoSpaceAfterOpenParens');
       if ($should_fix) {
         $phpcsFile->fixer->replaceToken($stackPtr + 2, '');
       }
     } // if whitespace
 
-    $closeParens  = $phpcsFile->findNext(T_CLOSE_PARENTHESIS, $stackPtr + 1);
+    $closeParens = $phpcsFile->findNext(T_CLOSE_PARENTHESIS, $stackPtr + 1);
     $closeContent = $phpcsFile->findPrevious(PHP_CodeSniffer_Tokens::$emptyTokens, ($closeParens - 1), null, true);
 
     if ($tokens[$closeContent]['line'] === $tokens[$closeParens]['line'] && $closeParens - $closeContent !== 1) {
-      $error      = 'Expected no space before close parenthesis';
+      $error = 'Expected no space before close parenthesis';
       $should_fix = $phpcsFile->addFixableError($error, $closeParens, 'NoSpaceBeforeCloseParens');
       if ($should_fix) {
         $phpcsFile->fixer->replaceToken($closeParens - 1, '');

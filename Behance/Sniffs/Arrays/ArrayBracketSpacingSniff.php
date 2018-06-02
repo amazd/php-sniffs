@@ -31,25 +31,25 @@ class Behance_Sniffs_Arrays_ArrayBracketSpacingSniff implements PHP_CodeSniffer_
     $tokens = $phpcsFile->getTokens();
 
     if ($tokens[$stackPtr]['code'] === T_OPEN_SQUARE_BRACKET) {
-      $nonSpace   = $phpcsFile->findNext(PHP_CodeSniffer_Tokens::$emptyTokens, ($stackPtr + 1), null, true);
-      $direction  = 1;
-      $position   = 'after opening';
-      $code       = 'AfterOpen';
+      $nonSpace = $phpcsFile->findNext(PHP_CodeSniffer_Tokens::$emptyTokens, ($stackPtr + 1), null, true);
+      $direction = 1;
+      $position = 'after opening';
+      $code = 'AfterOpen';
       $otherToken = T_CLOSE_SQUARE_BRACKET;
     } // if T_OPEN_SQUARE_BRACKET
 
     else {
 
-      $nonSpace   = $phpcsFile->findPrevious(PHP_CodeSniffer_Tokens::$emptyTokens, ($stackPtr - 1), null, true);
-      $direction  = -1;
-      $position   = 'before closing';
-      $code       = 'BeforeClose';
+      $nonSpace = $phpcsFile->findPrevious(PHP_CodeSniffer_Tokens::$emptyTokens, ($stackPtr - 1), null, true);
+      $direction = -1;
+      $position = 'before closing';
+      $code = 'BeforeClose';
       $otherToken = T_OPEN_SQUARE_BRACKET;
 
     } // else T_CLOSE_SQUARE_BRACKET
 
     // don't deal with multiline array dereferencing
-    if ($tokens[$nonSpace]['line'] !==  $tokens[$stackPtr]['line']) {
+    if ($tokens[$nonSpace]['line'] !== $tokens[$stackPtr]['line']) {
       return;
     }
 
