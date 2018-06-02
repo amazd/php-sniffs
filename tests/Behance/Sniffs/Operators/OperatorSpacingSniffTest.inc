@@ -327,3 +327,10 @@ $goodNot = $a && !$b;
 
 $doubleNegativeGood = !!$b;
 $doubleNegativeBad = ! !$b;
+
+$arr   = 1;
+$arr   =    1;
+$arr =    1;
+$arr
+  =
+    1;

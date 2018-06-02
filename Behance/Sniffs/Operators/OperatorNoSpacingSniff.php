@@ -1,6 +1,6 @@
 <?php
 
-class Behance_Sniffs_Operators_OperatorNoSpacingSniff implements PHP_CodeSniffer_Sniff {
+class Behance_Sniffs_Operators_OperatorNoSpacingSniff extends Behance_AbstractSniff {
 
   /**
    * Returns the token types that this sniff is interested in.
@@ -9,7 +9,7 @@ class Behance_Sniffs_Operators_OperatorNoSpacingSniff implements PHP_CodeSniffer
    */
   public function register() {
 
-    return [ T_DOUBLE_COLON ];
+    return [T_DOUBLE_COLON];
 
   } // register
 
@@ -21,37 +21,10 @@ class Behance_Sniffs_Operators_OperatorNoSpacingSniff implements PHP_CodeSniffer
    *                                        the token was found.
    * @return void
    */
-  public function process( PHP_CodeSniffer_File $phpcsFile, $stackPtr ) {
+  public function process(PHP_CodeSniffer_File $phpcsFile, $stackPtr) {
 
-    $this->_test( $phpcsFile, 1, $stackPtr );
-    $this->_test( $phpcsFile, -1, $stackPtr );
+    $this->_ensureNoSpaceAround($phpcsFile, $stackPtr, 'this operator', 'Operator');
 
   } // process
-
-  /**
-   * @param  PHP_CodeSniffer_File $phpcsFile
-   * @param  int                  $offset
-   * @param  int                  $stackPtr
-   *
-   * @return void
-   */
-  private function _test( PHP_CodeSniffer_File $phpcsFile, $offset, $stackPtr ) {
-
-    $tokens     = $phpcsFile->getTokens();
-    $data       = [ $tokens[ $stackPtr ]['content'] ];
-    $inspectPtr = $stackPtr + $offset;
-    $locString  = ( $offset === 1 )
-                  ? 'after'
-                  : 'before';
-
-    if ( $tokens[ $inspectPtr ]['code'] === T_WHITESPACE ) {
-      $error = '"%s" operator should have no whitespace ' . $locString . ' it';
-      $fix   = $phpcsFile->addFixableError( $error, $stackPtr, $locString, $data );
-      if ( $fix ) {
-        $phpcsFile->fixer->replaceToken( $inspectPtr, '' );
-      }
-    } // if whitespace
-
-  } // _test
 
 } // Behance_Sniffs_Operators_OperatorNoSpacingSniff

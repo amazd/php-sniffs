@@ -1,5 +1,5 @@
 <?php
-class Behance_Sniffs_Operators_OperatorSpacingSniff implements PHP_CodeSniffer_Sniff {
+class Behance_Sniffs_Operators_OperatorSpacingSniff extends Behance_AbstractSniff {
 
   /**
    * @var array
@@ -8,7 +8,6 @@ class Behance_Sniffs_Operators_OperatorSpacingSniff implements PHP_CodeSniffer_S
    * depending on their context
    */
   protected $_unary = [
-    T_EQUAL,
     T_BITWISE_AND,
     T_MINUS,
     T_BOOLEAN_NOT,
@@ -57,6 +56,7 @@ class Behance_Sniffs_Operators_OperatorSpacingSniff implements PHP_CodeSniffer_S
         T_STRING_CONCAT,
         T_INC,
         T_DEC,
+        T_EQUAL,
       ]
     ));
 
@@ -81,23 +81,7 @@ class Behance_Sniffs_Operators_OperatorSpacingSniff implements PHP_CodeSniffer_S
       }
     }
 
-    if ($tokens[$stackPtr - 1]['code'] !== T_WHITESPACE) {
-      $error      = '"%s" operator requires whitespace before it';
-      $data       = [$tokens[$stackPtr]['content']];
-      $should_fix = $phpcsFile->addFixableError($error, $stackPtr, 'OperatorPadding', $data);
-      if ($should_fix) {
-        $phpcsFile->fixer->addContent($stackPtr - 1, ' ');
-      }
-    } // if whitespace
-
-    if ($tokens[$stackPtr + 1]['code'] !== T_WHITESPACE) {
-      $error      = '"%s" operator requires whitespace after it';
-      $data       = [$tokens[$stackPtr]['content']];
-      $should_fix = $phpcsFile->addFixableError($error, $stackPtr + 1, 'OperatorPadding', $data);
-      if ($should_fix) {
-        $phpcsFile->fixer->addContentBefore($stackPtr + 1, ' ');
-      }
-    } // if whitespace
+    $this->_ensureOneSpaceAround($phpcsFile, $stackPtr, 'operator', 'Operator', true);
 
   } // process
 
@@ -125,7 +109,8 @@ class Behance_Sniffs_Operators_OperatorSpacingSniff implements PHP_CodeSniffer_S
       return $this->_processIncDec($phpcsFile, $stackPtr);
     }
     if ($code === T_BOOLEAN_NOT) {
-      return $this->_processNot($phpcsFile, $stackPtr);
+      $this->_ensureNoSpaceAfter($phpcsFile, $stackPtr, 'boolean not', 'BooleanNot');
+      return true;
     }
 
     return false;
@@ -150,45 +135,16 @@ class Behance_Sniffs_Operators_OperatorSpacingSniff implements PHP_CodeSniffer_S
       T_OPEN_PARENTHESIS,
       T_AS
     ];
-
     $nonWhitespacePtr = $phpcsFile->findPrevious($allowedTokens, $stackPtr, null, false, null, true);
 
     if ($nonWhitespacePtr !== false && $tokens[$nonWhitespacePtr]['line'] === $tokens[$stackPtr]['line']) {
-      if ($tokens[$stackPtr + 1]['code'] === T_WHITESPACE) {
-        $should_fix = $phpcsFile->addFixableError('Unary & should not have whitespace after it.', $stackPtr + 1, 'UnaryAmpNotSpacing');
-        if ($should_fix) {
-          $phpcsFile->fixer->replaceToken($stackPtr + 1, '');
-        }
-      } // if whitespace
+      $this->_ensureNoSpaceAfter($phpcsFile, $stackPtr, 'Unary &', 'UnaryAmp');
       return true;
     } // if nonWhitespace
 
     return false;
 
   } // _processAmpersand
-
-  /**
-   * Process an exclamation that is potentially being used in a unary context
-   *
-   * @param PHP_CodeSniffer_File $phpcsFile The file where the token was found.
-   * @param int                  $stackPtr  The position in the stack where
-   *                                        the token was found.
-   * @return bool                           Whether the exclamation was evaluated as a unary operator or not
-   */
-  private function _processNot(PHP_CodeSniffer_File $phpcsFile, $stackPtr) {
-
-    $tokens = $phpcsFile->getTokens();
-
-    if ($tokens[$stackPtr + 1]['code'] === T_WHITESPACE) {
-      $should_fix = $phpcsFile->addFixableError('Boolean Not should not have whitespace after it.', $stackPtr, 'BooleanNotSpacing');
-      if ($should_fix) {
-        $phpcsFile->fixer->replaceToken($stackPtr + 1, '');
-      }
-    } // if whitespace
-
-    return true;
-
-  } // _processNot
 
   /**
    * Process an exclamation that is potentially being used in a unary context
@@ -205,19 +161,11 @@ class Behance_Sniffs_Operators_OperatorSpacingSniff implements PHP_CodeSniffer_S
 
     // if ++ or -- is before a $, it's prefix, otherwise postfix
     if ($tokens[$nextToken]['code'] === T_VARIABLE) {
-      if ($tokens[$stackPtr + 1]['code'] === T_WHITESPACE) {
-        $should_fix = $phpcsFile->addFixableError('prefix inc/dec should not have whitespace after it.', $stackPtr + 1, 'IncDecSpacing');
-        if ($should_fix) {
-          $phpcsFile->fixer->replaceToken($stackPtr + 1, '');
-        }
-      } // if whitespace
-    } // if t_variable
-    elseif ($tokens[$stackPtr - 1]['code'] === T_WHITESPACE) {
-      $should_fix = $phpcsFile->addFixableError('postfix inc/dec should not have whitespace after it.', $stackPtr - 1, 'IncDecSpacing');
-      if ($should_fix) {
-        $phpcsFile->fixer->replaceToken($stackPtr - 1, '');
-      }
-    } // elseif postfix whitespace
+      $this->_ensureNoSpaceAfter($phpcsFile, $stackPtr, 'prefix inc/dec', 'IncDec');
+    }
+    else {
+      $this->_ensureNoSpaceBefore($phpcsFile, $stackPtr, 'postfix inc/dec', 'IncDec');
+    }
 
     return true;
 
@@ -248,12 +196,7 @@ class Behance_Sniffs_Operators_OperatorSpacingSniff implements PHP_CodeSniffer_S
       return false;
     }
 
-    if ($tokens[$stackPtr + 1]['code'] === T_WHITESPACE) {
-      $should_fix = $phpcsFile->addFixableError("'-' as unary should not have whitespace after it.", $stackPtr, 'MinusSpacing');
-      if ($should_fix) {
-        $phpcsFile->fixer->replaceToken($stackPtr + 1, '');
-      }
-    } // if whitespace
+    $this->_ensureNoSpaceAfter($phpcsFile, $stackPtr, 'unary minus', 'UnaryMinus');
 
     return true;
 

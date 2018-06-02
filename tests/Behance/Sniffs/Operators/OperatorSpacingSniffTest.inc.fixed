@@ -4,137 +4,137 @@ $world = "world!";
 
 echo $goodbye . ' cruel ' . $world;
 echo $goodbye . ' cruel ' . $world;
-echo $goodbye  .  ' cruel '  .  $world;
+echo $goodbye . ' cruel ' . $world;
 echo $goodbye
-               .  ' cruel '
-                  .  $world;
+               . ' cruel '
+                  . $world;
 
 echo 1 + 2;
 echo 1 + 2;
-echo 1  +  2;
+echo 1 + 2;
 echo 1
        +
          2;
 
 echo 1 - 2;
 echo 1 - 2;
-echo 1  -  2;
+echo 1 - 2;
 echo 1
        -
          2;
 
 echo 1 % 2;
 echo 1 % 2;
-echo 1  %  2;
+echo 1 % 2;
 echo 1
        %
          2;
 
 echo 1 / 2;
 echo 1 / 2;
-echo 1  /  2;
+echo 1 / 2;
 echo 1
        /
          2;
 
 echo 1 * 2;
 echo 1 * 2;
-echo 1  *  2;
+echo 1 * 2;
 echo 1
        *
          2;
 
 echo 1 ^ 2;
 echo 1 ^ 2;
-echo 1  ^  2;
+echo 1 ^ 2;
 echo 1
        ^
          2;
 
 echo 1 & 2;
 echo 1 & 2;
-echo 1  &  2;
+echo 1 & 2;
 echo 1
        &
          2;
 
 echo 1 | 2;
 echo 1 | 2;
-echo 1  |  2;
+echo 1 | 2;
 echo 1
        |
          2;
 
 echo 1 and 2;
-echo 1  and  2;
+echo 1 and 2;
 echo 1
        and
          2;
 
 echo 1 or 2;
-echo 1  or  2;
+echo 1 or 2;
 echo 1
        or
          2;
 
 echo 1 xor 2;
-echo 1  xor  2;
+echo 1 xor 2;
 echo 1
        xor
          2;
 
 $goodbye .= $world;
 $goodbye .= $world;
-$goodbye  .=  $world;
+$goodbye .= $world;
 $goodbye
           .=
               $world;
 
 $goodbye += $world;
 $goodbye += $world;
-$goodbye  +=  $world;
+$goodbye += $world;
 $goodbye
           +=
               $world;
 
 $goodbye -= $world;
 $goodbye -= $world;
-$goodbye  -=  $world;
+$goodbye -= $world;
 $goodbye
           -=
               $world;
 
 $goodbye /= $world;
 $goodbye /= $world;
-$goodbye  /=  $world;
+$goodbye /= $world;
 $goodbye
           /=
               $world;
 
 $goodbye %= $world;
 $goodbye %= $world;
-$goodbye  %=  $world;
+$goodbye %= $world;
 $goodbye
           %=
               $world;
 
 $goodbye *= $world;
 $goodbye *= $world;
-$goodbye  *=  $world;
+$goodbye *= $world;
 $goodbye
           *=
               $world;
 
 $goodbye <> $world;
 $goodbye <> $world;
-$goodbye  <>  $world;
+$goodbye <> $world;
 $goodbye
           <>
               $world;
 
 $goodbye &= $world;
 $goodbye &= $world;
-$goodbye  &=  $world;
+$goodbye &= $world;
 $goodbye
           &=
               $world;
@@ -142,7 +142,7 @@ $goodbye
 $arr = [
     'blah' => 'blah',
     'blah' => 'blah',
-    'blah'     =>     'blah',
+    'blah' => 'blah',
     'blah'
                =>
                       'blah'
@@ -150,56 +150,56 @@ $arr = [
 
 $truthy = 1 == 2;
 $truthy = 1 == 2;
-$truthy = 1  ==  2;
+$truthy = 1 == 2;
 $truthy = 1
               ==
                    2;
 
 $truthy = 1 === 2;
 $truthy = 1 === 2;
-$truthy = 1  ===  2;
+$truthy = 1 === 2;
 $truthy = 1
               ===
                    2;
 
 $truthy = 1 != 2;
 $truthy = 1 != 2;
-$truthy = 1  !=  2;
+$truthy = 1 != 2;
 $truthy = 1
               !=
                    2;
 
 $truthy = 1 !== 2;
 $truthy = 1 !== 2;
-$truthy = 1  !==  2;
+$truthy = 1 !== 2;
 $truthy = 1
               !==
                    2;
 
 $truthy = 1 < 2;
 $truthy = 1 < 2;
-$truthy = 1  <  2;
+$truthy = 1 < 2;
 $truthy = 1
               <
                    2;
 
 $truthy = 1 > 2;
 $truthy = 1 > 2;
-$truthy = 1  >  2;
+$truthy = 1 > 2;
 $truthy = 1
               >
                    2;
 
 $truthy = 1 >= 2;
 $truthy = 1 >= 2;
-$truthy = 1  >=  2;
+$truthy = 1 >= 2;
 $truthy = 1
               >=
                    2;
 
 $truthy = 1 <= 2;
 $truthy = 1 <= 2;
-$truthy = 1  <=  2;
+$truthy = 1 <= 2;
 $truthy = 1
               <=
                    2;
@@ -249,7 +249,7 @@ $diff = microtime( true ) - microtime( true );
 $diff = microtime( true ) - microtime( true );
 $diff = microtime( true ) - microtime( true );
 $diff = microtime( true ) - microtime( true );
-$arr  = [
+$arr = [
   'negval' => -1,
   'negval' => -1,
   -1 => $foo,
@@ -260,7 +260,7 @@ $thing->passNegativeFirstKay( -1, $foo );
 $thing->passNegativeFirstKay( -1, $foo );
 $thing->passNegativeFirstKay(-1, $foo );
 
-$arr  = [ -1 => 'REAL' ];
+$arr = [ -1 => 'REAL' ];
 $arr = [ -1 ];
 $arr = [ -1 ];
 $create_modules[ -1 ] = $good_modules[ -1 ];
@@ -326,3 +326,10 @@ $goodNot = $a && !$b;
 
 $doubleNegativeGood = !!$b;
 $doubleNegativeBad = !!$b;
+
+$arr = 1;
+$arr = 1;
+$arr = 1;
+$arr
+  =
+    1;
