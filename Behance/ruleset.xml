@@ -79,7 +79,6 @@
   <rule ref="Behance.Keywords.AlphabeticalUse"/>
   <rule ref="Behance.Keywords.KeywordParensSpacing"/>
   <rule ref="Behance.Keywords.OneUsePerStatement"/>
-  <rule ref="Behance.Operators.EqualsAlignment"/>
   <rule ref="Behance.Operators.OperatorNoSpacing"/>
   <rule ref="Behance.Operators.OperatorSpacing"/>
 
