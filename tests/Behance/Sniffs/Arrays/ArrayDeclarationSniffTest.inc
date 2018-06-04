@@ -139,3 +139,8 @@ $uhohBadArrowsComingUp = [
   'on'  =>      5,
   'fqhgwadssas'  => 6,
 ];
+
+$arrayValuesWithNoTrailingComma = [
+  T_TRY,
+    T_ELSE
+];

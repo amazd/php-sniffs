@@ -88,23 +88,12 @@ class Behance_Sniffs_Arrays_ArrayDeclarationSniff extends Behance_AbstractSniff 
 
       if ($tokens[$nextToken]['code'] === T_CLOSE_SHORT_ARRAY) {
         if ($keyUsed === false) {
-          $valueContent = $phpcsFile->findPrevious(PHP_CodeSniffer_Tokens::$emptyTokens, ($nextToken - 1), null, true);
-
-          // Find the value, which will be the first token on the line,
-          // excluding the leading whitespace.
-          while ($tokens[$valueContent]['line'] === $tokens[$nextToken]['line']) {
-            if ($valueContent === $arrayStart) {
-              // Value must have been on the same line as the array
-              // parenthesis, so we have reached the start of the value.
-              break;
-            }
-
-            $valueContent--;
-          } // while valueContent === nextToken
-
-          $valueContent = $phpcsFile->findNext(T_WHITESPACE, ($valueContent + 1), $nextToken, true);
-          $indices[] = ['value' => $valueContent];
-          $singleUsed = true;
+          $tokenBeforeClose = $phpcsFile->findPrevious(PHP_CodeSniffer_Tokens::$emptyTokens, ($nextToken - 1), null, true);
+          if ($lastComma !== $tokenBeforeClose) {
+            $valueContent = $phpcsFile->findFirstOnLine([T_WHITESPACE], $tokenBeforeClose, true);
+            $indices[] = ['value' => $valueContent];
+            $singleUsed = true;
+          }
         } // if !keyUsed
 
         $lastToken = T_CLOSE_SHORT_ARRAY;
