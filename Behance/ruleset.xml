@@ -13,55 +13,38 @@
   <rule ref="PSR2">
     <exclude name="PSR2.Classes.ClassDeclaration.OpenBraceNewLine"/>
     <exclude name="PSR2.Classes.ClassDeclaration.CloseBraceAfterBody"/>
-    <exclude name="PSR2.Classes.ClassDeclaration.CloseBraceSameLine"/>
-    <exclude name="PSR2.Classes.PropertyDeclaration.Multiple"/>
     <exclude name="PSR2.Classes.PropertyDeclaration.Underscore"/>
-    <exclude name="PSR2.ControlStructures.ControlStructureSpacing.SpacingAfterOpenBrace"/>
-    <exclude name="PSR2.ControlStructures.ControlStructureSpacing.SpaceBeforeCloseBrace"/>
     <exclude name="PSR2.ControlStructures.SwitchDeclaration.BodyOnNextLineCASE"/>
     <exclude name="PSR2.ControlStructures.SwitchDeclaration.BodyOnNextLineDEFAULT"/>
-    <exclude name="PSR2.Methods.FunctionCallSignature.SpaceAfterOpenBracket"/>
-    <exclude name="PSR2.Methods.FunctionCallSignature.SpaceBeforeCloseBracket"/>
-    <exclude name="PSR2.Methods.FunctionCallSignature.ContentAfterOpenBracket"/>
-    <exclude name="PSR2.Methods.FunctionCallSignature.CloseBracketLine"/>
     <exclude name="PSR2.Methods.FunctionClosingBrace.SpacingBeforeClose" />
     <exclude name="PSR2.Methods.MethodDeclaration.Underscore"/>
 
     <!-- TODO: Reconsider for inclusion -->
     <exclude name="PSR2.Namespaces.NamespaceDeclaration.BlankLineAfter"/>
 
-    <!--
-      Excluded because this incorrectly reports properties that come after a
-      onevar style declaration of a class property that is a multiline array
-      TODO: patch phpcs proper
-    -->
-    <exclude name="Generic.WhiteSpace.ScopeIndent.Incorrect"/>
-
     <!-- Generic standards that are inherited via PSR2 -->
-    <exclude name="Generic.ControlStructures.InlineControlStructure"/>
     <exclude name="Generic.Files.LineLength"/>
-    <exclude name="Generic.Functions.FunctionCallArgumentSpacing"/>
 
     <!-- Squiz standards that are inherited via PSR2 -->
     <exclude name="Squiz.ControlStructures.ControlSignature"/>
-    <exclude name="Squiz.ControlStructures.ForEachLoopDeclaration.SpaceAfterOpen"/>
-    <exclude name="Squiz.ControlStructures.ForEachLoopDeclaration.SpaceBeforeClose"/>
-    <exclude name="Squiz.Functions.FunctionDeclarationArgumentSpacing.SpacingBeforeClose"/>
-    <exclude name="Squiz.Functions.FunctionDeclarationArgumentSpacing.SpacingAfterOpen"/>
-    <exclude name="Squiz.Functions.FunctionDeclarationArgumentSpacing.SpacingAfterOpenHint"/>
     <exclude name="Squiz.Functions.MultiLineFunctionDeclaration.BraceOnSameLine"/>
+    <exclude name="Squiz.Functions.MultiLineFunctionDeclaration.SpaceAfterFunction"/>
     <exclude name="Squiz.Classes.ValidClassName.NotCamelCaps"/>
     <exclude name="Squiz.Classes.ClassDeclaration.CloseBraceSameLine"/>
-    <exclude name="Squiz.ControlStructures.ForLoopDeclaration.SpacingAfterOpen"/>
-    <exclude name="Squiz.ControlStructures.ForLoopDeclaration.SpacingBeforeClose"/>
+    <!-- TODO: ControlStructureSpacing enforces no blank lines after control structure spacing; reconsider -->
     <exclude name="Squiz.WhiteSpace.ControlStructureSpacing"/>
     <exclude name="Squiz.WhiteSpace.ScopeClosingBrace.ContentBefore"/>
-    <exclude name="Squiz.Functions.MultiLineFunctionDeclaration.SpaceAfterFunction"/>
   </rule>
 
   <rule ref="Generic.PHP.ForbiddenFunctions">
     <properties>
       <property name="forbiddenFunctions" type="array" value="sizeof=>count,delete=>unset"/>
+    </properties>
+  </rule>
+
+  <rule ref="PSR2.Methods.FunctionCallSignature">
+    <properties>
+      <property name="indent" value="2"/>
     </properties>
   </rule>
 
@@ -77,32 +60,25 @@
     </properties>
   </rule>
 
-  <!-- Custom standards -->
-  <rule ref="Behance.Arrays.ArrayBracketSpacing"/>
-  <rule ref="Behance.Arrays.ArrayDeclaration">
+  <rule ref="Squiz.Functions.MultiLineFunctionDeclaration">
     <properties>
       <property name="indent" value="2"/>
-      <property name="elementIndentLevel" value="2"/>
     </properties>
   </rule>
+
+  <!-- Custom standards -->
+  <rule ref="Behance.Arrays.ArrayBracketSpacing"/>
+  <rule ref="Behance.Arrays.ArrayDeclaration"/>
   <rule ref="Behance.Arrays.ShortHandArrayOnly"/>
   <rule ref="Behance.Classes.ClassDeclaration"/>
   <rule ref="Behance.Comments.DisallowHashComments"/>
   <rule ref="Behance.Comments.TrailingComment"/>
-  <rule ref="Behance.ControlStructures.ControlStructureSpacing"/>
-  <!-- InlineControlStructure is a copy of the Generic, but also checks elseif statements -->
-  <rule ref="Behance.ControlStructures.InlineControlStructure"/>
-  <rule ref="Behance.ControlStructures.Ternary"/>
   <rule ref="Behance.Formatting.BlankLine"/>
   <rule ref="Behance.Functions.ChainedMethodAlignment"/>
-  <rule ref="Behance.Functions.FunctionCallArgumentSpacing"/>
-  <rule ref="Behance.Functions.FunctionDeclaration"/>
   <rule ref="Behance.Functions.FunctionMbString"/>
-  <rule ref="Behance.Gotchas.BaseException"/>
   <rule ref="Behance.Keywords.AlphabeticalUse"/>
   <rule ref="Behance.Keywords.KeywordParensSpacing"/>
   <rule ref="Behance.Keywords.OneUsePerStatement"/>
-  <rule ref="Behance.Operators.EqualsAlignment"/>
   <rule ref="Behance.Operators.OperatorNoSpacing"/>
   <rule ref="Behance.Operators.OperatorSpacing"/>
 

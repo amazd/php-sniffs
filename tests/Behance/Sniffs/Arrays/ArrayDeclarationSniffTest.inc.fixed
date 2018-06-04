@@ -1,9 +1,11 @@
 <?php
-$misalignedArr = [1,
+$misalignedArr = [
+  1,
   2,
-    3,
-4,
-5];
+  3,
+  4,
+  5
+];
 
 $goodArr = [
   1,
@@ -13,29 +15,29 @@ $goodArr = [
   5
 ];
 
-$oneLineMissingSpaceBeforeDoubleArrow = ['key1'=> $val];
-$oneLineMissingSpaceAfterDoubleArrow = ['key2' =>$val];
+$oneLineMissingSpaceBeforeDoubleArrow = ['key1' => $val];
+$oneLineMissingSpaceAfterDoubleArrow = ['key2' => $val];
 $oneLineGoodDoubleArrow = ['key3' => $val];
 
-$oneLineExtraSpaceBeforeComma = ['val' , 'val'];
-$oneLineMissingSpaceAfterComma = ['val','val'];
-$oneLinebackwardsCommaSpacing = ['val' ,'val'];
+$oneLineExtraSpaceBeforeComma = ['val', 'val'];
+$oneLineMissingSpaceAfterComma = ['val', 'val'];
+$oneLinebackwardsCommaSpacing = ['val', 'val'];
 $oneLineGoodComma = ['val', 'val'];
-$oneLineGoodCommaExtraSpaces = ['val',           'val'];
+$oneLineGoodCommaExtraSpaces = ['val', 'val'];
 
-$oneLineExtraSpaceAfterOpen = [ 'val'];
-$oneLineExtraSpaceBeforeClose = ['val' ];
-$oneLineExtraSpaceAround = [ 'val' ];
+$oneLineExtraSpaceAfterOpen = ['val'];
+$oneLineExtraSpaceBeforeClose = ['val'];
+$oneLineExtraSpaceAround = ['val'];
 $oneLineGoodSpacing = ['val'];
 
-$oneLineExtraSpaceAfterOpen = [ 'key' => 'val'];
-$oneLineExtraSpaceBeforeClose = ['key' => 'val' ];
-$oneLineExtraSpaceAround = [ 'key' => 'val' ];
+$oneLineExtraSpaceAfterOpen = ['key' => 'val'];
+$oneLineExtraSpaceBeforeClose = ['key' => 'val'];
+$oneLineExtraSpaceAround = ['key' => 'val'];
 $oneLineGoodSpacing = ['key' => 'val'];
 
-$oneLineExtraSpaceAfterOpen = [ 'val', 'val2'];
-$oneLineExtraSpaceBeforeClose = ['val', 'val2' ];
-$oneLineExtraSpaceAround = [ 'val', 'val2' ];
+$oneLineExtraSpaceAfterOpen = ['val', 'val2'];
+$oneLineExtraSpaceBeforeClose = ['val', 'val2'];
+$oneLineExtraSpaceAround = ['val', 'val2'];
 $oneLineGoodSpacing = ['val', 'val2'];
 
 $goodArrWithFunctionValuesWithArrParams = [
@@ -46,12 +48,14 @@ $goodArrWithFunctionValuesWithArrParams = [
 
 $misalignedNestedArr = [
   ['a' => 'b'],
-    ['a' => 'b'],
-  [1,
+  ['a' => 'b'],
+  [
+    1,
     2,
-      3,
-  4,
-  5]
+    3,
+    4,
+    5
+  ]
 ];
 
 $goodArrWithConcatenatedKeys = [
@@ -59,16 +63,18 @@ $goodArrWithConcatenatedKeys = [
   $key . '_val2' => 'b'
 ];
 
-$misalignedArrWithConcatenatedKeys = [$key . '_val1' => 'a',
-    $key . '_val2' => 'b',
+$misalignedArrWithConcatenatedKeys = [
+  $key . '_val1' => 'a',
+  $key . '_val2' => 'b',
   $key . '_val3' => 'c',
-      $key . '_val4' => 'd',
-$key . '_val5' => 'e'];
+  $key . '_val4' => 'd',
+  $key . '_val5' => 'e'
+];
 
 [1, 2, 3];
 
 $emptyGood = [];
-$emptyBad = [ ];
+$emptyBad = [];
 
 $goodArrayWithClosure = [1, function() {}, 2];
 $badTrailingCommaInSingleLine = [1, 2,];
@@ -76,7 +82,7 @@ $badTrailingCommaInSingleLine = [1, 2,];
 $misAlignedClose = [
   1,
   2,
-   ];
+];
 
 $arrWithFuncCall = array(
   1,
@@ -96,7 +102,7 @@ $badNumericMixedWithAssoc = [
 ];
 
 $badMultiLineCommaSpace = [
-  1 ,
+  1,
   2
 ];
 
@@ -115,7 +121,7 @@ $arr = [
 
 $badMultilineAssocCommaSpacing = [
   'a' => 1,
-  'b' => 2 ,
+  'b' => 2,
 ];
 
 $okArrWithTrailingComma = [
@@ -132,10 +138,10 @@ $okArrWithTrailingComma = [
 ];
 
 $uhohBadArrowsComingUp = [
-  'test'     => 1,
+  'test' => 1,
   'testitup' => 2,
-  'tests' =>    3,
-  'come'  =>    4,
-  'on'  =>      5,
-  'fqhgwadssas'  => 6,
+  'tests' => 3,
+  'come' => 4,
+  'on' => 5,
+  'fqhgwadssas' => 6,
 ];
