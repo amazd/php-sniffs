@@ -18,7 +18,7 @@ class Behance_Sniffs_Arrays_ArrayDeclarationSniff extends Behance_AbstractSniff 
 
     return [T_OPEN_SHORT_ARRAY];
 
-  } // register
+  }
 
 
   /**
@@ -51,7 +51,7 @@ class Behance_Sniffs_Arrays_ArrayDeclarationSniff extends Behance_AbstractSniff 
     if ($tokens[$arrayStart]['line'] === $tokens[$arrayEnd]['line']) {
       $this->_handleSingleLineArray($phpcsFile, $arrayStart, $arrayEnd);
       return;
-    } // if arrayStart line === arrayEnd line
+    }
 
     // Check the closing bracket is on a new line.
     if ($tokens[$lastContent]['line'] == ($tokens[$arrayEnd]['line'])) {
@@ -60,10 +60,10 @@ class Behance_Sniffs_Arrays_ArrayDeclarationSniff extends Behance_AbstractSniff 
       if ($should_fix) {
         $phpcsFile->fixer->addContentBefore($arrayEnd, $phpcsFile->eolChar);
       }
-    } // if closing brace newline
+    }
     else {
       $this->_ensureAlignment($phpcsFile, $arrayEnd, $indentStart - 1, 'CloseBraceNotAligned', 'Closer of array');
-    } // elseif arrayEnd column !== indentStart
+    }
 
     $nextToken = $stackPtr;
     $lastComma = $stackPtr;
@@ -84,7 +84,7 @@ class Behance_Sniffs_Arrays_ArrayDeclarationSniff extends Behance_AbstractSniff 
 
         $nextToken = $tokens[$tokens[$nextToken][$nextTokenString . '_opener']][$nextTokenString . '_closer'];
         continue;
-      } // if T_OPEN_SHORT_ARRAY
+      }
 
       if ($tokens[$nextToken]['code'] === T_CLOSE_SHORT_ARRAY) {
         if ($keyUsed === false) {
@@ -94,11 +94,11 @@ class Behance_Sniffs_Arrays_ArrayDeclarationSniff extends Behance_AbstractSniff 
             $indices[] = ['value' => $valueContent];
             $singleUsed = true;
           }
-        } // if !keyUsed
+        }
 
         $lastToken = T_CLOSE_SHORT_ARRAY;
         continue;
-      } // if code T_CLOSE_SHORT_ARRAY
+      }
 
       if ($tokens[$nextToken]['code'] === T_COMMA) {
         $lastComma = $nextToken;
@@ -116,7 +116,7 @@ class Behance_Sniffs_Arrays_ArrayDeclarationSniff extends Behance_AbstractSniff 
           $valueContent = $phpcsFile->findPrevious(PHP_CodeSniffer_Tokens::$emptyTokens, ($nextToken - 1), null, true);
           if ($tokens[$valueContent]['code'] !== T_COMMA) {
             $this->_ensureNoSpaceBefore($phpcsFile, $nextToken, 'comma', 'Comma');
-          } // if nextToken === T_WHITESPACE
+          }
 
           // Find the value, which will be the first token on the line,
           // excluding the leading whitespace.
@@ -128,16 +128,16 @@ class Behance_Sniffs_Arrays_ArrayDeclarationSniff extends Behance_AbstractSniff 
             }
 
             $valueContent--;
-          } // while valueContent === nextToken
+          }
 
           $valueContent = $phpcsFile->findNext(T_WHITESPACE, ($valueContent + 1), $nextToken, true);
           $indices[] = ['value' => $valueContent];
           $singleUsed = true;
-        } // if !keyUsed
+        }
 
         $lastToken = T_COMMA;
         continue;
-      } // if code T_COMMA
+      }
 
       if ($tokens[$nextToken]['code'] === T_DOUBLE_ARROW) {
         if ($singleUsed === true) {
@@ -153,8 +153,8 @@ class Behance_Sniffs_Arrays_ArrayDeclarationSniff extends Behance_AbstractSniff 
         $currentEntry['value'] = $phpcsFile->findNext([T_WHITESPACE], ($nextToken + 1), $arrayEnd, true);
         $indices[] = $currentEntry;
         $lastToken = T_DOUBLE_ARROW;
-      } // if code = T_DOUBLE_ARROW
-    } // for nextToken
+      }
+    }
 
     // Check for mutli-line arrays that should be single-line.
     $singleValue = false;
@@ -170,7 +170,7 @@ class Behance_Sniffs_Arrays_ArrayDeclarationSniff extends Behance_AbstractSniff 
       if ($nextContent === false) {
         $singleValue = true;
       }
-    } // elseif indices 1 and lastToken T_COMMA
+    }
 
     $indicesStart = ($indentStart + $indentSpaces);
 
@@ -179,8 +179,8 @@ class Behance_Sniffs_Arrays_ArrayDeclarationSniff extends Behance_AbstractSniff 
         if (!empty($value['value']) && $tokens[$value['value'] - 1]['code'] === T_WHITESPACE) {
           $this->_ensureAlignment($phpcsFile, $value['value'], $indicesStart - 1, 'ValueNotAligned', 'Array value');
         }
-      } // foreach indices
-    } // if !keyUsed and !empty indices
+      }
+    }
 
     $numValues = count($indices);
 
@@ -195,10 +195,10 @@ class Behance_Sniffs_Arrays_ArrayDeclarationSniff extends Behance_AbstractSniff 
           if ($should_fix) {
             $phpcsFile->fixer->addContentBefore($index['value'], $phpcsFile->eolChar);
           }
-        } // if value is on line with bracket
+        }
 
         continue;
-      } // if index[index]
+      }
 
       if ($tokens[$index['index']]['line'] === $tokens[$stackPtr]['line']) {
         $error = 'The first index in a multi-value array must be on a new line';
@@ -207,7 +207,7 @@ class Behance_Sniffs_Arrays_ArrayDeclarationSniff extends Behance_AbstractSniff 
           $phpcsFile->fixer->addContentBefore($index['index'], $phpcsFile->eolChar);
         }
         continue;
-      } // if index is on line with bracket
+      }
 
       if ($this->_ensureAlignment($phpcsFile, $index['index'], $indicesStart - 1, 'KeyNotAligned', 'Array key')) {
         continue;
@@ -229,16 +229,16 @@ class Behance_Sniffs_Arrays_ArrayDeclarationSniff extends Behance_AbstractSniff 
             $nextComma = $i;
             break;
           }
-        } // for value -> arrayEnd
+        }
 
         // Check that there is no space before the comma.
         if ($nextComma !== false) {
           $this->_ensureNoSpaceBefore($phpcsFile, $nextComma, 'comma', 'Comma');
-        } // if nextComma !false
-      } // if !isArrayOpener
-    } // foreach indices
+        }
+      }
+    }
 
-  } // process
+  }
 
   protected function _handleSingleLineArray($phpcsFile, $arrayStart, $arrayEnd) {
 
@@ -272,8 +272,8 @@ class Behance_Sniffs_Arrays_ArrayDeclarationSniff extends Behance_AbstractSniff 
           $error = 'Comma not allowed after last value in single-line array declaration';
           $phpcsFile->addError($error, $i, 'CommaAfterLast');
         }
-      } // if COMMA
-    } // for arrayStart -> arrayEnd
+      }
+    }
 
     $nextArrow = $arrayStart;
     while (($nextArrow = $phpcsFile->findNext(T_DOUBLE_ARROW, ($nextArrow + 1), $arrayEnd)) !== false) {
@@ -283,9 +283,9 @@ class Behance_Sniffs_Arrays_ArrayDeclarationSniff extends Behance_AbstractSniff 
     foreach ($commas as $comma) {
       $this->_ensureOneSpaceAfter($phpcsFile, $comma, 'comma', 'Comma');
       $this->_ensureNoSpaceBefore($phpcsFile, $comma, 'comma', 'Comma');
-    } // foreach commas
+    }
 
-  } // _handleSingleLineArray
+  }
 
   private function _isNestedComma($tokens, $stackPtr, $nextToken) {
 
@@ -302,7 +302,7 @@ class Behance_Sniffs_Arrays_ArrayDeclarationSniff extends Behance_AbstractSniff 
     // in a function call.
     return $nextPtrCount > $stackPtrCount;
 
-  } // _isNestedComma
+  }
 
   private function _ensureAlignment($phpcsFile, $token, $expected_spaces, $errCode, $content_type) {
 
@@ -324,10 +324,10 @@ class Behance_Sniffs_Arrays_ArrayDeclarationSniff extends Behance_AbstractSniff 
       else {
         $phpcsFile->fixer->replaceToken($token - 1, $spaces_string);
       }
-    } // if shouldfix
+    }
 
     return true;
 
-  } // _ensureAlignment
+  }
 
-} // Behance_Sniffs_Arrays_ArrayDeclarationSniff
+}

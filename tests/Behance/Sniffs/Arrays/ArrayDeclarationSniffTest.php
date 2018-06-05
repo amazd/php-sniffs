@@ -48,12 +48,12 @@ class Behance_Sniffs_Arrays_ArrayDeclarationSniffTest extends AbstractSniffUnitT
       145 => 1,
     ];
 
-  } // getErrorList
+  }
 
   public function getWarningList($testFile) {
 
     return [];
 
-  } // getWarningList
+  }
 
-} // Behance_Sniffs_Arrays_ArrayDeclarationSniffTest
+}
