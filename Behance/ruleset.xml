@@ -19,6 +19,9 @@
     <exclude name="PSR2.Methods.FunctionClosingBrace.SpacingBeforeClose" />
     <exclude name="PSR2.Methods.MethodDeclaration.Underscore"/>
 
+    <!-- Excluded because this disallows newlines after e.g. if (... harming multiline if statements-->
+    <exclude name="PSR2.ControlStructures.ControlStructureSpacing.SpacingAfterOpenBrace"/>
+
     <!-- TODO: Reconsider for inclusion -->
     <exclude name="PSR2.Namespaces.NamespaceDeclaration.BlankLineAfter"/>
 
