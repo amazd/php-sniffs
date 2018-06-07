@@ -29,9 +29,7 @@
     <exclude name="Generic.Files.LineLength"/>
 
     <!-- Squiz standards that are inherited via PSR2 -->
-    <exclude name="Squiz.ControlStructures.ControlSignature"/>
     <exclude name="Squiz.Functions.MultiLineFunctionDeclaration.BraceOnSameLine"/>
-    <exclude name="Squiz.Functions.MultiLineFunctionDeclaration.SpaceAfterFunction"/>
     <exclude name="Squiz.Classes.ValidClassName.NotCamelCaps"/>
     <exclude name="Squiz.Classes.ClassDeclaration.CloseBraceSameLine"/>
     <!-- TODO: ControlStructureSpacing enforces no blank lines after control structure spacing; reconsider -->
@@ -84,5 +82,4 @@
   <rule ref="Behance.Keywords.OneUsePerStatement"/>
   <rule ref="Behance.Operators.OperatorNoSpacing"/>
   <rule ref="Behance.Operators.OperatorSpacing"/>
-
 </ruleset>
