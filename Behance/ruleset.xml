@@ -73,6 +73,7 @@
   <rule ref="Behance.Arrays.ShortHandArrayOnly"/>
   <rule ref="Behance.Classes.ClassDeclaration"/>
   <rule ref="Behance.Comments.DisallowHashComments"/>
+  <rule ref="Behance.Comments.EnforceCopyrightComment"/>
   <rule ref="Behance.Comments.TrailingComment"/>
   <rule ref="Behance.Formatting.BlankLine"/>
   <rule ref="Behance.Functions.ChainedMethodAlignment"/>
