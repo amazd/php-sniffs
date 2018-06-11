@@ -76,6 +76,7 @@
   <rule ref="Behance.Comments.TrailingComment"/>
   <rule ref="Behance.Formatting.BlankLine"/>
   <rule ref="Behance.Functions.ChainedMethodAlignment"/>
+  <rule ref="Behance.Functions.FunctionDeclaration"/>
   <rule ref="Behance.Functions.FunctionMbString"/>
   <rule ref="Behance.Keywords.AlphabeticalUse"/>
   <rule ref="Behance.Keywords.KeywordParensSpacing"/>
